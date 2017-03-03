@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%date %logger %message %n</pattern>
+    </encoder>
+  </appender>
+  <root>
+    <appender-ref ref="STDOUT" />
+  </root>
+
+<!-- 環境変数「RESOURCE_PATH」に「test.dbが存在するディレクトリのパス」を設定してください。 -->
+    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+      <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+        <driverClass>org.sqlite.JDBC</driverClass>
+        <url>jdbc:sqlite:${RESOURCE_PATH}/test.db</url>
+        <user></user>
+        <password></password>
+      </connectionSource>
+    </appender>
+    <root>
+      <appender-ref ref="DB" />
+    </root>
+
+</configuration>
