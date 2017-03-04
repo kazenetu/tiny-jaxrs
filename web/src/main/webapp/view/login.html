@@ -1,0 +1,19 @@
+<div class="container" ng-controller="loginController">
+  <h1>ログイン</h1>
+
+  <p class="bg-danger" ng-show="isError">{{errorMsg}}</p>
+  <form>
+  <div class="row">
+    ユーザーID：<input type="text" ng-model="userId">※「test」でログインできます。
+  </div>
+  <div class="row">
+    パスワード：<input type="password" ng-model="password">
+  </div>
+  <button ng-click="login()">ログイン</button>
+  </form>
+<!--
+  <div class="row">
+    <button ng-click="updateTest()">更新テスト</button>
+  </div>
+ -->
+ </div>

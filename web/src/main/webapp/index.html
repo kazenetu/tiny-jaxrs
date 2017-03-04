@@ -2,13 +2,34 @@
 <html lang="ja">
 
 <head>
-<meta charset="utf-8">
-<title>ログ出力サンプル</title>
+	<meta charset="utf-8">
+	<title>Sample</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<link rel="stylesheet" href="assets/lib/bootstrap/css/bootstrap.min.css">
+
 </head>
 
-<body>
-    <a href="api/log/test1" target="_blank">全パターンログ出力テスト</a>
-    <br>
+<body ng-app="App">
+	<div ng-view></div>
+
+	<script src="assets/lib/jquery.min.js"></script>
+	<script src="assets/lib/angular/angular.min.js"></script>
+	<script src="assets/lib/angular/angular-resource.min.js"></script>
+	<script src="assets/lib/angular/angular-route.min.js"></script>
+
+	<script src="assets/app.js"></script>
+
+	<script src="assets/service/userService.js"></script>
+	<script src="assets/service/webApiService.js"></script>
+
+	<script src="assets/controller/loginController.js"></script>
+	<script src="assets/controller/headerController.js"></script>
+
+	<script src="assets/controller/searchSample.js"></script>
+
+
 </body>
 
 </html>

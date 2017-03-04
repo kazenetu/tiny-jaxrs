@@ -1,0 +1,20 @@
+<div ng-include="'view/header.html'"></div>
+
+<!-- 検索 -->
+<div class="container" ng-controller="searchSample">
+    <div class="row">
+        <div class="pull-right">
+            <form action="app/dl/download" method="POST">
+                <input type="hidden" name="userName" value={{userName}}>
+                <!--
+                <input type="submit" class="btn" value="CSV出力">
+                 -->
+                <input type="button" class="btn" ng-click="search()"
+                    value="検索">
+            </form>
+        </div>
+    </div>
+    <ul>
+        <li ng-repeat="result in searchResult">ID:{{result.id}},Name:{{result.name}}</li>
+    </ul>
+</div>
