@@ -15,4 +15,10 @@
     <servlet-name>Jersey Web Application</servlet-name>
     <url-pattern>/webapi/*</url-pattern>
   </servlet-mapping>
+
+
+  <error-page>
+    <error-code>401</error-code>
+    <location>/WEB-INF/auth_error.html</location>
+  </error-page>
 </web-app>
