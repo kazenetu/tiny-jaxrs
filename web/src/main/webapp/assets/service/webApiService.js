@@ -1,5 +1,5 @@
 var myApp = angular.module('webApiService', []);
-myApp.service('webApiService', function($resource) {
+myApp.service('webApiService', function($resource, $location) {
 
   this.baseUri = "";
 
@@ -13,26 +13,40 @@ myApp.service('webApiService', function($resource) {
   /**
    * GET(配列取得)メソッド
    */
-  this.query = function(action,params){
-    var result = $resource(this.baseUri + action);
-    return result.query(params);
+  this.query = function(action,params,callFunction){
+    var result = $resource(this.baseUri + action).query(params);
+
+    result.$promise.then(function (response) {
+    	callFunction(response);
+    }, function (response) {
+        $location.path('/');
+    });
   };
 
   /**
    * GETメソッド
    */
-  this.get = function(action,params){
-    var result = $resource(this.baseUri + action);
-    return result.get(params);
+  this.get = function(action,params,callFunction){
+    var result = $resource(this.baseUri + action).get(params);
+
+    result.$promise.then(function (response) {
+    	callFunction(response);
+    }, function (response) {
+        $location.path('/');
+    });
   };
 
   /**
    * POSTメソッド
    */
-  this.post = function(action,params){
-    var result = $resource(this.baseUri + action);
-    return result.save(params);
+  this.post = function(action,params,callFunction){
+    var result = $resource(this.baseUri + action).save(params);
+
+    result.$promise.then(function (response) {
+    	callFunction(response);
+    }, function (response) {
+        $location.path('/');
+    });
   };
 
 });
- 

@@ -5,12 +5,11 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
 
         $scope.search = function () {
 
-            var result = webApiService.query('api/user/list?userId=:id', { id: userService.getId() });
-            result.$promise.then(function (response) {
-                $scope.searchResult = response;
-            }, function (response) {
-                $location.path('/');
-            });
+            webApiService.query('api/user/list?userId=:id', { id: userService.getId() },
+                function (response) {
+                	$scope.searchResult = response;
+                 });
+
         }
 
         $scope.userId = userService.getId();
