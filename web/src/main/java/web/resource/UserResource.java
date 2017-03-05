@@ -2,7 +2,9 @@ package web.resource;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import web.common.base.Resource;
+import web.common.util.PdfUtil;
 import web.entity.TestData;
 import web.entity.UserData;
 import web.model.UserModel;
@@ -97,7 +102,7 @@ public class UserResource extends Resource{
     @POST
     @Path("download")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response SendData(@FormParam("userId") String userId,@FormParam("userName") String userName) {
+    public Response download(@FormParam("userId") String userId,@FormParam("userName") String userName) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
@@ -111,6 +116,41 @@ public class UserResource extends Resource{
             return Response.ok(list)
                     .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
                     .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Path("downloadPDF")
+    @Produces("application/pdf")
+    public Response downloadPDF(@FormParam("userId") String userId,@FormParam("userName") String userName) {
+        //認証チェック（認証エラー時は401例外を出す）
+        authCheck(userId);
+
+        List<UserData> users = new ArrayList<>();
+        try(UserModel userModel=new UserModel();PdfUtil pdfUtil = new PdfUtil();){
+            // DBからデータ取得
+            users =  userModel.getUsers();
+
+            // PDFのデータソースとして設定
+            JRDataSource dataSource = new JRBeanCollectionDataSource(users);
+
+            Map<String, Object> params = new HashMap<>();
+
+            // PDFの動的作成と取得
+            byte[] result = pdfUtil.getPdfBytes("UserList", params, dataSource);
+
+            // サンプルのファイル名
+            String fileName = "テスト_" + userName + ".pdf";
+
+            // 結果を返す
+            return Response.ok(result)
+                     .header("Content-Disposition", "attachment; filename=" +
+                     URLEncoder.encode(fileName, "utf-8"))
+                    .build();
+
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();

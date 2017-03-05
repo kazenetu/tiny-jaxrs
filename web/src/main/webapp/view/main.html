@@ -4,15 +4,20 @@
 <div class="container" ng-controller="searchSample">
     <div class="row">
         <div class="pull-right">
-			<form action="api/user/download" method="POST">
+			<form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
                 <input type="hidden" name="userId" value={{userId}}>
                 <input type="hidden" name="userName" value={{userName}}>
 
                 <input type="submit" class="btn" value="CSV出力">
-
-                <input type="button" class="btn" ng-click="search()"
-                    value="検索">
             </form>
+            <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
+                <input type="hidden" name="userId" value={{userId}}>
+                <input type="hidden" name="userName" value={{userName}}>
+
+                <input type="submit" class="btn" value="PDF出力">
+
+            </form>
+            <input type="button" class="btn" ng-click="search()"  value="検索">
         </div>
     </div>
     <ul>
