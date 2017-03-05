@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,6 +29,7 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import web.common.base.Resource;
 import web.common.util.PdfUtil;
+import web.entity.PasswordChange;
 import web.entity.TestData;
 import web.entity.UserData;
 import web.model.UserModel;
@@ -66,6 +68,39 @@ public class UserResource extends Resource{
                 return String.format("{\"result\":\"OK\",\"name\":\"%s\"}", data.getName());
             }).orElse("{\"result\":\"NG\"}");
 
+            return Response.ok(result) .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Path("passwordChange")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response passwordChange(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try(UserModel userModel=new UserModel()){
+
+            // json文字列をPasswordChangeにデシリアライズする
+            PasswordChange instance = mapper.readValue(json, PasswordChange.class);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getId());
+
+
+            String result = "";
+
+            // パスワード変更SQLを発行
+            if ( userModel.passwordChange(instance.getId(), instance.getPassword(),instance.getNewPassword())) {
+                result = "{\"result\":\"OK\"}";
+            }else{
+                result = "{\"result\":\"NG\"}";
+            }
+
+            // パスワード変更結果を返す
             return Response.ok(result) .build();
         } catch (Exception e) {
             logger.error(e.getMessage());

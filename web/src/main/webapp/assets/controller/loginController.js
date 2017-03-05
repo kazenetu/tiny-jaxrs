@@ -25,20 +25,5 @@ myApp.controller('loginController', ['$scope','$location', 'webApiService','user
           );
       };
 
-      // 後ほど実装
-      $scope.updateTest = function(){
-          webApiService.post('api/user/updateTest',{id:$scope.id},
-              function(response){
-                  if(response.result !== "OK"){
-                    $scope.errorMsg = "更新失敗！";
-                    $scope.isError = true;
-                  }else{
-                    $scope.errorMsg = "更新成功";
-                    $scope.isError = true;
-                  }
-               }
-          );
-      }
-
     }
 ]);

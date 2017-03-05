@@ -54,7 +54,7 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public List<UserData> getUsers() throws Exception{
-        String sql = "select USER_ID,NAME from MT_USER;";
+        String sql = "select USER_ID,NAME,PASSWORD from MT_USER;";
 
         List<UserData> users = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserData(row.get("USER_ID").toString(),(String)row.get("NAME"),"",0));
+                    users.add(new UserData(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
                 });
             }
         } catch (Exception e) {
@@ -71,5 +71,38 @@ public class UserModel extends Model{
         }
 
         return users;
+    }
+
+    /**
+     * パスワード変更
+     * @param userID ユーザーID
+     * @param password パスワード
+     * @param newPassword 新パスワード
+     * @return 正常終了結果
+     */
+    public boolean passwordChange(String userID, String password, String newPassword) {
+        String sql = "update MT_USER set PASSWORD=? where USER_ID=? and PASSWORD=?;";
+
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(newPassword);
+        params.add(userID);
+        params.add(password);
+
+        try {
+            db.setTransaction();
+
+            if (db.execute(sql, params) > 0) {
+                db.commit();
+                return true;
+            } else {
+                db.rollback();
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
