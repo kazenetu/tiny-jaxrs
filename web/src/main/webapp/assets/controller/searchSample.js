@@ -13,6 +13,7 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
             });
         }
 
+        $scope.userId = userService.getId();
         $scope.userName = userService.getName();
     }
 ]);

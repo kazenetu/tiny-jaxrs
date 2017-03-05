@@ -1,11 +1,14 @@
 package web.resource;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -20,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import web.common.base.Resource;
+import web.entity.TestData;
 import web.entity.UserData;
 import web.model.UserModel;
 
@@ -90,5 +94,27 @@ public class UserResource extends Resource{
         }
     }
 
+    @POST
+    @Path("download")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response SendData(@FormParam("userId") String userId,@FormParam("userName") String userName) {
+        //認証チェック（認証エラー時は401例外を出す）
+        authCheck(userId);
+
+        List<TestData> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(new TestData("Name" + i, 20 + i));
+        }
+
+        String fileName = "テスト_" + userName + ".csv";
+        try {
+            return Response.ok(list)
+                    .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
+                    .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
 
 }
