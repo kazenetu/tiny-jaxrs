@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <Resource name="jdbc/SQLite" auth="Container" type="javax.sql.DataSource" username="" password="" driverClassName="org.sqlite.JDBC" url="jdbc:sqlite:${catalina.base}/web/WEB-INF/classes/test.db" validationQuery="SELECT 0" />
+
+</Context>

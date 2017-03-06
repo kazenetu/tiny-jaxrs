@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import org.sqlite.SQLiteDataSource;
 
 /**
@@ -22,16 +25,31 @@ public class Sqlite implements Database {
     private boolean isSetTransaction = false;
 
     public Sqlite() {
+
+        // context.xmlからDataSourceを取得
+        try {
+            InitialContext context = new InitialContext();
+            DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/SQLite");
+            con = ds.getConnection();
+            context.close();
+            return;
+        } catch (Exception e1) {
+            // TODO 自動生成された catch ブロック
+            e1.printStackTrace();
+        }
+
+        // 取得できない場合はリソースパスから取得
         try {
             //クラスローダーからdbファイルの物理パスを取得する
             String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
 
             // データベースに接続する なければ作成される
-            SQLiteDataSource ds = new SQLiteDataSource();
-            ds.setUrl("jdbc:sqlite:" + filePath);
-            con = ds.getConnection();
+            SQLiteDataSource sqliteDs = new SQLiteDataSource();
+            sqliteDs.setUrl("jdbc:sqlite:" + filePath);
 
-        } catch (SQLException e) {
+            con = sqliteDs.getConnection();
+
+        } catch (Exception e) {
             // TODO 自動生成された catch ブロック
             // Connection の例外が発生した時
 
