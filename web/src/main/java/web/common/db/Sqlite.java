@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sqlite.SQLiteDataSource;
 
 /**
@@ -21,6 +23,8 @@ import org.sqlite.SQLiteDataSource;
  *
  */
 public class Sqlite implements Database {
+    private static Logger logger = LoggerFactory.getLogger(Sqlite.class);
+
     private Connection con = null;
     private boolean isSetTransaction = false;
 
@@ -34,9 +38,10 @@ public class Sqlite implements Database {
             context.close();
             return;
         } catch (Exception e1) {
-            // TODO 自動生成された catch ブロック
-            e1.printStackTrace();
+            logger.debug("外部ファイルからコネクション取得失敗："+e1.getMessage());
         }
+
+        logger.debug("デバッグ用コネクションを取得");
 
         // 取得できない場合はリソースパスから取得
         try {
@@ -50,10 +55,7 @@ public class Sqlite implements Database {
             con = sqliteDs.getConnection();
 
         } catch (Exception e) {
-            // TODO 自動生成された catch ブロック
-            // Connection の例外が発生した時
-
-            e.printStackTrace();
+            logger.debug("デバッグ用コネクション取得失敗："+e.getMessage());
         }
     }
 
