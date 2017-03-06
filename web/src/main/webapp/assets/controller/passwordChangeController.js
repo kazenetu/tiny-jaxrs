@@ -1,7 +1,7 @@
 var myApp = angular.module('passwordChangeController', ['webApiService','userService']);
 
-myApp.controller('passwordChangeController', ['$scope','webApiService','userService',
-    function($scope, webApiService, userService){
+myApp.controller('passwordChangeController', ['$scope','$location','webApiService','userService',
+    function($scope, $location, webApiService, userService){
       $scope.isError = false;
       $scope.errorMsg = "";
 
