@@ -73,6 +73,64 @@ public class UserModel extends Model{
         return users;
     }
 
+    private final int PAGE_COUNT = 10;
+    /**
+     * 検索結果のページ総数を取得する
+     * @return ページ総数
+     */
+    public int getUserPageCount(){
+        String sql = "select count(USER_ID) cnt from MT_USER;";
+
+        int recordCount = 0;
+
+        try {
+            ArrayList<Object> params = new ArrayList<>();
+            List<Map<String,Object>> result = db.query(sql, params);
+
+            Map<String,Object> row = result.get(0);
+            recordCount = (int)row.get("cnt");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            //throw new Exception(e);
+        }
+
+        int pageCount = recordCount / PAGE_COUNT;
+        if(recordCount - pageCount*PAGE_COUNT > 0){
+            pageCount++;
+        }
+
+        return pageCount;
+    }
+
+    /**
+     * ユーザーのページ分を取得する
+     * @return ユーザーのリスト
+     * @throws Exception
+     */
+    public List<UserData> getUsers(int pageIndex) throws Exception{
+        String sql = "select USER_ID,NAME,PASSWORD from MT_USER ORDER BY cast(USER_ID as numeric) LIMIT ? OFFSET ?;";
+
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(PAGE_COUNT);
+        params.add(pageIndex*PAGE_COUNT);
+
+        List<UserData> users = new ArrayList<>();
+
+        try {
+            List<Map<String,Object>> result = db.query(sql, params);
+            if (!result.isEmpty()) {
+                result.forEach(row->{
+                    users.add(new UserData(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
+                });
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new Exception(e);
+        }
+
+        return users;
+    }
+
     /**
      * パスワード変更
      * @param userID ユーザーID

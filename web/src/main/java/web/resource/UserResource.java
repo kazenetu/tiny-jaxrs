@@ -134,6 +134,60 @@ public class UserResource extends Resource{
         }
     }
 
+    /**
+     * 検索結果のページ総数を取得する
+     * @param servletRequest リクエストオブジェクト
+     * @param userId ユーザーID
+     * @return レスポンス
+     */
+    @GET
+    @Path("totalpage")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response totalPage(@QueryParam("userId") String userId) {
+        //認証チェック（認証エラー時は401例外を出す）
+        authCheck(userId);
+
+        String result = "{\"result\":\"NG\"}";
+
+        try(UserModel userModel=new UserModel()){
+            int pageCount =  userModel.getUserPageCount();
+
+            result = "{\"pageCount\":\"" + pageCount + "\"}";
+
+            return Response.ok(result)
+                    .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    /**
+     * ユーザー一覧取得(ページング用)
+     * @param userId ユーザーID
+     * @param page ページ数
+     * @return レスポンス
+     */
+    @GET
+    @Path("page")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userlist(@QueryParam("userId") String userId,@QueryParam("page") int pageIndex) {
+        //認証チェック（認証エラー時は401例外を出す）
+        authCheck(userId);
+
+        List<UserData> users = new ArrayList<>();
+        try(UserModel userModel=new UserModel()){
+            users =  userModel.getUsers(pageIndex);
+
+            ObjectMapper mapper = new ObjectMapper();
+            return Response.ok(mapper.writeValueAsString(users))
+                    .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
     @POST
     @Path("download")
     @Produces(MediaType.TEXT_PLAIN)
