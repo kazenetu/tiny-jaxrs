@@ -79,7 +79,7 @@ public class UserModel extends Model{
      * @return ページ総数
      */
     public int getUserPageCount(){
-        String sql = "select count(USER_ID) cnt from MT_USER;";
+        String sql = "select cast(count(USER_ID) as int) CNT from MT_USER;";
 
         int recordCount = 0;
 
@@ -88,7 +88,7 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, params);
 
             Map<String,Object> row = result.get(0);
-            recordCount = (int)row.get("cnt");
+            recordCount = (int)row.get("CNT");
         } catch (Exception e) {
             logger.error(e.getMessage());
             //throw new Exception(e);
@@ -108,7 +108,7 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public List<UserData> getUsers(int pageIndex) throws Exception{
-        String sql = "select USER_ID,NAME,PASSWORD from MT_USER ORDER BY cast(USER_ID as numeric) LIMIT ? OFFSET ?;";
+        String sql = "select USER_ID,NAME,PASSWORD from MT_USER ORDER BY USER_ID LIMIT ? OFFSET ?;";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(PAGE_COUNT);

@@ -1,6 +1,7 @@
 package web.common.base;
 
 import web.common.db.Database;
+import web.common.db.PostgreSql;
 import web.common.db.Sqlite;
 
 /**
@@ -34,6 +35,11 @@ public abstract class Model implements AutoCloseable {
         // dbのインスタンスを作成
         if (DBType.SQLite.toString().equals(dbName)) {
             db = new Sqlite();
+            return;
+        }
+        if (DBType.PostgreSQL.toString().equals(dbName)) {
+            db = new PostgreSql();
+            return;
         }
     }
 
