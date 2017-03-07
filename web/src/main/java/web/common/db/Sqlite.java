@@ -19,7 +19,6 @@ import org.sqlite.SQLiteDataSource;
 
 /**
  * SQLiteアクセスクラス
- * @author nayaon
  *
  */
 public class Sqlite implements Database {
