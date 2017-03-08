@@ -27,7 +27,7 @@ public class PostgreSql implements Database {
     private Connection con = null;
     private boolean isSetTransaction = false;
 
-    public PostgreSql() {
+    public PostgreSql(){
 
         // context.xmlからDataSourceを取得
         try {
@@ -52,16 +52,16 @@ public class PostgreSql implements Database {
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
         if (con != null) {
             try {
                 if (isSetTransaction) {
                     con.rollback();
                 }
                 con.close();
-            } catch (SQLException e) {
-                // TODO 自動生成された catch ブロック
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw new Exception(e);
             }
         }
     }
@@ -76,6 +76,7 @@ public class PostgreSql implements Database {
             con.setSavepoint();
             isSetTransaction = true;
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -89,6 +90,7 @@ public class PostgreSql implements Database {
             con.commit();
             isSetTransaction = false;
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -102,6 +104,7 @@ public class PostgreSql implements Database {
             con.rollback();
             isSetTransaction = false;
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -124,6 +127,7 @@ public class PostgreSql implements Database {
 
             return statement.executeUpdate();
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -159,6 +163,7 @@ public class PostgreSql implements Database {
             }
 
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
         return resultList;

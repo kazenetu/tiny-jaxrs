@@ -45,9 +45,10 @@ public abstract class Model implements AutoCloseable {
 
     /**
      * クローズメソッド
+     * @throws Exception
      */
     @Override
-    public void close() {
+    public void close() throws Exception {
         db.close();
         db = null;
     }

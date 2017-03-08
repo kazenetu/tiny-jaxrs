@@ -7,7 +7,7 @@ import java.util.Map;
  * データベースインターフェース
  */
 public interface Database {
-    public void close();
+    public void close() throws Exception;
 
     /**
      * トランザクション設定

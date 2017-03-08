@@ -59,7 +59,7 @@ public class Sqlite implements Database {
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
         if (con != null) {
             try {
                 if (isSetTransaction) {
@@ -67,8 +67,8 @@ public class Sqlite implements Database {
                 }
                 con.close();
             } catch (SQLException e) {
-                // TODO 自動生成された catch ブロック
-                e.printStackTrace();
+                logger.error(e.getMessage());
+                throw new Exception(e);
             }
         }
     }
@@ -83,6 +83,7 @@ public class Sqlite implements Database {
             con.setSavepoint();
             isSetTransaction = true;
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -96,6 +97,7 @@ public class Sqlite implements Database {
             con.commit();
             isSetTransaction = false;
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -109,6 +111,7 @@ public class Sqlite implements Database {
             con.rollback();
             isSetTransaction = false;
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -131,6 +134,7 @@ public class Sqlite implements Database {
 
             return statement.executeUpdate();
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -166,6 +170,7 @@ public class Sqlite implements Database {
             }
 
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             throw new Exception(e);
         }
         return resultList;
