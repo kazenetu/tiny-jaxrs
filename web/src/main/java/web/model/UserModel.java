@@ -78,13 +78,18 @@ public class UserModel extends Model{
      * 検索結果のページ総数を取得する
      * @return ページ総数
      */
-    public int getUserPageCount(){
-        String sql = "select cast(count(USER_ID) as int) CNT from MT_USER;";
+    public int getUserPageCount(String searchUserId){
+        String sql = "select cast(count(USER_ID) as int) CNT from MT_USER ";
 
         int recordCount = 0;
 
         try {
             ArrayList<Object> params = new ArrayList<>();
+            if(!(searchUserId == null || "".equals(searchUserId))){
+                sql += "where USER_ID like ? ";
+                params.add("%" + searchUserId + "%");
+            }
+
             List<Map<String,Object>> result = db.query(sql, params);
 
             Map<String,Object> row = result.get(0);
@@ -95,8 +100,12 @@ public class UserModel extends Model{
         }
 
         int pageCount = recordCount / PAGE_COUNT;
-        if(recordCount - pageCount*PAGE_COUNT > 0){
-            pageCount++;
+        if(recordCount <= PAGE_COUNT){
+            pageCount = 0;
+        }else{
+            if(recordCount - pageCount*PAGE_COUNT > 0){
+                pageCount++;
+            }
         }
 
         return pageCount;
@@ -107,10 +116,15 @@ public class UserModel extends Model{
      * @return ユーザーのリスト
      * @throws Exception
      */
-    public List<UserData> getUsers(int pageIndex) throws Exception{
-        String sql = "select USER_ID,NAME,PASSWORD from MT_USER ORDER BY USER_ID LIMIT ? OFFSET ?;";
+    public List<UserData> getUsers(int pageIndex,String searchUserId) throws Exception{
+        String sql = "select USER_ID,NAME,PASSWORD from MT_USER ";
 
         ArrayList<Object> params = new ArrayList<>();
+        if(!(searchUserId == null || "".equals(searchUserId))){
+            sql += "where USER_ID like ? ";
+            params.add("%" + searchUserId + "%");
+        }
+        sql += " ORDER BY USER_ID LIMIT ? OFFSET ?";
         params.add(PAGE_COUNT);
         params.add(pageIndex*PAGE_COUNT);
 

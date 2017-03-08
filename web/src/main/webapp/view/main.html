@@ -3,6 +3,11 @@
 <!-- 検索 -->
 <div class="container" ng-controller="searchSample">
     <div class="row">
+        <label>ユーザーID</label>
+        <input type="text"  ng-model="searchUserId">
+    </div>
+
+    <div class="row">
         <div class="pull-right">
 			<form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
                 <input type="hidden" name="userId" value={{userId}}>

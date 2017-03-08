@@ -15,7 +15,8 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
              });
         */
 
-        webApiService.get('api/user/totalpage?userId=:id', { id: userService.getId() },
+        webApiService.get('api/user/totalpage?userId=:id&searchUserId=:searchUserId',
+    		{ id: userService.getId(),searchUserId:$scope.searchUserId },
             function (response) {
         		$scope.totalPage = response.pageCount;
         		$scope.pageIndex = 0;
@@ -39,8 +40,8 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
 
 
     var getPage = function(){
-        webApiService.query('api/user/page?userId=:id&page=:pageIndex',
-            { id: userService.getId(),pageIndex:$scope.pageIndex },
+        webApiService.query('api/user/page?userId=:id&page=:pageIndex&searchUserId=:searchUserId',
+            { id: userService.getId(),pageIndex:$scope.pageIndex,searchUserId:$scope.searchUserId },
             function (response) {
                 $scope.searchResult = response;
              });

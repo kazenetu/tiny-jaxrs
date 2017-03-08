@@ -143,14 +143,14 @@ public class UserResource extends Resource{
     @GET
     @Path("totalpage")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response totalPage(@QueryParam("userId") String userId) {
+    public Response totalPage(@QueryParam("userId") String userId,@QueryParam("searchUserId") String searchUserId) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
         String result = "{\"result\":\"NG\"}";
 
         try(UserModel userModel=new UserModel()){
-            int pageCount =  userModel.getUserPageCount();
+            int pageCount =  userModel.getUserPageCount(searchUserId);
 
             result = "{\"pageCount\":\"" + pageCount + "\"}";
 
@@ -171,13 +171,13 @@ public class UserResource extends Resource{
     @GET
     @Path("page")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response userlist(@QueryParam("userId") String userId,@QueryParam("page") int pageIndex) {
+    public Response userlist(@QueryParam("userId") String userId,@QueryParam("page") int pageIndex,@QueryParam("searchUserId") String searchUserId) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
         List<UserData> users = new ArrayList<>();
         try(UserModel userModel=new UserModel()){
-            users =  userModel.getUsers(pageIndex);
+            users =  userModel.getUsers(pageIndex,searchUserId);
 
             ObjectMapper mapper = new ObjectMapper();
             return Response.ok(mapper.writeValueAsString(users))
