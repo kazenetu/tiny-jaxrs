@@ -9,7 +9,7 @@ myApp.service('userService', function() {
   };
 
   this.getId = function(){
-    if(this.id === ""){
+    if(isValueNone(this.id)){
       this.id = sessionStorage.getItem("userId");
     }
     return this.id;
@@ -21,12 +21,13 @@ myApp.service('userService', function() {
   };
 
   this.getName = function(){
-    if(this.name === ""){
+    if(isValueNone(this.name)){
       this.name = sessionStorage.getItem("userName");
-    }
-    if(this.name === null || this.name===""){
-      return "ななし";
     }
     return this.name;
   };
+
+  function isValueNone(value){
+	  return value===null || value === undefined || value === "";
+  }
 });
