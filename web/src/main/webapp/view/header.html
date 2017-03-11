@@ -1,7 +1,7 @@
-<div class="container" ng-controller="headerController">
+<div class="container" ng-controller="headerController as header">
   <div class="jumbotron">
-    <h1>Example page header<br><small>こんにちは {{ userName() }} さん</small></h1>
+    <h1>Example page header<br><small>こんにちは {{ header.userName() }} さん</small></h1>
 
-    <button ng-click="passwordChange()">パスワード変更</button>
+    <button ng-click="header.passwordChange()">パスワード変更</button>
   </div>
 </div>

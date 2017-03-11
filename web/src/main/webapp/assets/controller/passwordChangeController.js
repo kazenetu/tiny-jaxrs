@@ -1,16 +1,18 @@
-function PasswordChangeController($scope, $location, webApiService, userService) {
-    $scope.isError = false;
-    $scope.errorMsg = "";
+function PasswordChangeController($location, webApiService, userService) {
+    var ctrl = this;
 
-    $scope.passwordChange = function() {
+    ctrl.isError = false;
+    ctrl.errorMsg = "";
+
+    ctrl.passwordChange = function() {
         webApiService.post('api/user/passwordChange', {
             id : userService.getId(),
-            password : $scope.password,
-            newPassword : $scope.newPassword
+            password : ctrl.password,
+            newPassword : ctrl.newPassword
         }, function(response) {
             if (response.result !== "OK") {
-                $scope.errorMsg = "現在のパスワードが異なります";
-                $scope.isError = true;
+                ctrl.errorMsg = "現在のパスワードが異なります";
+                ctrl.isError = true;
             } else {
                 $location.path('/main');
             }

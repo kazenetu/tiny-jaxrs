@@ -1,9 +1,11 @@
-function HeaderController($scope, $location, userService) {
-    $scope.userName = function() {
+function HeaderController($location, userService) {
+    var ctrl = this;
+
+    ctrl.userName = function() {
         return userService.getName();
     };
 
-    $scope.passwordChange = function() {
+    ctrl.passwordChange = function() {
         $location.path('/passwordChange');
     };
 }
