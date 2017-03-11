@@ -4,7 +4,6 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
     function ($scope, $location, webApiService, userService) {
 
     var ctrl = this;
-	$scope.pageIndex = 0;
 	$scope.totalPage =0;
 
 	$scope.search = function () {
@@ -19,24 +18,13 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
     		{ id: userService.getId(),searchUserId:$scope.searchUserId },
             function (response) {
         		$scope.totalPage = response.pageCount;
-        		$scope.pageIndex = 0;
+                ctrl.sendPageIndex(0,null);
 
-        		ctrl.getPage(0);
+                ctrl.getPage(0);
              });
 
     }
-    $scope.prev = function () {
-    	if($scope.pageIndex>0){
-    		$scope.pageIndex--;
-    		ctrl.getPage($scope.pageIndex);
-    	}
-    }
-    $scope.next = function () {
-    	if($scope.pageIndex<$scope.totalPage-1){
-    		$scope.pageIndex++;
-    		ctrl.getPage($scope.pageIndex);
-    	}
-    }
+
 
     ctrl.getPage = function(pageIndex){
         webApiService.query('api/user/page?userId=:id&page=:pageIndex&searchUserId=:searchUserId',
@@ -46,8 +34,27 @@ myApp.controller('searchSample', ['$scope', '$location', 'webApiService', 'userS
              });
     }
 
-    $scope.test = function(index){
-        ctrl.getPage(index);
+    ctrl.childlen = [];
+    $scope.sendRoot = function(src){
+        if(ctrl.childlen.indexOf(src) == -1){
+            ctrl.childlen.push(src);
+        }
+    }
+
+    $scope.paging = function(pageIndex,sender){
+        ctrl.getPage(pageIndex);
+
+        ctrl.sendPageIndex(pageIndex,sender);
+    }
+
+    ctrl.sendPageIndex = function(pageIndex,sender){
+        var index=0;
+        while(index < ctrl.childlen.length){
+            if(ctrl.childlen[index] !== sender){
+                ctrl.childlen[index].setPagetIndex(pageIndex);
+            }
+            index++;
+        }
     }
 
     $scope.userId = userService.getId();

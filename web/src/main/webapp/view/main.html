@@ -26,16 +26,12 @@
         </div>
     </div>
 
-    <pager index={{pageIndex}} total={{totalPage}} on-paging="test(index)"/>
+    <pager total-page={{totalPage}} on-paging="paging(pageIndex,sender)" on-send-root="sendRoot(src)" />
 
     <ul>
         <li ng-repeat="result in searchResult">ID:{{result.id}},Name:{{result.name}},PWD:{{result.password}}</li>
     </ul>
 
-<div  ng-show="totalPage>0">
-    <input type="button" class="btn" ng-click="prev()"  value="＜">
-    {{pageIndex+1}}/{{totalPage}}
-    <input type="button" class="btn" ng-click="next()"  value="＞">
-</div>
+    <pager total-page={{totalPage}} on-paging="paging(pageIndex,sender)" on-send-root="sendRoot(src)" />
 
 </div>
