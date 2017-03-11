@@ -1,7 +1,7 @@
 <div ng-include="'view/header.html'"></div>
 
 <!-- 検索 -->
-<div class="container" ng-controller="searchSample">
+<div class="container" ng-controller="searchSample as main">
     <div class="row">
         <label>ユーザーID</label>
         <input type="text"  ng-model="searchUserId">
@@ -26,12 +26,12 @@
         </div>
     </div>
 
-    <pager total-page={{totalPage}} on-paging="paging(pageIndex,sender)" on-send-root="sendRoot(src)" />
+    <pager total-page={{main.totalPage}} on-paging="paging(pageIndex,sender)" on-send-root="sendRoot(src)" />
 
     <ul>
         <li ng-repeat="result in searchResult">ID:{{result.id}},Name:{{result.name}},PWD:{{result.password}}</li>
     </ul>
 
-    <pager total-page={{totalPage}} on-paging="paging(pageIndex,sender)" on-send-root="sendRoot(src)" />
+    <pager total-page={{main.totalPage}} on-paging="paging(pageIndex,sender)" on-send-root="sendRoot(src)" />
 
 </div>

@@ -1,13 +1,11 @@
-var myApp = angular.module('headerController', ["userService"]);
+function HeaderController($scope, $location, userService) {
+    $scope.userName = function() {
+        return userService.getName();
+    };
 
-myApp.controller('headerController', ['$scope','$location', 'userService',
-    function($scope,$location, userService){
-        $scope.userName = function() {
-            return userService.getName();
-        };
+    $scope.passwordChange = function() {
+        $location.path('/passwordChange');
+    };
+}
 
-        $scope.passwordChange = function() {
-            $location.path('/passwordChange');
-        };
-    }
-]);
+angular.module('App').controller('headerController', HeaderController);
