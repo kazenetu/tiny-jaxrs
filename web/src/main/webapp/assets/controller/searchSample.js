@@ -15,6 +15,10 @@ function SearchSample($location, webApiService, userService) {
         });
     }
 
+    ctrl.edit = function(id){
+        console.log(id);
+    }
+
     ctrl.getPage = function(pageIndex) {
         webApiService.query('api/user/page?userId=:id&page=:pageIndex&searchUserId=:searchUserId', {
             id : userService.getId(),

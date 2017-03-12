@@ -29,7 +29,10 @@
     <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
 
     <ul>
-        <li ng-repeat="result in ctrl.searchResult">ID:{{result.id}},Name:{{result.name}},PWD:{{result.password}}</li>
+        <li ng-repeat="result in ctrl.searchResult">
+            ID:{{result.id}},Name:{{result.name}},PWD:{{result.password}}
+            <button class="btn" ng-click="ctrl.edit(result.id)")>編集</button>
+        </li>
     </ul>
 
     <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
