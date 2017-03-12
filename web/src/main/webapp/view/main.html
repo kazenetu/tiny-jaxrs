@@ -1,13 +1,29 @@
-<div ng-include="'view/header.html'"></div>
+<style type="text/css">
+.buttons-row
+{
+    height:2em;
+}
+td
+{
+    padding-top:0.25em;
+    padding-bottom:0.25em;
+}
+</style>
 
-<!-- 検索 -->
+<div ng-include="'view/header.html'">テスト</div>
+
+<!-- メイン画面 -->
 <div class="container" ng-controller="searchSample as ctrl">
-    <div class="row">
-        <label>ユーザーID</label>
-        <input type="text"  ng-model="ctrl.searchUserId">
+    <!-- 検索条件 -->
+    <form class="form-inline">
+    <div class="form-group">
+        <label for="searchUserId">ユーザーID</label>
+        <input type="text" id = "searchUserId"  ng-model="ctrl.searchUserId">
     </div>
+    </form>
 
-    <div class="row">
+    <!-- ボタン類 -->
+    <div class="form-group buttons-row">
         <div class="pull-right">
             <form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
                 <input type="hidden" name="userId" value={{ctrl.userId}}>
@@ -26,15 +42,41 @@
         </div>
     </div>
 
+    <!-- 検索結果 -->
+    <div>
     <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
 
-    <ul>
-        <li ng-repeat="result in ctrl.searchResult">
-            ID:{{result.id}},Name:{{result.name}},PWD:{{result.password}}
-            <button class="btn" ng-click="ctrl.edit(result.id)")>編集</button>
-        </li>
-    </ul>
+    <table class="table-bordered">
+        <tr>
+            <th class="text-center" style="width:10em;">
+                ID
+            </th>
+            <th class="text-center" style="width:10em;">
+                名前
+            </th>
+            <th class="text-center" style="width:10em;">
+                パスワード
+            </th>
+            <th class="text-center" style="width:5em;">
+                変更
+            </th>
+        </tr>
+        <tr  ng-repeat="result in ctrl.searchResult">
+            <td class="text-center">
+                {{result.id}}
+            </td>
+            <td class="text-left">
+                {{result.name}}
+            </td>
+            <td class="text-left">
+                {{result.password}}
+            </td>
+            <td class="text-center">
+                <button class="btn btn-sm" ng-click="ctrl.edit(result.id)")>編集</button>
+            </td>
+        </tr>
+    </table>
 
     <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
-
+    </div>
 </div>
