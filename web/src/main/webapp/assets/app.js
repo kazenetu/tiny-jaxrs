@@ -1,4 +1,4 @@
-var myApp = angular.module('App', [ 'ngResource', 'ngRoute', 'webApiService','userService' ]);
+var myApp = angular.module('App', [ 'ngResource', 'ngRoute', 'webApiService','storageService','userService' ]);
 
 myApp.config([ '$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {

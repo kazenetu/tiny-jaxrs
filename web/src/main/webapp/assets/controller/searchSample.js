@@ -1,17 +1,49 @@
-function SearchSample($location, webApiService, userService) {
+function SearchSample($location, webApiService, userService,storageService) {
 
     var ctrl = this;
     ctrl.totalPage = 0;
 
-    ctrl.search = function() {
+
+    function clearCondition(){
+        storageService.setValue(storageService.KEY_CONDITION,'');
+    }
+
+    function setConditions(pageIndex){
+        var valus =
+        {
+            searchUserId : ctrl.searchUserId,
+            pageIndex:pageIndex
+        };
+        storageService.setValue(storageService.KEY_CONDITION,JSON.stringify(valus));
+    }
+
+    function getConditions(){
+        var valueString = storageService.getValue(storageService.KEY_CONDITION);
+        if(valueString !== ""){
+            values = JSON.parse(valueString);
+
+            // 検索条件
+            ctrl.searchUserId = values.searchUserId;
+
+            // 検索(ページ指定)
+            ctrl.search(values.pageIndex);
+        }
+    }
+
+    ctrl.init = function() {
+        getConditions();
+    }
+
+    ctrl.search = function(pageIndex) {
+        // 検索条件クリア
+        clearCondition();
+
         webApiService.get('api/user/totalpage?userId=:id&searchUserId=:searchUserId', {
             id : userService.getId(),
             searchUserId : ctrl.searchUserId
         }, function(response) {
             ctrl.totalPage = response.pageCount;
-            ctrl.sendPageIndex(0, null);
-
-            ctrl.getPage(0);
+            ctrl.paging(pageIndex,null);
         });
     }
 
@@ -26,6 +58,8 @@ function SearchSample($location, webApiService, userService) {
             searchUserId : ctrl.searchUserId
         }, function(response) {
             ctrl.searchResult = response;
+
+            setConditions(pageIndex)
         });
     }
 

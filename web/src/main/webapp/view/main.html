@@ -13,7 +13,7 @@ td
 <div ng-include="'view/header.html'">テスト</div>
 
 <!-- メイン画面 -->
-<div class="container" ng-controller="searchSample as ctrl">
+<div class="container" ng-init="ctrl.init()" ng-controller="searchSample as ctrl">
     <!-- 検索条件 -->
     <form class="form-inline">
     <div class="form-group">
@@ -38,7 +38,7 @@ td
                 <input type="submit" class="btn" value="PDF出力">
 
             </form>
-            <input type="button" class="btn" ng-click="ctrl.search()"  value="検索">
+            <input type="button" class="btn" ng-click="ctrl.search(0)"  value="検索">
         </div>
     </div>
 
