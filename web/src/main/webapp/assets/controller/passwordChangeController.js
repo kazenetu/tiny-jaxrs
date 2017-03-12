@@ -18,6 +18,10 @@ function PasswordChangeController($location, webApiService, userService) {
             }
         });
     }
+
+    ctrl.cancel = function(){
+        $location.path('/main');
+    }
 }
 
 angular.module('App').controller('passwordChangeController', PasswordChangeController);
