@@ -48,7 +48,8 @@ function SearchSample($location, webApiService, userService,storageService) {
     }
 
     ctrl.edit = function(id){
-        console.log(id);
+        storageService.setValue(storageService.KEY_EDIT_DATA,id);
+        $location.path('/useredit');
     }
 
     ctrl.getPage = function(pageIndex) {
