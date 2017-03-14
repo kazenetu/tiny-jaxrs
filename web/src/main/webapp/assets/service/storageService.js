@@ -4,8 +4,6 @@ function StorageService(){
         enableConditionPaths:'enableConditionPaths',
         updateKeys:'updateKeys'
     };
-    this.KEY_CONDITION = 'searchCondition';
-    this.KEY_EDIT_DATA = 'editData';
 
     this.clearValue = function(key) {
         sessionStorage.removeItem(key);
