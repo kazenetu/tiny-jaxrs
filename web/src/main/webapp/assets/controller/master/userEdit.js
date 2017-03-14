@@ -24,6 +24,23 @@ function UserEdit($location, webApiService, userService,storageService) {
     }
 
     ctrl.update = function(){
+        // ユーザーデータ更新
+        webApiService.post('api/user/update', {
+            loginUserId: userService.getId(),
+            requestData:{
+                id :ctrl.userId,
+                name :ctrl.userName,
+                password :ctrl.password
+            }
+        }, function(response) {
+            if (response.result !== "OK") {
+                ctrl.errorMsg = "更新失敗しました。";
+                ctrl.isError = true;
+            } else {
+                ctrl.isError = false;
+                $location.path('/main');
+            }
+        });
 
     }
 

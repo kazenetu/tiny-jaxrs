@@ -145,6 +145,32 @@ public class UserModel extends Model{
         return users;
     }
 
+    public boolean update(UserData userData){
+        String sql = "update MT_USER set Name = ?,PASSWORD=? where USER_ID=?;";
+
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(userData.getName());
+        params.add(userData.getPassword());
+        params.add(userData.getId());
+
+        try {
+            db.setTransaction();
+
+            if (db.execute(sql, params) > 0) {
+                db.commit();
+                return true;
+            } else {
+                db.rollback();
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     /**
      * パスワード変更
      * @param userID ユーザーID

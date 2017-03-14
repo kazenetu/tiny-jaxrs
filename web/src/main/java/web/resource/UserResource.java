@@ -23,10 +23,12 @@ import org.glassfish.jersey.process.internal.RequestScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import web.common.base.RequestEntity;
 import web.common.base.Resource;
 import web.common.util.PdfUtil;
 import web.entity.PasswordChange;
@@ -95,6 +97,40 @@ public class UserResource extends Resource{
 
             // パスワード変更SQLを発行
             if ( userModel.passwordChange(instance.getId(), instance.getPassword(),instance.getNewPassword())) {
+                result = "{\"result\":\"OK\"}";
+            }else{
+                result = "{\"result\":\"NG\"}";
+            }
+
+            // パスワード変更結果を返す
+            return Response.ok(result) .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Path("update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try(UserModel userModel=new UserModel()){
+
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
+            RequestEntity<UserData> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+
+            String result = "";
+
+            // 更新SQLを発行
+            if ( userModel.update(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
             }else{
                 result = "{\"result\":\"NG\"}";
