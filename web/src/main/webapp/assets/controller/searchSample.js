@@ -20,11 +20,13 @@ function SearchSample($location, webApiService, userService,storageService) {
     function getConditions(){
         var values = storageService.getValue(storageService.keys.condition);
 
-        // 検索条件
-        ctrl.searchUserId = values.searchUserId;
+        if(values.pageIndex){
+            // 検索条件
+            ctrl.searchUserId = values.searchUserId;
 
-        // 検索(ページ指定)
-        ctrl.search(values.pageIndex);
+            // 検索(ページ指定)
+            ctrl.search(values.pageIndex);
+        }
     }
 
     ctrl.init = function() {
@@ -41,6 +43,9 @@ function SearchSample($location, webApiService, userService,storageService) {
         }, function(response) {
             ctrl.totalPage = response.pageCount;
             ctrl.paging(pageIndex,null);
+
+            var values = ['/main','/useredit'];
+            storageService.setValue(storageService.keys.enableConditionPaths,values);
         });
     }
 

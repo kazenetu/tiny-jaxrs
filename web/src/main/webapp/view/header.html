@@ -1,4 +1,4 @@
-<div class="container" ng-controller="headerController as header">
+<div class="container" ng-init="header.init()" ng-controller="headerController as header">
   <div class="jumbotron">
     <h1>Example page header<br><small>こんにちは {{ header.userName() }} さん</small></h1>
 

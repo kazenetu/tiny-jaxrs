@@ -1,6 +1,7 @@
 function StorageService(){
     this.keys = {
         condition:'condition',
+        enableConditionPaths:'enableConditionPaths',
         updateKeys:'updateKeys'
     };
     this.KEY_CONDITION = 'searchCondition';
