@@ -13,7 +13,7 @@ function PagerController() {
      * 表示用現在ページ
      */
     ctrl.indexlPage = function() {
-        return parseInt(ctrl.pageIndex)+1;
+        return parseInt(ctrl.pageIndex,10)+1;
     }
 
     /**
