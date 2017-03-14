@@ -10,7 +10,7 @@ function UserEdit($location, webApiService, userService,storageService) {
 
     ctrl.init = function(){
         // 検索画面から取得したキー情報を設定
-        ctrl.userId = storageService.getValue(storageService.KEY_EDIT_DATA);
+        ctrl.userId = storageService.getValue(storageService.keys.updateKeys);
 
         // ユーザーデータ取得
         webApiService.query('api/user/page?userId=:id&page=:pageIndex&searchUserId=:searchUserId', {

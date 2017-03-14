@@ -1,4 +1,8 @@
 function StorageService(){
+    this.keys = {
+        condition:'condition',
+        updateKeys:'updateKeys'
+    };
     this.KEY_CONDITION = 'searchCondition';
     this.KEY_EDIT_DATA = 'editData';
 

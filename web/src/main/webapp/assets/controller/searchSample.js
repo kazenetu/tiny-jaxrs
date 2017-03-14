@@ -14,11 +14,11 @@ function SearchSample($location, webApiService, userService,storageService) {
             searchUserId : ctrl.searchUserId,
             pageIndex:pageIndex
         };
-        storageService.setValue(storageService.KEY_CONDITION,JSON.stringify(valus));
+        storageService.setValue(storageService.keys.condition,JSON.stringify(valus));
     }
 
     function getConditions(){
-        var valueString = storageService.getValue(storageService.KEY_CONDITION);
+        var valueString = storageService.getValue(storageService.keys.condition);
         if(valueString !== ""){
             values = JSON.parse(valueString);
 
@@ -48,7 +48,7 @@ function SearchSample($location, webApiService, userService,storageService) {
     }
 
     ctrl.edit = function(id){
-        storageService.setValue(storageService.KEY_EDIT_DATA,id);
+        storageService.setValue(storageService.keys.updateKeys,id);
         $location.path('/useredit');
     }
 
