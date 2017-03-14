@@ -5,7 +5,7 @@ function SearchSample($location, webApiService, userService,storageService) {
 
 
     function clearCondition(){
-        storageService.setValue(storageService.keys.condition,'');
+        storageService.clearValue(storageService.keys.condition);
     }
 
     function setConditions(pageIndex){
@@ -14,20 +14,17 @@ function SearchSample($location, webApiService, userService,storageService) {
             searchUserId : ctrl.searchUserId,
             pageIndex:pageIndex
         };
-        storageService.setValue(storageService.keys.condition,JSON.stringify(valus));
+        storageService.setValue(storageService.keys.condition,valus);
     }
 
     function getConditions(){
-        var valueString = storageService.getValue(storageService.keys.condition);
-        if(valueString !== ""){
-            values = JSON.parse(valueString);
+        var values = storageService.getValue(storageService.keys.condition);
 
-            // 検索条件
-            ctrl.searchUserId = values.searchUserId;
+        // 検索条件
+        ctrl.searchUserId = values.searchUserId;
 
-            // 検索(ページ指定)
-            ctrl.search(values.pageIndex);
-        }
+        // 検索(ページ指定)
+        ctrl.search(values.pageIndex);
     }
 
     ctrl.init = function() {
@@ -48,7 +45,10 @@ function SearchSample($location, webApiService, userService,storageService) {
     }
 
     ctrl.edit = function(id){
-        storageService.setValue(storageService.keys.updateKeys,id);
+        var values={
+                userId : id
+        };
+        storageService.setValue(storageService.keys.updateKeys,values);
         $location.path('/useredit');
     }
 

@@ -6,16 +6,20 @@ function StorageService(){
     this.KEY_CONDITION = 'searchCondition';
     this.KEY_EDIT_DATA = 'editData';
 
+    this.clearValue = function(key) {
+        sessionStorage.removeItem(key);
+    };
+
     this.setValue = function(key, value) {
-        sessionStorage.setItem(key, value);
+        sessionStorage.setItem(key, JSON.stringify(value));
     };
 
     this.getValue = function(key) {
         var value = sessionStorage.getItem(key);
         if (isValueNone(value)) {
-            value = "";
+            return {};
         }
-        return value;
+        return JSON.parse(value);
 
     };
 
