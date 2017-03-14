@@ -5,7 +5,7 @@ function SearchSample($location, webApiService, userService,storageService) {
 
 
     function clearCondition(){
-        storageService.setValue(storageService.KEY_CONDITION,'');
+        storageService.setValue(storageService.keys.condition,'');
     }
 
     function setConditions(pageIndex){
