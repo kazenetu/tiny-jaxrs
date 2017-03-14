@@ -10,10 +10,10 @@ td
 }
 </style>
 
-<div ng-include="'view/header.html'"></div>
-
 <!-- メイン画面 -->
 <div class="container" ng-init="ctrl.init()" ng-controller="searchSample as ctrl">
+    <header on-send-root="ctrl.sendRootHeader(src)" />
+
     <!-- 検索条件 -->
     <form class="form-inline">
     <div class="form-group">

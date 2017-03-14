@@ -1,8 +1,6 @@
-<div ng-include="'view/header.html'">テスト</div>
-
 <!-- メイン画面 -->
 <div class="container" ng-init="ctrl.init()" ng-controller="userEdit as ctrl">
-<p class="bg-danger" ng-show="ctrl.isError">{{ctrl.errorMsg}}</p>
+    <header on-send-root="ctrl.sendRootHeader(src)" />
 
     <!-- ボタン類 -->
     <div class="form-group buttons-row">

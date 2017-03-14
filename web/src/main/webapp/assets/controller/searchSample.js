@@ -42,6 +42,12 @@ function SearchSample($location, webApiService, userService,storageService) {
             searchUserId : ctrl.searchUserId
         }, function(response) {
             ctrl.totalPage = response.pageCount;
+
+            ctrl.header.hideError();
+            if(ctrl.totalPage <= 0){
+                ctrl.header.showError('検索結果が0件です');
+            }
+
             ctrl.paging(pageIndex,null);
 
             var values = ['/main','/useredit'];
@@ -90,6 +96,11 @@ function SearchSample($location, webApiService, userService,storageService) {
             }
             index++;
         }
+    }
+
+    ctrl.header = null;
+    ctrl.sendRootHeader = function(src){
+        ctrl.header = src;
     }
 
     ctrl.userId = userService.getId();

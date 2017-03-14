@@ -1,9 +1,6 @@
 function UserEdit($location, webApiService, userService,storageService) {
     var ctrl = this;
 
-    ctrl.isError = false;
-    ctrl.errorMsg = "";
-
     ctrl.userId = "";
     ctrl.userName = "";
     ctrl.password = "";
@@ -35,11 +32,10 @@ function UserEdit($location, webApiService, userService,storageService) {
                 password :ctrl.password
             }
         }, function(response) {
-            if (response.result !== "OK") {
-                ctrl.errorMsg = "更新失敗しました。";
-                ctrl.isError = true;
+            if (response.result !== 'OK') {
+                ctrl.header.showError('更新失敗しました。');
             } else {
-                ctrl.isError = false;
+                ctrl.header.hideError();
                 $location.path('/main');
                 storageService.clearValue(storageService.keys.updateKeys);
             }
@@ -56,6 +52,10 @@ function UserEdit($location, webApiService, userService,storageService) {
         storageService.clearValue(storageService.keys.updateKeys);
     }
 
+    ctrl.header = null;
+    ctrl.sendRootHeader = function(src){
+        ctrl.header = src;
+    }
 }
 
 angular.module('App').controller('userEdit', UserEdit);

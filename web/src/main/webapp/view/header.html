@@ -1,7 +1,6 @@
-<div class="container" ng-init="header.init()" ng-controller="headerController as header">
-  <div class="jumbotron">
-    <h1>Example page header<br><small>こんにちは {{ header.userName() }} さん</small></h1>
+<div class="jumbotron">
+    <h1>Example page header<br><small>こんにちは {{ $ctrl.userName() }} さん</small></h1>
 
-    <button class="btn" ng-click="header.passwordChange()">パスワード変更</button>
-  </div>
+    <button class="btn" ng-click="$ctrl.passwordChange()">パスワード変更</button>
 </div>
+<p class="bg-danger ng-hide" ng-show="$ctrl.isError">{{$ctrl.errorMsg}}</p>

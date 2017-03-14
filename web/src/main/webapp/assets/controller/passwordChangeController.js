@@ -1,19 +1,16 @@
 function PasswordChangeController($location, webApiService, userService) {
     var ctrl = this;
 
-    ctrl.isError = false;
-    ctrl.errorMsg = "";
-
     ctrl.passwordChange = function() {
         webApiService.post('api/user/passwordChange', {
             id : userService.getId(),
             password : ctrl.password,
             newPassword : ctrl.newPassword
         }, function(response) {
-            if (response.result !== "OK") {
-                ctrl.errorMsg = "現在のパスワードが異なります";
-                ctrl.isError = true;
+            if (response.result !== 'OK') {
+                ctrl.header.showError('現在のパスワードが異なります');
             } else {
+                ctrl.header.hideError();
                 $location.path('/main');
             }
         });
@@ -21,6 +18,11 @@ function PasswordChangeController($location, webApiService, userService) {
 
     ctrl.cancel = function(){
         $location.path('/main');
+    }
+
+    ctrl.header = null;
+    ctrl.sendRootHeader = function(src){
+        ctrl.header = src;
     }
 }
 
