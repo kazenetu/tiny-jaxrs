@@ -50,7 +50,7 @@ function UserListController($location, webApiService, userService,storageService
 
             ctrl.paging(pageIndex,null);
 
-            var values = ['/main','/useredit'];
+            var values = ['/userlist','/useredit'];
             storageService.setValue(storageService.keys.enableConditionPaths,values);
         });
     }

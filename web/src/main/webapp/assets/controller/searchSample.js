@@ -3,6 +3,9 @@ function SearchSample($location, webApiService, userService,storageService) {
     var ctrl = this;
     ctrl.totalPage = 0;
 
+    ctrl.gotoPage = function(pageUrl) {
+        $location.path(pageUrl);
+    }
 
     function clearCondition(){
         storageService.clearValue(storageService.keys.condition);
@@ -29,9 +32,6 @@ function SearchSample($location, webApiService, userService,storageService) {
         }
     }
 
-    ctrl.init = function() {
-        getConditions();
-    }
 
     ctrl.search = function(pageIndex) {
         // 検索条件クリア

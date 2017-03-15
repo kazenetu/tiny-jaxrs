@@ -36,7 +36,7 @@ function UserEdit($location, webApiService, userService,storageService) {
                 ctrl.header.showError('更新失敗しました。');
             } else {
                 ctrl.header.hideError();
-                $location.path('/main');
+                $location.path('/userlist');
                 storageService.clearValue(storageService.keys.updateKeys);
             }
         });
@@ -48,7 +48,7 @@ function UserEdit($location, webApiService, userService,storageService) {
         console.log("ctrl.userName:"+ctrl.userName);
         console.log("ctrl.password:"+ctrl.password);
 
-        $location.path('/main');
+        $location.path('/userlist');
         storageService.clearValue(storageService.keys.updateKeys);
     }
 
