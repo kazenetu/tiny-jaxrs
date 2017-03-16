@@ -11,7 +11,7 @@ td
 </style>
 
 <!-- メイン画面 -->
-<div class="container" ng-init="ctrl.init()" ng-controller="userListController as ctrl">
+<div class="container ng-cloak" ng-cloak ng-init="ctrl.init()" ng-controller="userListController as ctrl">
     <header on-send-root="ctrl.sendRootHeader(src)" />
 
     <!-- 検索条件 -->

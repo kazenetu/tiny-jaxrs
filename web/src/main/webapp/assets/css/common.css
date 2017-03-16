@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+// 読み込み完了前の非表示設定
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

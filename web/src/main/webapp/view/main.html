@@ -11,7 +11,7 @@ td
 </style>
 
 <!-- メイン画面 -->
-<div class="container" ng-controller="mainController as ctrl">
+<div class="container" ng-cloak ng-controller="mainController as ctrl">
     <header on-send-root="ctrl.sendRootHeader(src)" />
 
     <button ng-click="ctrl.gotoPage('/userlist')" class="btn">ユーザーマスタ検索</button>
