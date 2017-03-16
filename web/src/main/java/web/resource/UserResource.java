@@ -78,6 +78,28 @@ public class UserResource extends Resource{
     }
 
     /**
+     * ログアウト
+     * @param servletRequest リクエストオブジェクト
+     * @return レスポンス
+     */
+    @POST
+    @Path("logout")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response logout(@Context final HttpServletRequest servletRequest) {
+
+        try{
+            //セッションの破棄
+            session.invalidate();
+
+            String result = "{\"result\":\"OK\"}";
+            return Response.ok(result) .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    /**
      * ログインユーザーのパスワード変更
      * @param json リクエスト情報
      * @return 変更成否

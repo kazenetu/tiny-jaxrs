@@ -1,7 +1,7 @@
 /**
  * ヘッダーコンポーネント
  */
-function HeaderController($location, userService, storageService) {
+function HeaderController($location, userService, webApiService, storageService) {
     var ctrl = this;
 
     ctrl.isError = false;
@@ -28,6 +28,17 @@ function HeaderController($location, userService, storageService) {
         if(Array.isArray(paths) && paths.indexOf(currentPath) < 0){
             storageService.clearValue(storageService.keys.condition);
         }
+    };
+
+    /**
+     * ログアウト
+     */
+    ctrl.logout = function() {
+        // ユーザーデータ取得
+        webApiService.post('api/user/logout', {
+        }, function(response) {
+            $location.path('/');
+        });
     };
 
     /**
