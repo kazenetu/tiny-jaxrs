@@ -11,7 +11,7 @@ td
 </style>
 
 <!-- メイン画面 -->
-<div class="container" ng-init="ctrl.init()" ng-controller="searchSample as ctrl">
+<div class="container" ng-controller="mainController as ctrl">
     <header on-send-root="ctrl.sendRootHeader(src)" />
 
     <button ng-click="ctrl.gotoPage('/userlist')">ユーザーマスタ検索</button>
