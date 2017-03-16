@@ -37,6 +37,7 @@ function HeaderController($location, userService, webApiService, storageService)
         // ユーザーデータ取得
         webApiService.post('api/user/logout', {
         }, function(response) {
+            storageService.clearAllValues();
             $location.path('/');
         });
     };

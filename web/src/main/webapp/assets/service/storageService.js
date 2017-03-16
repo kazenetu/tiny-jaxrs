@@ -19,6 +19,13 @@ function StorageService(){
     };
 
     /**
+     * すべての値の削除
+     */
+    this.clearAllValues = function() {
+        sessionStorage.clear();
+    };
+
+    /**
      * 値（オブジェクト）の設定
      */
     this.setValue = function(key, value) {
