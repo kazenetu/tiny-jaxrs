@@ -77,6 +77,11 @@ public class UserResource extends Resource{
         }
     }
 
+    /**
+     * ログインユーザーのパスワード変更
+     * @param json リクエスト情報
+     * @return 変更成否
+     */
     @POST
     @Path("passwordChange")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -110,6 +115,11 @@ public class UserResource extends Resource{
         }
     }
 
+    /**
+     * ユーザー情報の更新
+     * @param json ログインユーザーIDと変更情報
+     * @return 変更成否
+     */
     @POST
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
