@@ -1,10 +1,16 @@
 # tiny-jaxrs
 簡易的なJAX-RSアプリ
 
-# 使い方
+## 開発環境
+下記環境で開発をしています。
++ Eclipse4.6
++ Tomcat8
++ Java8
+
+## 使い方
 [web](web/)を「プロジェクトの追加」などでワークスペースに追加してください。
 
-# 設定ファイルなど
+## 設定ファイルなど
 + [config](config/)  
 DBの設定などを格納したcontext.xmlです。  
 ※Tomcat用
