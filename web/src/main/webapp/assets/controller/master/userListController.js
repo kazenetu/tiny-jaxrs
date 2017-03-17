@@ -20,7 +20,7 @@ function UserListController($location, webApiService, userService,storageService
     function getConditions(){
         var values = storageService.getValue(storageService.keys.condition);
 
-        if(values.pageIndex){
+        if('pageIndex' in values){
             // 検索条件
             ctrl.searchUserId = values.searchUserId;
 
