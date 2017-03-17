@@ -1,0 +1,5 @@
+<div  ng-show="$ctrl.totalPage > 0">
+  <input type="button" class="btn" ng-click="$ctrl.prev()" ng-disabled="!$ctrl.isEnabledPrev()"  value="＜">
+  {{$ctrl.indexlPage()}} / {{$ctrl.totalPage}}
+  <input type="button" class="btn" ng-click="$ctrl.next()" ng-disabled="!$ctrl.isEnabledNext()" value="＞">
+</div>

@@ -77,12 +77,6 @@ myApp.component("pager", {
         onPaging: '&',
         onSendRoot:'&'
     },
-    template:`
-          <div  ng-show="$ctrl.totalPage > 0">
-              <input type="button" class="btn" ng-click="$ctrl.prev()" ng-disabled="!$ctrl.isEnabledPrev()"  value="＜">
-              {{$ctrl.indexlPage()}} / {{$ctrl.totalPage}}
-              <input type="button" class="btn" ng-click="$ctrl.next()" ng-disabled="!$ctrl.isEnabledNext()" value="＞">
-          </div>
-          `,
+    templateUrl:'assets/common/component/pager.html',
     controller : PagerController
 });
