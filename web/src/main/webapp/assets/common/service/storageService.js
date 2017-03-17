@@ -33,7 +33,7 @@ function StorageService(){
     };
 
     /**
-     * 値（オブジェクト）の取得k
+     * 値（オブジェクト）の取得
      */
     this.getValue = function(key) {
         var value = sessionStorage.getItem(key);
