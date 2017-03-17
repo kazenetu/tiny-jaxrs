@@ -1,14 +1,14 @@
-<div class="container" ng-cloak ng-controller="loginController as login">
+<div class="container" data-ng-cloak data-ng-controller="loginController as login">
   <h1>ログイン</h1>
 
-  <p class="bg-danger" ng-show="login.isError">{{login.errorMsg}}</p>
+  <p class="bg-danger" data-ng-show="login.isError">{{login.errorMsg}}</p>
   <form>
   <div class="row">
-    ユーザーID：<input type="text" ng-model="login.userId">※「test」でログインできます。
+    ユーザーID：<input type="text" data-ng-model="login.userId">※「test」でログインできます。
   </div>
   <div class="row">
-    パスワード：<input type="password" ng-model="login.password">
+    パスワード：<input type="password" data-ng-model="login.password">
   </div>
-  <button ng-click="login.login()">ログイン</button>
+  <button data-ng-click="login.login()">ログイン</button>
   </form>
  </div>

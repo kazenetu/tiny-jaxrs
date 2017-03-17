@@ -11,14 +11,14 @@ td
 </style>
 
 <!-- メイン画面 -->
-<div class="container ng-cloak" ng-cloak ng-init="ctrl.init()" ng-controller="userListController as ctrl">
-    <header on-send-root="ctrl.sendRootHeader(src)" />
+<div class="container ng-cloak" data-ng-cloak data-ng-init="ctrl.init()" data-ng-controller="userListController as ctrl">
+    <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
 
     <!-- 検索条件 -->
     <form class="form-inline">
     <div class="form-group">
         <label for="searchUserId">ユーザーID</label>
-        <input type="text" id = "searchUserId"  ng-model="ctrl.searchUserId">
+        <input type="text" id = "searchUserId"  data-ng-model="ctrl.searchUserId">
     </div>
     </form>
 
@@ -38,7 +38,7 @@ td
                 <input type="submit" class="btn" value="PDF出力">
 
             </form>
-            <input type="button" class="btn" ng-click="ctrl.search(0)"  value="検索">
+            <input type="button" class="btn" data-ng-click="ctrl.search(0)"  value="検索">
         </div>
     </div>
 
@@ -61,7 +61,7 @@ td
                 変更
             </th>
         </tr>
-        <tr  ng-repeat="result in ctrl.searchResult">
+        <tr  data-ng-repeat="result in ctrl.searchResult">
             <td class="text-center">
                 {{result.id}}
             </td>
@@ -72,7 +72,7 @@ td
                 {{result.password}}
             </td>
             <td class="text-center">
-                <button class="btn btn-sm" ng-click="ctrl.edit(result.id)">編集</button>
+                <button class="btn btn-sm" data-ng-click="ctrl.edit(result.id)">編集</button>
             </td>
         </tr>
     </table>

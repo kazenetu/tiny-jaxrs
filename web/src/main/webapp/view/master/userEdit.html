@@ -1,27 +1,27 @@
 <!-- メイン画面 -->
-<div class="container" ng-cloak ng-init="ctrl.init()" ng-controller="userEdit as ctrl">
-    <header on-send-root="ctrl.sendRootHeader(src)" />
+<div class="container" data-ng-cloak data-ng-init="ctrl.init()" data-ng-controller="userEdit as ctrl">
+    <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
 
     <!-- ボタン類 -->
     <div class="form-group buttons-row">
-        <input type="button" class="btn" ng-click="ctrl.cancel()"  value="戻る">
+        <input type="button" class="btn" data-ng-click="ctrl.cancel()"  value="戻る">
         <div class="pull-right">
-            <input type="button" class="btn" ng-click="ctrl.update()"  value="更新">
+            <input type="button" class="btn" data-ng-click="ctrl.update()"  value="更新">
         </div>
     </div>
 
     <!-- 編集項目 -->
     <div class="form-group">
         <label for="userId">ユーザーID</label>
-        <input type="text" id = "userId" ng-disabled="true" ng-model="ctrl.userId">
+        <input type="text" id = "userId" data-ng-disabled="true" data-ng-model="ctrl.userId">
     </div>
     <div class="form-group">
         <label for="userName">ユーザー名</label>
-        <input type="text" id = "userName"  ng-model="ctrl.userName">
+        <input type="text" id = "userName"  data-ng-model="ctrl.userName">
     </div>
     <div class="form-group">
         <label for="password">パスワード</label>
-        <input type="text" id = "password"  ng-model="ctrl.password">
+        <input type="text" id = "password"  data-ng-model="ctrl.password">
     </div>
 
 </div>

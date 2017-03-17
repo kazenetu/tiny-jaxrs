@@ -1,9 +1,9 @@
 <div class="jumbotron">
     <h1>Example page header<br><small>こんにちは {{ $ctrl.userName() }} さん</small></h1>
 
-    <button class="btn" ng-click="$ctrl.passwordChange()">パスワード変更</button>
+    <button class="btn" data-ng-click="$ctrl.passwordChange()">パスワード変更</button>
     <div class="pull-right">
-        <button class="btn" ng-click="$ctrl.logout()">ログアウト</button>
+        <button class="btn" data-ng-click="$ctrl.logout()">ログアウト</button>
     </div>
 </div>
-<p class="bg-danger ng-hide" ng-show="$ctrl.isError">{{$ctrl.errorMsg}}</p>
+<p class="bg-danger ng-hide" data-ng-show="$ctrl.isError">{{$ctrl.errorMsg}}</p>
