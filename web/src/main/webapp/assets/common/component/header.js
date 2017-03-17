@@ -67,6 +67,6 @@ myApp.component("header", {
     bindings : {
         onSendRoot:'&'
     },
-    templateUrl:'view/header.html',
+    templateUrl:'assets/common/component/header.html',
     controller : HeaderController
 });
