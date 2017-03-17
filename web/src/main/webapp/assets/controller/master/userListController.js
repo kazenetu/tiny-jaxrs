@@ -43,9 +43,9 @@ function UserListController($location, webApiService, userService,storageService
         }, function(response) {
             ctrl.totalPage = response.pageCount;
 
-            ctrl.header.hideError();
+            ctrl.hideError();
             if(ctrl.totalPage <= 0){
-                ctrl.header.showError('検索結果が0件です');
+                ctrl.showError('検索結果が0件です');
             }
 
             ctrl.paging(pageIndex,null);
@@ -101,6 +101,18 @@ function UserListController($location, webApiService, userService,storageService
     ctrl.header = null;
     ctrl.sendRootHeader = function(src){
         ctrl.header = src;
+    }
+    ctrl.showError = function(message){
+        if(ctrl.header === null){
+            return;
+        }
+        ctrl.header.showError(message);
+    }
+    ctrl.hideError = function(){
+        if(ctrl.header === null){
+            return;
+        }
+        ctrl.header.hideError();
     }
 
     ctrl.userId = userService.getId();
