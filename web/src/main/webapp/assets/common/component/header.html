@@ -6,4 +6,6 @@
         <button class="btn" data-ng-click="$ctrl.logout()">ログアウト</button>
     </div>
 </div>
-<p class="bg-danger ng-hide" data-ng-show="$ctrl.isError">{{$ctrl.errorMsg}}</p>
+<h3 class="error-area bg-danger ng-hide" data-ng-show="$ctrl.isError">
+{{$ctrl.errorMsg}}
+</h3>
