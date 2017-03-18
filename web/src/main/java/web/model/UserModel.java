@@ -76,7 +76,7 @@ public class UserModel extends Model{
     private final int PAGE_COUNT = 10;
     /**
      * 検索結果のページ総数を取得する
-     * @return ページ総数
+     * @return ページ総数(検索件数0件の場合は-1)
      */
     public int getUserPageCount(String searchUserId){
         String sql = "select cast(count(USER_ID) as int) CNT from MT_USER ";
@@ -99,12 +99,15 @@ public class UserModel extends Model{
             //throw new Exception(e);
         }
 
-        int pageCount = recordCount / PAGE_COUNT;
-        if(recordCount <= PAGE_COUNT){
-            pageCount = 0;
-        }else{
-            if(recordCount - pageCount*PAGE_COUNT > 0){
-                pageCount++;
+        int pageCount = -1;
+        if(recordCount > 0){
+            pageCount = recordCount / PAGE_COUNT;
+            if(recordCount <= PAGE_COUNT){
+                pageCount = 0;
+            }else{
+                if(recordCount - pageCount*PAGE_COUNT > 0){
+                    pageCount++;
+                }
             }
         }
 

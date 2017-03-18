@@ -44,8 +44,9 @@ function UserListController($location, webApiService, userService,storageService
             ctrl.totalPage = response.pageCount;
 
             ctrl.hideError();
-            if(ctrl.totalPage <= 0){
+            if(ctrl.totalPage < 0){
                 ctrl.showError('検索結果が0件です');
+                ctrl.totalPage = 0;
             }
 
             ctrl.paging(pageIndex,null);
