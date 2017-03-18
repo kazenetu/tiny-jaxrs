@@ -1,6 +1,30 @@
 @CHARSET "UTF-8";
 
-// 読み込み完了前の非表示設定
+/* 読み込み完了前の非表示設定 */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
+}
+
+html,body{
+    background-color: gainsboro;
+	min-height:100%;
+}
+
+/* ヘッダー */
+.header{
+    background-color: mediumaquamarine;
+    margin-bottom: 0px !important;
+}
+
+/* メインエリア */
+.main-area{
+	background-color: cornsilk;
+	padding:2em;
+	min-height:80%;
+}
+.buttons-row
+{
+    height:2em;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
 }

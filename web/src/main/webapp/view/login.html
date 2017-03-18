@@ -1,14 +1,29 @@
-<div class="container" data-ng-cloak data-ng-controller="loginController as login">
-  <h1>ログイン</h1>
 
-  <p class="bg-danger" data-ng-show="login.isError">{{login.errorMsg}}</p>
-  <form>
-  <div class="row">
-    ユーザーID：<input type="text" data-ng-model="login.userId">※「test」でログインできます。
-  </div>
-  <div class="row">
-    パスワード：<input type="password" data-ng-model="login.password">
-  </div>
-  <button data-ng-click="login.login()">ログイン</button>
-  </form>
+<div class="container" data-ng-controller="loginController as login">
+    <!-- ヘッダー -->
+    <div class="jumbotron header">
+          <h1>ログイン</h1>
+    </div>
+    <p class="bg-danger ng-hide" data-ng-show="$ctrl.isError">{{$ctrl.errorMsg}}</p>
+
+
+    <!-- メイン画面 -->
+    <div  class="main-area" data-ng-cloak >
+        <p class="bg-danger" data-ng-show="login.isError">{{login.errorMsg}}</p>
+        <form>
+            <div class="row">
+                ユーザーID：<input type="text" data-ng-model="login.userId">※「test」でログインできます。
+            </div>
+            <div class="row">
+                パスワード：<input type="password" data-ng-model="login.password">
+            </div>
+
+            <!-- ボタン類 -->
+            <div class="form-group buttons-row">
+                <div class="col-sm-2 text-right">
+                    <button class="btn" data-ng-click="login.login()">ログイン</button>
+                </div>
+            </div>
+        </form>
+    </div>
  </div>
