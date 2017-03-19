@@ -36,6 +36,10 @@ front.controller.UserListController =  function UserListController($location, we
         getConditions();
     }
 
+    ctrl.back = function(){
+        $location.path('/main');
+    }
+
     ctrl.search = function(pageIndex) {
         // 検索条件クリア
         clearCondition();
