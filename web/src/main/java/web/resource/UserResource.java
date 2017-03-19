@@ -241,22 +241,29 @@ public class UserResource extends Resource{
 
     /**
      * ユーザー一覧取得(ページング用)
-     * @param userId ユーザーID
-     * @param page ページ数
+     * @param json ログインユーザーIDと検索条件
      * @return レスポンス
      */
-    @GET
+    @POST
     @Path("page")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response userlist(@QueryParam("userId") String userId,@QueryParam("page") int pageIndex,@QueryParam("searchUserId") String searchUserId) {
-        //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
+    public Response userlistPage(String json) {
+        ObjectMapper mapper = new ObjectMapper();
 
-        List<UserData> users = new ArrayList<>();
-        try(UserModel userModel=new UserModel()){
-            users =  userModel.getUsers(pageIndex,searchUserId);
+        try(UserModel userModel = new UserModel()){
 
-            ObjectMapper mapper = new ObjectMapper();
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserList.class);
+            RequestEntity<UserList> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+
+            // 検索条件での検索結果を取得する
+            List<UserData> users =  userModel.getUsers(instance.getRequestData());
+
             return Response.ok(mapper.writeValueAsString(users))
                     .build();
         } catch (Exception e) {

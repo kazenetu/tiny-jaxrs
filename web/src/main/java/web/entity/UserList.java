@@ -4,11 +4,22 @@ public class UserList {
 
     private String searchUserId;
 
+    private int pageIndex;
+
     public UserList(){
     }
 
-    public UserList(String searchUserId){
+    public UserList(int pageIndex, String searchUserId){
+        this.setPageIndex(pageIndex);
         this.searchUserId = searchUserId;
+    }
+
+    public int getPageIndex() {
+        return pageIndex;
+    }
+
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
     }
 
     /**

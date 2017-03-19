@@ -43,6 +43,7 @@ function UserListController($location, webApiService, userService,storageService
         webApiService.post('api/user/totalpage', {
             loginUserId: userService.getId(),
             requestData:{
+                pageIndex : pageIndex,
                 searchUserId : ctrl.searchUserId
             }
         }, function(response) {
@@ -70,10 +71,12 @@ function UserListController($location, webApiService, userService,storageService
     }
 
     ctrl.getPage = function(pageIndex) {
-        webApiService.query('api/user/page?userId=:id&page=:pageIndex&searchUserId=:searchUserId', {
-            id : userService.getId(),
-            pageIndex : pageIndex,
-            searchUserId : ctrl.searchUserId
+        webApiService.postQuery('api/user/page', {
+            loginUserId: userService.getId(),
+            requestData:{
+                pageIndex : pageIndex,
+                searchUserId : ctrl.searchUserId
+            }
         }, function(response) {
             ctrl.searchResult = response;
 

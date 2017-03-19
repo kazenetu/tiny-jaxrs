@@ -124,11 +124,16 @@ public class UserModel extends Model{
      * @return ユーザーのリスト
      * @throws Exception
      */
-    public List<UserData> getUsers(int pageIndex,String searchUserId) throws Exception{
+    public List<UserData> getUsers(UserList seachCondition) throws Exception{
         String sql = "select USER_ID,NAME,PASSWORD from MT_USER ";
 
+        // 検索条件
+        int pageIndex = seachCondition.getPageIndex();
+        String searchUserId = seachCondition.getSearchUserId();
+
+        // パラメータの設定
         ArrayList<Object> params = new ArrayList<>();
-        if(!(searchUserId == null || "".equals(searchUserId))){
+        if(!isNullorEmpty(searchUserId)){
             sql += "where USER_ID like ? ";
             params.add("%" + searchUserId + "%");
         }
