@@ -1,4 +1,4 @@
-function UserEdit($location, webApiService, userService,storageService) {
+front.controller.UserEdit = function UserEdit($location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('ユーザー編集');
 
@@ -58,4 +58,4 @@ function UserEdit($location, webApiService, userService,storageService) {
     }
 }
 
-angular.module('App').controller('userEdit', UserEdit);
+angular.module('App').controller('userEdit', front.controller.UserEdit);

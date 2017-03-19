@@ -1,4 +1,4 @@
-function UserListController($location, webApiService, userService,storageService) {
+front.controller.UserListController =  function UserListController($location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.SearchBase);
     this.setTitle('ユーザー検索');
 
@@ -89,4 +89,4 @@ function UserListController($location, webApiService, userService,storageService
     ctrl.userName = userService.getName();
 }
 
-angular.module('App').controller('userListController', UserListController);
+angular.module('App').controller('userListController', front.controller.UserListController);

@@ -1,4 +1,4 @@
-function PasswordChangeController($location, webApiService, userService) {
+front.controller.PasswordChangeController = function PasswordChangeController($location, webApiService, userService) {
     front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('パスワード変更');
 
@@ -25,4 +25,4 @@ function PasswordChangeController($location, webApiService, userService) {
 
 }
 
-angular.module('App').controller('passwordChangeController', PasswordChangeController);
+angular.module('App').controller('passwordChangeController', front.controller.PasswordChangeController);

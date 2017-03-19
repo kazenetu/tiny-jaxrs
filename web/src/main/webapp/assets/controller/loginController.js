@@ -1,4 +1,4 @@
-function LoginController($location, webApiService, userService) {
+front.controller.LoginController = function LoginController($location, webApiService, userService) {
     var ctrl = this;
 
     ctrl.id = "";
@@ -25,4 +25,4 @@ function LoginController($location, webApiService, userService) {
     }
 }
 
-angular.module('App').controller('loginController', LoginController);
+angular.module('App').controller('loginController', front.controller.LoginController);

@@ -1,4 +1,4 @@
-function MainController($location, webApiService, userService,storageService) {
+front.controller.MainController = function MainController($location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('メニュー');
 
@@ -10,4 +10,4 @@ function MainController($location, webApiService, userService,storageService) {
 
 }
 
-angular.module('App').controller('mainController', MainController);
+angular.module('App').controller('mainController', front.controller.MainController);
