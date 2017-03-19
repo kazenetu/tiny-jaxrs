@@ -95,10 +95,6 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     }
 
     ctrl.cancel = function(){
-        console.log("ctrl.userId:"+ctrl.userId);
-        console.log("ctrl.userName:"+ctrl.userName);
-        console.log("ctrl.password:"+ctrl.password);
-
         $location.path('/userlist');
         storageService.clearValue(storageService.keys.updateKeys);
     }
