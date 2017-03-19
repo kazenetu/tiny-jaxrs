@@ -9,7 +9,7 @@
         <div class="form-group buttons-row">
             <input type="button" class="btn" data-ng-click="ctrl.cancel()"  value="戻る">
             <div class="pull-right">
-                <input type="button" class="btn" data-ng-click="ctrl.update()"  value="更新">
+                <input type="button" class="btn" data-ng-click="ctrl.insertOrUpdate()"  value="更新">
             </div>
         </div>
         <hr>
@@ -17,7 +17,11 @@
         <!-- 編集項目 -->
         <div class="form-group">
             <label for="userId">ユーザーID</label>
-            <input type="text" id = "userId" data-ng-disabled="true" data-ng-model="ctrl.userId">
+            <input type="text" id = "userId" data-ng-disabled="ctrl.disabledUserId"
+                data-ng-blur='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
+
+            <span data-ng-show="ctrl.userIdIcon !== ''" class="glyphicon {{ctrl.userIdIcon}}" aria-hidden="true"></span>
+
         </div>
         <div class="form-group">
             <label for="userName">ユーザー名</label>

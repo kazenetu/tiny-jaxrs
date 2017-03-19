@@ -40,6 +40,14 @@ front.controller.UserListController =  function UserListController($location, we
         $location.path('/main');
     }
 
+    ctrl.create = function(){
+        var values={
+                userId : null
+        };
+        storageService.setValue(storageService.keys.updateKeys,values);
+        $location.path('/useredit');
+    }
+
     ctrl.search = function(pageIndex) {
         // 検索条件クリア
         clearCondition();

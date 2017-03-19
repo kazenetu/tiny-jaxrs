@@ -4,32 +4,67 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
 
     var ctrl = this;
 
+    ctrl.disabledUserId = true;
     ctrl.userId = "";
     ctrl.userName = "";
     ctrl.password = "";
+
+    ctrl.userIdIcon = '';
 
     ctrl.init = function(){
         // 検索画面から取得したキー情報を設定
         var values= storageService.getValue(storageService.keys.updateKeys);
 
-        ctrl.userId = values.userId;
+        if(values.userId === null){
+            ctrl.disabledUserId = false;
 
-        // ユーザーデータ取得
-        webApiService.postQuery('api/user/page', {
-            loginUserId: userService.getId(),
-            requestData:{
-                pageIndex : 0,
-                searchUserId : ctrl.userId
-            }
-        }, function(response) {
-            ctrl.userName = response[0].name;
-            ctrl.password = response[0].password;
-        });
+        }else{
+            ctrl.disabledUserId = true;
+            ctrl.userId = values.userId;
+
+            // ユーザーデータ取得
+            webApiService.postQuery('api/user/page', {
+                loginUserId: userService.getId(),
+                requestData:{
+                    pageIndex : 0,
+                    searchUserId : ctrl.userId
+                }
+            }, function(response) {
+                ctrl.userName = response[0].name;
+                ctrl.password = response[0].password;
+            });
+        }
     }
 
-    ctrl.update = function(){
+    ctrl.duplicateUserId = function(){
+        ctrl.userIdIcon = '';
+
+        if(!ctrl.disabledUserId){
+            // ユーザーデータ取得
+            webApiService.postQuery('api/user/page', {
+                loginUserId: userService.getId(),
+                requestData:{
+                    pageIndex : 0,
+                    searchUserId : ctrl.userId
+                }
+            }, function(response) {
+                if(response.length <= 0){
+                    ctrl.userIdIcon = 'glyphicon-ok';
+                }else{
+                    ctrl.userIdIcon = 'glyphicon-remove';
+                }
+            });
+        }
+    }
+
+    ctrl.insertOrUpdate = function(){
+        var method = 'insert';
+        if(ctrl.disabledUserId){
+            method = 'update';
+        }
+
         // ユーザーデータ更新
-        webApiService.post('api/user/update', {
+        webApiService.post('api/user/' + method, {
             loginUserId: userService.getId(),
             requestData:{
                 id :ctrl.userId,
