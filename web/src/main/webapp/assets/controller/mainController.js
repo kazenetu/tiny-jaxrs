@@ -1,4 +1,6 @@
 function MainController($location, webApiService, userService,storageService) {
+    extendController(this,PageBase);
+    this.setTitle('メニュー');
 
     var ctrl = this;
 
@@ -6,10 +8,6 @@ function MainController($location, webApiService, userService,storageService) {
         $location.path(pageUrl);
     }
 
-    ctrl.header = null;
-    ctrl.sendRootHeader = function(src){
-        ctrl.header = src;
-    }
 }
 
 angular.module('App').controller('mainController', MainController);

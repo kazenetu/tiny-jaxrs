@@ -1,4 +1,7 @@
 function UserEdit($location, webApiService, userService,storageService) {
+    extendController(this,PageBase);
+    this.setTitle('ユーザー編集');
+
     var ctrl = this;
 
     ctrl.userId = "";
@@ -50,11 +53,6 @@ function UserEdit($location, webApiService, userService,storageService) {
 
         $location.path('/userlist');
         storageService.clearValue(storageService.keys.updateKeys);
-    }
-
-    ctrl.header = null;
-    ctrl.sendRootHeader = function(src){
-        ctrl.header = src;
     }
 }
 

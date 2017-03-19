@@ -4,6 +4,7 @@
 function HeaderController($location, userService, webApiService, storageService) {
     var ctrl = this;
 
+    ctrl.title = '';
     ctrl.isError = false;
     ctrl.errorMsg = '';
 
@@ -56,6 +57,10 @@ function HeaderController($location, userService, webApiService, storageService)
     ctrl.hideError = function() {
         ctrl.isError = false;
         ctrl.errorMsg = '';
+    }
+
+    ctrl.setTitle = function(title) {
+        ctrl.title = title;
     }
 
 }

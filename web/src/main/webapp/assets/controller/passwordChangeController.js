@@ -1,4 +1,7 @@
 function PasswordChangeController($location, webApiService, userService) {
+    extendController(this,PageBase);
+    this.setTitle('パスワード変更');
+
     var ctrl = this;
 
     ctrl.passwordChange = function() {
@@ -20,10 +23,6 @@ function PasswordChangeController($location, webApiService, userService) {
         $location.path('/main');
     }
 
-    ctrl.header = null;
-    ctrl.sendRootHeader = function(src){
-        ctrl.header = src;
-    }
 }
 
 angular.module('App').controller('passwordChangeController', PasswordChangeController);
