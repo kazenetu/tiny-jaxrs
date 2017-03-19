@@ -310,6 +310,44 @@ public class UserResource extends Resource{
         }
     }
 
+    /**
+     * ユーザー情報の検索
+     * @param json ログインユーザーIDと変更情報
+     * @return レスポンス
+     */
+    @POST
+    @Path("find")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response find(String json) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try(UserModel userModel=new UserModel()){
+
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
+            RequestEntity<UserData> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+            // ユーザーを検索
+            Optional<UserData> userData = userModel.getUser(instance.getRequestData().getId());
+
+            List<UserData> result = new ArrayList<>();
+            if(userData.isPresent()){
+                result.add(userData.get());
+            }
+
+            // 結果を返す
+            return Response.ok(mapper.writeValueAsString(result)) .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
     @POST
     @Path("download")
     @Produces(MediaType.TEXT_PLAIN)

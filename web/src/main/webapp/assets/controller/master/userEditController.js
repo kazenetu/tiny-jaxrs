@@ -10,6 +10,12 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     ctrl.password = "";
 
     ctrl.userIdIcon = '';
+    ctrl.ICONS = {
+        NONE:'none',
+        OK: 'glyphicon-ok',
+        NG: 'glyphicon-remove',
+    };
+    ctrl.commmitButtonName = '';
 
     ctrl.init = function(){
         // 検索画面から取得したキー情報を設定
@@ -17,17 +23,18 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
 
         if(values.userId === null){
             ctrl.disabledUserId = false;
+            ctrl.commmitButtonName = '登録';
 
         }else{
             ctrl.disabledUserId = true;
+            ctrl.commmitButtonName = '更新';
             ctrl.userId = values.userId;
 
             // ユーザーデータ取得
-            webApiService.postQuery('api/user/page', {
+            webApiService.postQuery('api/user/find', {
                 loginUserId: userService.getId(),
                 requestData:{
-                    pageIndex : 0,
-                    searchUserId : ctrl.userId
+                    id : ctrl.userId
                 }
             }, function(response) {
                 ctrl.userName = response[0].name;
@@ -37,21 +44,25 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     }
 
     ctrl.duplicateUserId = function(){
-        ctrl.userIdIcon = '';
+        ctrl.userIdIcon = ctrl.ICONS.NONE;
 
         if(!ctrl.disabledUserId){
+            if(ctrl.userId === ''){
+                ctrl.userIdIcon = ctrl.ICONS.NG;
+                return;
+            }
+
             // ユーザーデータ取得
-            webApiService.postQuery('api/user/page', {
+            webApiService.postQuery('api/user/find', {
                 loginUserId: userService.getId(),
                 requestData:{
-                    pageIndex : 0,
-                    searchUserId : ctrl.userId
+                    id : ctrl.userId
                 }
             }, function(response) {
                 if(response.length <= 0){
-                    ctrl.userIdIcon = 'glyphicon-ok';
+                    ctrl.userIdIcon = ctrl.ICONS.OK;
                 }else{
-                    ctrl.userIdIcon = 'glyphicon-remove';
+                    ctrl.userIdIcon = ctrl.ICONS.NG;
                 }
             });
         }

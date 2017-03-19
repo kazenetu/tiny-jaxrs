@@ -159,6 +159,39 @@ public class UserModel extends Model{
     }
 
     /**
+     * ユーザーを取得する
+     * @param userID ユーザーID
+     * @return ユーザー情報(検索できない場合はnull)
+     * @throws Exception
+     */
+    public Optional<UserData> getUser(String userID) throws Exception{
+        String sql = "select USER_ID,NAME,PASSWORD from MT_USER where USER_ID like ?;";
+
+        // パラメータの設定
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(userID);
+
+        UserData userData = null;
+
+        try {
+            List<Map<String,Object>> result = db.query(sql, params);
+            if (!result.isEmpty()) {
+                Map<String,Object> row = result.get(0);
+
+                userData = new UserData();
+                userData.setId((String)row.get("USER_ID"));
+                userData.setName((String)row.get("NAME"));
+                userData.setPassword((String)row.get("PASSWORD"));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new Exception(e);
+        }
+
+        return Optional.ofNullable(userData);
+    }
+
+    /**
      * ユーザーの登録
      * @param userData ユーザーデータ
      * @return 成否
