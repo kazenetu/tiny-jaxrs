@@ -17,15 +17,20 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     };
     ctrl.commmitButtonName = '';
 
+    /**
+     * 初期化イベント
+     */
     ctrl.init = function(){
         // 検索画面から取得したキー情報を設定
         var values= storageService.getValue(storageService.keys.updateKeys);
 
         if(values.userId === null){
+            // 新規作成
             ctrl.disabledUserId = false;
             ctrl.commmitButtonName = '登録';
 
         }else{
+            // 更新
             ctrl.disabledUserId = true;
             ctrl.commmitButtonName = '更新';
             ctrl.userId = values.userId;
@@ -43,9 +48,14 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
         }
     }
 
+    /**
+     * ユーザーID重複チェック
+     */
     ctrl.duplicateUserId = function(){
+        // ユーザーIDの重複アイコンは「なし」
         ctrl.userIdIcon = ctrl.ICONS.NONE;
 
+        // 新規作成時のみチェックする
         if(!ctrl.disabledUserId){
             if(ctrl.userId === ''){
                 ctrl.userIdIcon = ctrl.ICONS.NG;
@@ -60,14 +70,19 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
                 }
             }, function(response) {
                 if(response.length <= 0){
+                    // レコードがなければOKアイコン
                     ctrl.userIdIcon = ctrl.ICONS.OK;
                 }else{
+                    //レコードがあればNGアイコン
                     ctrl.userIdIcon = ctrl.ICONS.NG;
                 }
             });
         }
     }
 
+    /**
+     * 登録または更新イベント
+     */
     ctrl.insertOrUpdate = function(){
         var method = 'insert';
         if(ctrl.disabledUserId){
@@ -84,7 +99,7 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
             }
         }, function(response) {
             if (response.result !== 'OK') {
-                ctrl.header.showError('更新失敗しました。');
+                ctrl.header.showError(ctrl.commmitButtonName + '失敗しました。');
             } else {
                 ctrl.header.hideError();
                 $location.path('/userlist');
@@ -94,6 +109,9 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
 
     }
 
+    /**
+     * 戻るイベント
+     */
     ctrl.cancel = function(){
         $location.path('/userlist');
         storageService.clearValue(storageService.keys.updateKeys);
