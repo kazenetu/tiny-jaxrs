@@ -1,7 +1,7 @@
 /**
  * SessionStorageサービス
  */
-function StorageService(){
+front.common.service.StorageService = function StorageService(){
     /**
      * SessionStorageへの保存用キー
      */
@@ -52,4 +52,4 @@ function StorageService(){
     }
 }
 
-angular.module('storageService',[]).service('storageService', StorageService);
+angular.module('storageService',[]).service('storageService', front.common.service.StorageService);

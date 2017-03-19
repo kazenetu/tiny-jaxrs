@@ -1,65 +1,64 @@
-var myApp = angular.module('webApiService', []);
-myApp.service('webApiService', function($resource, $location) {
+front.common.service.WebApiService = function WebApiService($resource, $location){
+    this.baseUri = "";
 
-  this.baseUri = "";
+    /**
+     * 基本URIを設定する
+     */
+    this.setBaseUri = function(uri){
+      this.baseUri = uri;
+    }
 
-  /**
-   * 基本URIを設定する
-   */
-  this.setBaseUri = function(uri){
-    this.baseUri = uri;
-  }
+    /**
+     * GET(配列取得)メソッド
+     */
+    this.query = function(action,params,callFunction){
+      var result = $resource(this.baseUri + action).query(params);
 
-  /**
-   * GET(配列取得)メソッド
-   */
-  this.query = function(action,params,callFunction){
-    var result = $resource(this.baseUri + action).query(params);
+      result.$promise.then(function (response) {
+          callFunction(response);
+      }, function (response) {
+          $location.path('/');
+      });
+    };
 
-    result.$promise.then(function (response) {
-    	callFunction(response);
-    }, function (response) {
-        $location.path('/');
-    });
-  };
+    /**
+     * GETメソッド
+     */
+    this.get = function(action,params,callFunction){
+      var result = $resource(this.baseUri + action).get(params);
 
-  /**
-   * GETメソッド
-   */
-  this.get = function(action,params,callFunction){
-    var result = $resource(this.baseUri + action).get(params);
+      result.$promise.then(function (response) {
+          callFunction(response);
+      }, function (response) {
+          $location.path('/');
+      });
+    };
 
-    result.$promise.then(function (response) {
-    	callFunction(response);
-    }, function (response) {
-        $location.path('/');
-    });
-  };
+    /**
+     * POSTメソッド
+     */
+    this.post = function(action,params,callFunction){
+      var result = $resource(this.baseUri + action).save(params);
 
-  /**
-   * POSTメソッド
-   */
-  this.post = function(action,params,callFunction){
-    var result = $resource(this.baseUri + action).save(params);
+      result.$promise.then(function (response) {
+          callFunction(response);
+      }, function (response) {
+          $location.path('/');
+      });
+    };
 
-    result.$promise.then(function (response) {
-    	callFunction(response);
-    }, function (response) {
-        $location.path('/');
-    });
-  };
+    /**
+     * POST(配列取得)メソッド
+     */
+    this.postQuery = function(action,params,callFunction){
+        var result = $resource(this.baseUri + action,null,{query: {method: 'post', isArray: true}}).query(params);
 
-  /**
-   * POST(配列取得)メソッド
-   */
-  this.postQuery = function(action,params,callFunction){
-      var result = $resource(this.baseUri + action,null,{query: {method: 'post', isArray: true}}).query(params);
+      result.$promise.then(function (response) {
+          callFunction(response);
+      }, function (response) {
+          $location.path('/');
+      });
+    };
+}
 
-    result.$promise.then(function (response) {
-        callFunction(response);
-    }, function (response) {
-        $location.path('/');
-    });
-  };
-
-});
+angular.module('webApiService',[]).service('webApiService', front.common.service.WebApiService);
