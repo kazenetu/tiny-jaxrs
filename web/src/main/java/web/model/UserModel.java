@@ -159,6 +159,37 @@ public class UserModel extends Model{
     }
 
     /**
+     * ユーザーの登録
+     * @param userData ユーザーデータ
+     * @return 成否
+     */
+    public boolean insert(UserData userData){
+        String sql = "insert into mt_user(user_id, name, password) values (?, ?,?);";
+
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(userData.getId());
+        params.add(userData.getName());
+        params.add(userData.getPassword());
+
+        try {
+            db.setTransaction();
+
+            if (db.execute(sql, params) > 0) {
+                db.commit();
+                return true;
+            } else {
+                db.rollback();
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
      * ユーザーの更新
      * @param userData ユーザーデータ
      * @return 成否

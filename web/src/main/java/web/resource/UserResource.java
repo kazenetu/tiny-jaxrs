@@ -139,6 +139,44 @@ public class UserResource extends Resource{
     }
 
     /**
+     * ユーザー情報の登録
+     * @param json ログインユーザーIDと登録情報
+     * @return 変更成否
+     */
+    @POST
+    @Path("insert")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response insert(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try(UserModel userModel=new UserModel()){
+
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
+            RequestEntity<UserData> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+            String result = "";
+
+            // 登録SQLを発行
+            if ( userModel.insert(instance.getRequestData())) {
+                result = "{\"result\":\"OK\"}";
+            }else{
+                result = "{\"result\":\"NG\"}";
+            }
+
+            // パスワード変更結果を返す
+            return Response.ok(result) .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    /**
      * ユーザー情報の更新
      * @param json ログインユーザーIDと変更情報
      * @return 変更成否
