@@ -1,7 +1,7 @@
 /**
  * ページベース
  */
-function PageBase(){
+front.common.controller.PageBase = function PageBase(){
     var ctrl = this;
 
     ctrl.title = '';

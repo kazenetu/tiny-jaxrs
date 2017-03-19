@@ -1,5 +1,5 @@
 function UserListController($location, webApiService, userService,storageService) {
-    extendController(this,SearchBase);
+    extendController(this, front.common.controller.SearchBase);
     this.setTitle('ユーザー検索');
 
     var ctrl = this;
