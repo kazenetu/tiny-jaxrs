@@ -53,4 +53,12 @@ public abstract class Model implements AutoCloseable {
         db = null;
     }
 
+    /**
+     * パラメータの未入力チェック
+     * @param value 文字列インスタンス
+     * @return nullまたは空文字の場合はtrue、値が入っている場合はfalse
+     */
+    public boolean isNullorEmpty(String value){
+        return (value == null || value.length() == 0);
+    }
 }
