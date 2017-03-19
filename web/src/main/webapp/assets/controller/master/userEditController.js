@@ -15,10 +15,12 @@ function UserEdit($location, webApiService, userService,storageService) {
         ctrl.userId = values.userId;
 
         // ユーザーデータ取得
-        webApiService.query('api/user/page?userId=:id&page=:pageIndex&searchUserId=:searchUserId', {
-            id : userService.getId(),
-            pageIndex : 0,
-            searchUserId : ctrl.userId
+        webApiService.postQuery('api/user/page', {
+            loginUserId: userService.getId(),
+            requestData:{
+                pageIndex : 0,
+                searchUserId : ctrl.userId
+            }
         }, function(response) {
             ctrl.userName = response[0].name;
             ctrl.password = response[0].password;
