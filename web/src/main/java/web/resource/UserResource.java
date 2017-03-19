@@ -34,6 +34,7 @@ import web.common.util.PdfUtil;
 import web.entity.PasswordChange;
 import web.entity.TestData;
 import web.entity.UserData;
+import web.entity.UserList;
 import web.model.UserModel;
 
 @RequestScoped
@@ -204,22 +205,30 @@ public class UserResource extends Resource{
 
     /**
      * 検索結果のページ総数を取得する
-     * @param servletRequest リクエストオブジェクト
-     * @param userId ユーザーID
+     * @param json ログインユーザーIDと検索条件
      * @return レスポンス
      */
-    @GET
+    @POST
     @Path("totalpage")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response totalPage(@QueryParam("userId") String userId,@QueryParam("searchUserId") String searchUserId) {
-        //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
+    public Response totalPage(String json) {
+        ObjectMapper mapper = new ObjectMapper();
 
-        String result = "{\"result\":\"NG\"}";
+        try(UserModel userModel = new UserModel()){
 
-        try(UserModel userModel=new UserModel()){
-            int pageCount =  userModel.getUserPageCount(searchUserId);
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserList.class);
+            RequestEntity<UserList> instance = mapper.readValue(json, type);
 
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+
+            // 検索条件での検索件数を取得する
+            int pageCount =  userModel.getUserPageCount(instance.getRequestData());
+
+            String result = "";
             result = "{\"pageCount\":\"" + pageCount + "\"}";
 
             return Response.ok(result)

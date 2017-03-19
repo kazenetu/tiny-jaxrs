@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import web.common.base.Model;
 import web.entity.UserData;
+import web.entity.UserList;
 
 /**
  * ユーザーモデル
@@ -78,14 +79,18 @@ public class UserModel extends Model{
      * 検索結果のページ総数を取得する
      * @return ページ総数(検索件数0件の場合は-1)
      */
-    public int getUserPageCount(String searchUserId){
+    public int getUserPageCount(UserList seachCondition){
         String sql = "select cast(count(USER_ID) as int) CNT from MT_USER ";
+
+        // 検索条件
+        String searchUserId = seachCondition.getSearchUserId();
 
         int recordCount = 0;
 
         try {
             ArrayList<Object> params = new ArrayList<>();
-            if(!(searchUserId == null || "".equals(searchUserId))){
+
+            if(!isNullorEmpty(searchUserId)){
                 sql += "where USER_ID like ? ";
                 params.add("%" + searchUserId + "%");
             }

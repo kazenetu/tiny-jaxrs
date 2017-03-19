@@ -40,9 +40,11 @@ function UserListController($location, webApiService, userService,storageService
         // 検索条件クリア
         clearCondition();
 
-        webApiService.get('api/user/totalpage?userId=:id&searchUserId=:searchUserId', {
-            id : userService.getId(),
-            searchUserId : ctrl.searchUserId
+        webApiService.post('api/user/totalpage', {
+            loginUserId: userService.getId(),
+            requestData:{
+                searchUserId : ctrl.searchUserId
+            }
         }, function(response) {
             ctrl.totalPage = response.pageCount;
 
