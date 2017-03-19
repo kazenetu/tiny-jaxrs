@@ -49,4 +49,17 @@ myApp.service('webApiService', function($resource, $location) {
     });
   };
 
+  /**
+   * POST(配列取得)メソッド
+   */
+  this.postQuery = function(action,params,callFunction){
+      var result = $resource(this.baseUri + action,null,{query: {method: 'post', isArray: true}}).query(params);
+
+    result.$promise.then(function (response) {
+        callFunction(response);
+    }, function (response) {
+        $location.path('/');
+    });
+  };
+
 });
