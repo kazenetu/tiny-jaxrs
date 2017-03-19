@@ -158,6 +158,11 @@ public class UserModel extends Model{
         return users;
     }
 
+    /**
+     * ユーザーの更新
+     * @param userData ユーザーデータ
+     * @return 成否
+     */
     public boolean update(UserData userData){
         String sql = "update MT_USER set Name = ?,PASSWORD=? where USER_ID=?;";
 
