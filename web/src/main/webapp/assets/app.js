@@ -19,3 +19,14 @@ myApp.config([ '$routeProvider', function($routeProvider) {
     sessionStorage.setItem("rootURL",location.protocol + '//' + location.host + '/web/');
 }
 ]);
+
+// 名前空間を作成
+var front = {
+    common:{
+        component:{},
+        controller:{},
+        service:{},
+        utils:{}
+    },
+    controller:{},
+};
