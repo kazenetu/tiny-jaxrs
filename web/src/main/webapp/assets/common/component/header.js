@@ -1,7 +1,7 @@
 /**
  * ヘッダーコンポーネント
  */
-function HeaderController($location, userService, webApiService, storageService) {
+front.common.component.HeaderController = function HeaderController($location, userService, webApiService, storageService) {
     var ctrl = this;
 
     ctrl.title = '';
@@ -73,5 +73,5 @@ myApp.component("header", {
         onSendRoot:'&'
     },
     templateUrl:'assets/common/component/header.html',
-    controller : HeaderController
+    controller : front.common.component.HeaderController
 });

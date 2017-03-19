@@ -1,7 +1,7 @@
 /**
  * ページャーコンポーネント
  */
-function PagerController() {
+front.common.component.PagerController = function PagerController() {
     var ctrl = this;
 
     /**
@@ -78,5 +78,5 @@ myApp.component("pager", {
         onSendRoot:'&'
     },
     templateUrl:'assets/common/component/pager.html',
-    controller : PagerController
+    controller : front.common.component.PagerController
 });
