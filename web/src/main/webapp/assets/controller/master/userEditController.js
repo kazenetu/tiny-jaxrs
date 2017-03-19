@@ -1,5 +1,5 @@
 function UserEdit($location, webApiService, userService,storageService) {
-    extendController(this, front.common.controller.PageBase);
+    front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('ユーザー編集');
 
     var ctrl = this;

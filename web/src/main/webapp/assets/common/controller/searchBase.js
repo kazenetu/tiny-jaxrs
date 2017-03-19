@@ -2,7 +2,7 @@
  * 検索画面のベース画面
  */
 front.common.controller.SearchBase = function SearchBase(){
-    extendController(this,front.common.controller.PageBase);
+    front.common.utils.extendController(this,front.common.controller.PageBase);
 
     var ctrl = this;
 

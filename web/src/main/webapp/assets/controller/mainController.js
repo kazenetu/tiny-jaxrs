@@ -1,5 +1,5 @@
 function MainController($location, webApiService, userService,storageService) {
-    extendController(this, front.common.controller.PageBase);
+    front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('メニュー');
 
     var ctrl = this;

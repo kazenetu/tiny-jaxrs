@@ -1,5 +1,5 @@
 function PasswordChangeController($location, webApiService, userService) {
-    extendController(this, front.common.controller.PageBase);
+    front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('パスワード変更');
 
     var ctrl = this;
