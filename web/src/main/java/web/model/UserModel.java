@@ -254,6 +254,35 @@ public class UserModel extends Model{
     }
 
     /**
+     * ユーザーの削除
+     * @param userData ユーザーデータ
+     * @return 成否
+     */
+    public boolean delete(UserData userData){
+        String sql = "delete from MT_USER where USER_ID=?;";
+
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(userData.getId());
+
+        try {
+            db.setTransaction();
+
+            if (db.execute(sql, params) > 0) {
+                db.commit();
+                return true;
+            } else {
+                db.rollback();
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO 自動生成された catch ブロック
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
      * パスワード変更
      * @param userID ユーザーID
      * @param password パスワード

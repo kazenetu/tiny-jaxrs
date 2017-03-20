@@ -149,6 +149,29 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     }
 
     /**
+     * 削除イベント
+     */
+    ctrl.delete = function(){
+        // ユーザーデータ削除
+        webApiService.post('api/user/delete', {
+            loginUserId: userService.getId(),
+            requestData:{
+                id :ctrl.userId,
+                name :ctrl.userName,
+                password :ctrl.password
+            }
+        }, function(response) {
+            if (response.result !== 'OK') {
+                ctrl.showError('削除失敗しました。');
+            } else {
+                ctrl.hideError();
+                $location.path('/userlist');
+                storageService.clearValue(storageService.keys.updateKeys);
+            }
+        });
+    }
+
+    /**
      * DB反映前の入力チェック
      */
     function validateCheck(){

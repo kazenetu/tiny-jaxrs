@@ -216,6 +216,45 @@ public class UserResource extends Resource{
     }
 
     /**
+     * ユーザー情報の削除
+     * @param json ログインユーザーIDと削除情報
+     * @return 削除成否
+     */
+    @POST
+    @Path("delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try(UserModel userModel=new UserModel()){
+
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
+            RequestEntity<UserData> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+
+            String result = "";
+
+            // 更新SQLを発行
+            if ( userModel.delete(instance.getRequestData())) {
+                result = "{\"result\":\"OK\"}";
+            }else{
+                result = "{\"result\":\"NG\"}";
+            }
+
+            // パスワード変更結果を返す
+            return Response.ok(result) .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    /**
      * ユーザー一覧取得
      * @param servletRequest リクエストオブジェクト
      * @param userId ユーザーID
