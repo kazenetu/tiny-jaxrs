@@ -14,7 +14,6 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     ctrl.errorUserName = "";
     ctrl.errorPassword = "";
 
-
     /**
      * ユーザーIDの編集可否
      * true：編集不可（編集モード）
@@ -124,27 +123,29 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
             return;
         }
 
-        var method = 'insert';
-        if(ctrl.disabledUserId){
-            method = 'update';
-        }
+        ctrl.showConfirm(ctrl.commmitButtonName + 'しますか？','このユーザーを' + ctrl.commmitButtonName +'します', ctrl.commmitButtonName +'する',function(){
+            var method = 'insert';
+            if(ctrl.disabledUserId){
+                method = 'update';
+            }
 
-        // ユーザーデータ更新
-        webApiService.post('api/user/' + method, {
-            loginUserId: userService.getId(),
-            requestData:{
-                id :ctrl.userId,
-                name :ctrl.userName,
-                password :ctrl.password
-            }
-        }, function(response) {
-            if (response.result !== 'OK') {
-                ctrl.showError(ctrl.commmitButtonName + '失敗しました。');
-            } else {
-                ctrl.hideError();
-                $location.path('/userlist');
-                storageService.clearValue(storageService.keys.updateKeys);
-            }
+            // ユーザーデータ更新
+            webApiService.post('api/user/' + method, {
+                loginUserId: userService.getId(),
+                requestData:{
+                    id :ctrl.userId,
+                    name :ctrl.userName,
+                    password :ctrl.password
+                }
+            }, function(response) {
+                if (response.result !== 'OK') {
+                    ctrl.showError(ctrl.commmitButtonName + '失敗しました。');
+                } else {
+                    ctrl.hideError();
+                    $location.path('/userlist');
+                    storageService.clearValue(storageService.keys.updateKeys);
+                }
+            });
         });
     }
 
@@ -152,22 +153,24 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
      * 削除イベント
      */
     ctrl.delete = function(){
-        // ユーザーデータ削除
-        webApiService.post('api/user/delete', {
-            loginUserId: userService.getId(),
-            requestData:{
-                id :ctrl.userId,
-                name :ctrl.userName,
-                password :ctrl.password
-            }
-        }, function(response) {
-            if (response.result !== 'OK') {
-                ctrl.showError('削除失敗しました。');
-            } else {
-                ctrl.hideError();
-                $location.path('/userlist');
-                storageService.clearValue(storageService.keys.updateKeys);
-            }
+        ctrl.showConfirm('削除しますか？','このユーザーを削除します','削除する',function(){
+            // ユーザーデータ削除
+            webApiService.post('api/user/delete', {
+                loginUserId: userService.getId(),
+                requestData:{
+                    id :ctrl.userId,
+                    name :ctrl.userName,
+                    password :ctrl.password
+                }
+            }, function(response) {
+                if (response.result !== 'OK') {
+                    ctrl.showError('削除失敗しました。');
+                } else {
+                    ctrl.hideError();
+                    $location.path('/userlist');
+                    storageService.clearValue(storageService.keys.updateKeys);
+                }
+            });
         });
     }
 
@@ -214,6 +217,29 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     ctrl.cancel = function(){
         $location.path('/userlist');
         storageService.clearValue(storageService.keys.updateKeys);
+    }
+
+    // 確認ダイアログ系
+    ctrl.confirmTitle = '';
+    ctrl.confirmMsg = '';
+    ctrl.confirmCommitText = '';
+
+    var confirmCallback = null;
+    ctrl.showConfirm = function(title,message,buttonText,callFunction){
+        ctrl.confirmTitle = title;
+        ctrl.confirmMsg = message;
+        ctrl.confirmCommitText =buttonText;
+        $('#confirm').modal('show');
+        confirmCallback = callFunction;
+    }
+    ctrl.confirmCommitClick = function(){
+        if(confirmCallback !== null){
+            $('#confirm').on('hidden.bs.modal',function(){
+                $('#confirm').off('hidden.bs.modal');
+                confirmCallback();
+            });
+            $('#confirm').modal('hide');
+        }
     }
 }
 
