@@ -8,6 +8,29 @@ front.common.component.HeaderController = function HeaderController($location, u
     ctrl.isError = false;
     ctrl.errorMsg = '';
 
+    // ダイアログ系
+    ctrl.isConfirmMode = true;
+    ctrl.dialogTitle = '';
+    ctrl.dialogMessage = '';
+    ctrl.dialogCommitText = '';
+
+    /**
+     * 確定ボタンクリックで呼ばれるコールバック関数
+     */
+    var dialogCallback = null;
+
+    /**
+     * メッセージダイアログの表示
+     */
+    ctrl.showMsgDialog = function(title,message,buttonText,callFunction){
+        ctrl.isConfirmMode = false;
+        ctrl.dialogTitle = title;
+        ctrl.dialogMessage = message;
+        ctrl.dialogCommitText = buttonText;
+        $('#confirm').modal('show');
+        dialogCallback = callFunction;
+    }
+
     ctrl.userName = function() {
         return userService.getName();
     };
@@ -63,6 +86,30 @@ front.common.component.HeaderController = function HeaderController($location, u
         ctrl.title = title;
     }
 
+    /**
+     * 決定ボタンクリックイベント
+     */
+    ctrl.dialogCommitClick = function(){
+        if(dialogCallback !== null){
+            $('#confirm').on('hidden.bs.modal',function(){
+                $('#confirm').off('hidden.bs.modal');
+                dialogCallback();
+            });
+            $('#confirm').modal('hide');
+        }
+    }
+
+    /**
+     * 確認メッセージの表示
+     */
+    ctrl.showConfirm = function(title,message,buttonText,callFunction){
+        ctrl.isConfirmMode = true;
+        ctrl.dialogTitle = title;
+        ctrl.dialogMessage = message;
+        ctrl.dialogCommitText = buttonText;
+        $('#confirm').modal('show');
+        dialogCallback = callFunction;
+    }
 }
 
 /**

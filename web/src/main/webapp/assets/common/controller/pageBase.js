@@ -42,4 +42,22 @@ front.common.controller.PageBase = function PageBase(){
         ctrl.title = title;
         document.title = 'Sample:' + title;
     }
+
+    /**
+     * 確認メッセージの表示
+     */
+    ctrl.showConfirm = function(title,message,buttonText,callFunction){
+        if(ctrl.header === null) return;
+
+        ctrl.header.showConfirm(title,message,buttonText,callFunction);
+    }
+
+    /**
+     * メッセージダイアログの表示
+     */
+    ctrl.showMsgDialog = function(title,message,buttonText,callFunction){
+        if(ctrl.header === null) return;
+
+        ctrl.header.showMsgDialog(title,message,buttonText,callFunction);
+    }
 }

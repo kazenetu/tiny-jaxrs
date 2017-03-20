@@ -123,7 +123,7 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
             return;
         }
 
-        ctrl.showConfirm(ctrl.commmitButtonName + 'しますか？','このユーザーを' + ctrl.commmitButtonName +'します', ctrl.commmitButtonName +'する',function(){
+        ctrl.showConfirm(ctrl.commmitButtonName + 'の確認','このユーザーを' + ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する',function(){
             var method = 'insert';
             if(ctrl.disabledUserId){
                 method = 'update';
@@ -153,7 +153,7 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
      * 削除イベント
      */
     ctrl.delete = function(){
-        ctrl.showConfirm('削除しますか？','このユーザーを削除します','削除する',function(){
+        ctrl.showConfirm('削除の確認','このユーザーを削除しますか','削除する',function(){
             // ユーザーデータ削除
             webApiService.post('api/user/delete', {
                 loginUserId: userService.getId(),
@@ -219,28 +219,6 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
         storageService.clearValue(storageService.keys.updateKeys);
     }
 
-    // 確認ダイアログ系
-    ctrl.confirmTitle = '';
-    ctrl.confirmMsg = '';
-    ctrl.confirmCommitText = '';
-
-    var confirmCallback = null;
-    ctrl.showConfirm = function(title,message,buttonText,callFunction){
-        ctrl.confirmTitle = title;
-        ctrl.confirmMsg = message;
-        ctrl.confirmCommitText =buttonText;
-        $('#confirm').modal('show');
-        confirmCallback = callFunction;
-    }
-    ctrl.confirmCommitClick = function(){
-        if(confirmCallback !== null){
-            $('#confirm').on('hidden.bs.modal',function(){
-                $('#confirm').off('hidden.bs.modal');
-                confirmCallback();
-            });
-            $('#confirm').modal('hide');
-        }
-    }
 }
 
 angular.module('App').controller('userEdit', front.controller.UserEdit);
