@@ -4,9 +4,16 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
 
     var ctrl = this;
 
+    // 入力情報
     ctrl.userId = "";
     ctrl.userName = "";
     ctrl.password = "";
+
+    // 入力情報のエラークラス
+    ctrl.errorUserId = "";
+    ctrl.errorUserName = "";
+    ctrl.errorPassword = "";
+
 
     /**
      * ユーザーIDの編集可否
@@ -89,6 +96,7 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
                 if(response.length <= 0){
                     // レコードがなければOKアイコン
                     ctrl.userIdIcon = ctrl.ICONS.OK;
+                    ctrl.checkClearRequired('errorUserId');
                 }else{
                     //レコードがあればNGアイコン
                     ctrl.userIdIcon = ctrl.ICONS.NG;
@@ -98,9 +106,24 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
     }
 
     /**
+     * 必須入力エラー後に入力があるか
+     */
+    ctrl.checkClearRequired = function(target){
+        if(this[target] !== ''){
+            this[target] = '';
+            ctrl.hideError();
+        }
+    }
+
+    /**
      * 登録または更新イベント
      */
     ctrl.insertOrUpdate = function(){
+        // 入力チェック
+        if(!validateCheck()){
+            return;
+        }
+
         var method = 'insert';
         if(ctrl.disabledUserId){
             method = 'update';
@@ -123,6 +146,43 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
                 storageService.clearValue(storageService.keys.updateKeys);
             }
         });
+    }
+
+    /**
+     * DB反映前の入力チェック
+     */
+    function validateCheck(){
+        // エラーなし状態に設定
+        ctrl.hideError();
+        ctrl.errorUserId = '';
+        ctrl.errorUserName = '';
+        ctrl.errorPassword = '';
+
+        // 新規作成モードのみのチェック
+        if(!ctrl.disabledUserId){
+            // 重複チェックを実行
+            ctrl.duplicateUserId();
+            // ユーザーID重複アイコンがNGの場合はエラー
+            if(ctrl.userIdIcon === ctrl.ICONS.NG){
+                ctrl.showError('ユーザーIDを確認してください');
+                ctrl.errorUserId = 'has-error';
+                return false;
+            }
+        }
+
+        if(ctrl.userName === ''){
+            ctrl.showError('ユーザー名を入力してください');
+            ctrl.errorUserName = 'has-error';
+            return false;
+        }
+
+        if(ctrl.password === ''){
+            ctrl.showError('パスワードを入力してください');
+            ctrl.errorPassword = 'has-error';
+            return false;
+        }
+
+        return true;
     }
 
     /**

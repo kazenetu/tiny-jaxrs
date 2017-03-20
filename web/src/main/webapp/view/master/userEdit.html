@@ -15,23 +15,41 @@
         <hr>
 
         <!-- 編集項目 -->
-        <div class="form-group">
-            <label for="userId">ユーザーID</label>
-            <input type="text" id = "userId" data-ng-disabled="ctrl.disabledUserId"
+        <form class="form-horizontal">
+        <div class="form-group {{ctrl.errorUserId}}">
+            <div class=col-sm-2>
+                <label class="control-label" for="userId">ユーザーID</label>
+            </div>
+            <div class=col-sm-2>
+            <input type="text" id = "userId" data-ng-disabled="ctrl.disabledUserId" class="form-control"
                 data-ng-blur='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
+            </div>
+            <div class=col-sm-5>
+                <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.OK" class="glyphicon {{ctrl.userIdIcon}} text-success" aria-hidden="true">登録できます</span>
+                <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG && ctrl.userId !== ''" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">すでに登録されています</span>
+                <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG && ctrl.userId === ''" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">入力してください</span>
+            </div>
+        </div>
 
-            <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.OK" class="glyphicon {{ctrl.userIdIcon}} text-success" aria-hidden="true">登録できます</span>
-            <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG && ctrl.userId !== ''" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">すでに登録されています</span>
-            <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG && ctrl.userId === ''" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">入力してください</span>
+        <div class="form-group {{ctrl.errorUserName}}">
+            <div class=col-sm-2>
+                <label class="control-label" for="userName">ユーザー名</label>
+            </div>
+            <div class=col-sm-2>
+            <input type="text" id = "userName" class="form-control" data-ng-model="ctrl.userName"
+                ng-blur="ctrl.checkClearRequired('errorUserName')">
+            </div>
+        </div>
 
+        <div class="form-group {{ctrl.errorPassword}}">
+            <div class=col-sm-2>
+                <label class="control-label" for="password">パスワード</label>
+            </div>
+            <div class=col-sm-2>
+            <input type="text" id = "password" class="form-control" data-ng-model="ctrl.password"
+                ng-blur="ctrl.checkClearRequired('errorPassword')">
+            </div>
         </div>
-        <div class="form-group">
-            <label for="userName">ユーザー名</label>
-            <input type="text" id = "userName"  data-ng-model="ctrl.userName">
-        </div>
-        <div class="form-group">
-            <label for="password">パスワード</label>
-            <input type="text" id = "password"  data-ng-model="ctrl.password">
-        </div>
+        </form>
     </div>
 </div>
