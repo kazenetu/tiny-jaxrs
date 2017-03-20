@@ -99,14 +99,13 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
             }
         }, function(response) {
             if (response.result !== 'OK') {
-                ctrl.header.showError(ctrl.commmitButtonName + '失敗しました。');
+                ctrl.showError(ctrl.commmitButtonName + '失敗しました。');
             } else {
-                ctrl.header.hideError();
+                ctrl.hideError();
                 $location.path('/userlist');
                 storageService.clearValue(storageService.keys.updateKeys);
             }
         });
-
     }
 
     /**
