@@ -4,17 +4,34 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
 
     var ctrl = this;
 
-    ctrl.disabledUserId = true;
     ctrl.userId = "";
     ctrl.userName = "";
     ctrl.password = "";
 
+    /**
+     * ユーザーIDの編集可否
+     * true：編集不可（編集モード）
+     * false：編集可（新規作成モード）
+     */
+    ctrl.disabledUserId = true;
+
+    /**
+     * ユーザーID重複チェック
+     */
     ctrl.userIdIcon = '';
+
+    /**
+     * ユーザーID重複チェック用列挙体
+     */
     ctrl.ICONS = {
         NONE:'none',
         OK: 'glyphicon-ok',
         NG: 'glyphicon-remove',
     };
+
+    /**
+     * DB反映ボタンの表示名
+     */
     ctrl.commmitButtonName = '';
 
     /**
