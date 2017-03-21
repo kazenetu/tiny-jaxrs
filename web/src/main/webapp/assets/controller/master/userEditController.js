@@ -1,4 +1,4 @@
-front.controller.UserEdit = function UserEdit($location, webApiService, userService,storageService) {
+front.controller.UserEdit = function UserEdit($q, $location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('ユーザー編集');
 
@@ -123,7 +123,13 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
             return;
         }
 
-        ctrl.showConfirm(ctrl.commmitButtonName + 'の確認','このユーザーを' + ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する',function(){
+        var d = $q.defer();
+        d.promise
+        .then(ctrl.showConfirm($q,ctrl.commmitButtonName + 'の確認',
+                'このユーザーを' + ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する'))
+        .then(function(){
+            var deferrred = $q.defer();
+
             var method = 'insert';
             if(ctrl.disabledUserId){
                 method = 'update';
@@ -142,11 +148,21 @@ front.controller.UserEdit = function UserEdit($location, webApiService, userServ
                     ctrl.showError(ctrl.commmitButtonName + '失敗しました。');
                 } else {
                     ctrl.hideError();
-                    $location.path('/userlist');
-                    storageService.clearValue(storageService.keys.updateKeys);
+
+                    deferrred.resolve();
                 }
             });
+
+            return deferrred.promise;
+        })
+        .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
+                'このユーザーを' + ctrl.commmitButtonName +'しました', '確認'))
+        .then(function(){
+            $location.path('/userlist');
+            storageService.clearValue(storageService.keys.updateKeys);
         });
+        // 発火
+        d.resolve();
     }
 
     /**

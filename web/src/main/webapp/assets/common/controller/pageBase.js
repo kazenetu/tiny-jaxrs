@@ -46,18 +46,34 @@ front.common.controller.PageBase = function PageBase(){
     /**
      * 確認メッセージの表示
      */
-    ctrl.showConfirm = function(title,message,buttonText,callFunction){
+    ctrl.showConfirm = function($q,title,message,buttonText){
         if(ctrl.header === null) return;
 
-        ctrl.header.showConfirm(title,message,buttonText,callFunction);
+        return function(){
+            var deferrred = $q.defer();
+
+            ctrl.header.showConfirm(title,message,buttonText,function(){
+                deferrred.resolve();
+            });
+
+            return deferrred.promise;
+        }
     }
 
     /**
      * メッセージダイアログの表示
      */
-    ctrl.showMsgDialog = function(title,message,buttonText,callFunction){
+    ctrl.showMsgDialog = function($q,title,message,buttonText){
         if(ctrl.header === null) return;
 
-        ctrl.header.showMsgDialog(title,message,buttonText,callFunction);
+        return function(){
+            var deferrred = $q.defer();
+
+            ctrl.header.showMsgDialog(title,message,buttonText,function(){
+                deferrred.resolve();
+            });
+
+            return deferrred.promise;
+        }
     }
 }
