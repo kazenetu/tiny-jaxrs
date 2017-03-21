@@ -216,11 +216,14 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
 
         // 新規作成モードのみのチェック
         if(!ctrl.disabledUserId){
-            // 重複チェックを実行
-            ctrl.duplicateUserId();
+            if(ctrl.userId === ''){
+                ctrl.showError('ユーザーIDを入力してください');
+                ctrl.errorUserId = 'has-error';
+                return false;
+            }
             // ユーザーID重複アイコンがNGの場合はエラー
             if(ctrl.userIdIcon === ctrl.ICONS.NG){
-                ctrl.showError('ユーザーIDを確認してください');
+                ctrl.showError('ユーザーIDはすでに登録されています');
                 ctrl.errorUserId = 'has-error';
                 return false;
             }
