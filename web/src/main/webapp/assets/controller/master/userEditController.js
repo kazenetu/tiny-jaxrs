@@ -169,7 +169,12 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
      * 削除イベント
      */
     ctrl.delete = function(){
-        ctrl.showConfirm('削除の確認','このユーザーを削除しますか','削除する',function(){
+        var d = $q.defer();
+        d.promise
+        .then(ctrl.showConfirm($q,'削除の確認','このユーザーを削除しますか','削除する'))
+        .then(function(){
+            var deferrred = $q.defer();
+
             // ユーザーデータ削除
             webApiService.post('api/user/delete', {
                 loginUserId: userService.getId(),
@@ -183,11 +188,20 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                     ctrl.showError('削除失敗しました。');
                 } else {
                     ctrl.hideError();
-                    $location.path('/userlist');
-                    storageService.clearValue(storageService.keys.updateKeys);
+
+                    deferrred.resolve();
                 }
             });
+
+            return deferrred.promise;
+        })
+        .then(ctrl.showMsgDialog($q,'削除の報告','このユーザーを削除しました', '確認'))
+        .then(function(){
+            $location.path('/userlist');
+            storageService.clearValue(storageService.keys.updateKeys);
         });
+        // 発火
+        d.resolve();
     }
 
     /**
