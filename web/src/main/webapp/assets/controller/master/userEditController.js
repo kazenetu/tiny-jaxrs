@@ -158,7 +158,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
                 'このユーザーを' + ctrl.commmitButtonName +'しました', '確認'))
         .then(function(){
-            $location.path('/userlist');
+            $location.path('/master/userlist');
             storageService.clearValue(storageService.keys.updateKeys);
         });
         // 発火
@@ -197,7 +197,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         })
         .then(ctrl.showMsgDialog($q,'削除の報告','このユーザーを削除しました', '確認'))
         .then(function(){
-            $location.path('/userlist');
+            $location.path('/master/userlist');
             storageService.clearValue(storageService.keys.updateKeys);
         });
         // 発火
@@ -248,7 +248,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
      * 戻るイベント
      */
     ctrl.cancel = function(){
-        $location.path('/userlist');
+        $location.path('/master/userlist');
         storageService.clearValue(storageService.keys.updateKeys);
     }
 

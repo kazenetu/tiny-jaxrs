@@ -7,9 +7,9 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         templateUrl : 'view/passwordChange.html',
     }).when('/main', {
         templateUrl : 'view/main.html',
-    }).when('/userlist', {
+    }).when('/master/userlist', {
         templateUrl : 'view/master/userList.html',
-    }).when('/useredit', {
+    }).when('/master/useredit', {
         templateUrl : 'view/master/userEdit.html',
     }).otherwise({
         redirectTo : '/'

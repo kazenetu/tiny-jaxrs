@@ -45,7 +45,7 @@ front.controller.UserListController =  function UserListController($location, we
                 userId : null
         };
         storageService.setValue(storageService.keys.updateKeys,values);
-        $location.path('/useredit');
+        $location.path('/master/useredit');
     }
 
     ctrl.search = function(pageIndex) {
@@ -69,7 +69,7 @@ front.controller.UserListController =  function UserListController($location, we
 
             ctrl.paging(pageIndex,null);
 
-            var values = ['/userlist','/useredit'];
+            var values = ['/master/userlist','/master/useredit'];
             storageService.setValue(storageService.keys.enableConditionPaths,values);
         });
     }
@@ -79,7 +79,7 @@ front.controller.UserListController =  function UserListController($location, we
                 userId : id
         };
         storageService.setValue(storageService.keys.updateKeys,values);
-        $location.path('/useredit');
+        $location.path('/master/useredit');
     }
 
     ctrl.getPage = function(pageIndex) {
