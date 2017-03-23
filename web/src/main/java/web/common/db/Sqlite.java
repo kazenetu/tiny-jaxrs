@@ -67,7 +67,6 @@ public class Sqlite implements Database {
                 }
                 con.close();
             } catch (SQLException e) {
-                logger.error(e.getMessage());
                 throw new Exception(e);
             }
         }
@@ -83,7 +82,6 @@ public class Sqlite implements Database {
             con.setSavepoint();
             isSetTransaction = true;
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -97,7 +95,6 @@ public class Sqlite implements Database {
             con.commit();
             isSetTransaction = false;
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -111,7 +108,6 @@ public class Sqlite implements Database {
             con.rollback();
             isSetTransaction = false;
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -134,7 +130,6 @@ public class Sqlite implements Database {
 
             return statement.executeUpdate();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -170,7 +165,6 @@ public class Sqlite implements Database {
             }
 
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
         return resultList;

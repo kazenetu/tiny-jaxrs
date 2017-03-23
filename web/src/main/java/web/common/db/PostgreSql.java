@@ -60,7 +60,6 @@ public class PostgreSql implements Database {
                 }
                 con.close();
             } catch (Exception e) {
-                logger.error(e.getMessage());
                 throw new Exception(e);
             }
         }
@@ -76,7 +75,6 @@ public class PostgreSql implements Database {
             con.setSavepoint();
             isSetTransaction = true;
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -90,7 +88,6 @@ public class PostgreSql implements Database {
             con.commit();
             isSetTransaction = false;
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -104,7 +101,6 @@ public class PostgreSql implements Database {
             con.rollback();
             isSetTransaction = false;
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -127,7 +123,6 @@ public class PostgreSql implements Database {
 
             return statement.executeUpdate();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
     }
@@ -163,7 +158,6 @@ public class PostgreSql implements Database {
             }
 
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             throw new Exception(e);
         }
         return resultList;
