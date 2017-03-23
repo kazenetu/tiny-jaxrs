@@ -6,7 +6,7 @@ td
 }
 </style>
 
-<div class="container" data-ng-init="ctrl.init()" data-ng-controller="userListController as ctrl">
+<div class="container height-100percent" data-ng-init="ctrl.init()" data-ng-controller="userListController as ctrl">
     <!-- ヘッダー -->
     <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
 
@@ -21,6 +21,7 @@ td
         </div>
         <hr>
 
+        <div style="height:90%;overflow-y:auto;">
         <!-- 検索条件 -->
         <form class="form-inline">
         <div class="form-group">
@@ -50,7 +51,6 @@ td
         </div>
 
         <!-- 検索結果 -->
-        <div>
         <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
 
         <table class="table-bordered">
