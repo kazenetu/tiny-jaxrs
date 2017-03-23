@@ -8,7 +8,7 @@ front.controller.LoginController = function LoginController($location, webApiSer
 
     ctrl.login = function() {
 
-        webApiService.get('api/user/login?userId=:id&password=:password', {
+        webApiService.post('api/user/login', {
             id : ctrl.userId,
             password : ctrl.password
         }, function(response) {

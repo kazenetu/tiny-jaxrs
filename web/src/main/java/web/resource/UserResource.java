@@ -45,29 +45,33 @@ public class UserResource extends Resource{
     /**
      * ログイン
      * @param servletRequest リクエストオブジェクト
-     * @param userId ユーザーID
-     * @param password パスワード
-     * @return レスポンス
+     * @param json リクエスト情報
      */
-    @GET
+    @POST
     @Path("login")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(@Context final HttpServletRequest servletRequest,@QueryParam("userId") String userId,@QueryParam("password") String password) {
+    public Response login(@Context final HttpServletRequest servletRequest,String json) {
 
         //すでにログイン済みの場合はSessionIDの破棄と生成を行う
         if(session.getAttribute("userId") != null){
             refreshSessionId(servletRequest);
         }
 
+        ObjectMapper mapper = new ObjectMapper();
+
         try(UserModel userModel=new UserModel()){
-            Optional<UserData> userData = userModel.login(userId, password);
+            // json文字列をPasswordChangeにデシリアライズする
+            UserData instance = mapper.readValue(json, UserData.class);
+
+            Optional<UserData> userData = userModel.login(instance.getId(), instance.getPassword());
 
             String result =  userData.map(data->{
                 //SessionIDの破棄と生成を行う
                 refreshSessionId(servletRequest);
 
                 // セッションにログインIDを設定
-                session.setAttribute("userId", userId);
+                session.setAttribute("userId", instance.getId());
                 return String.format("{\"result\":\"OK\",\"name\":\"%s\"}", data.getName());
             }).orElse("{\"result\":\"NG\"}");
 
