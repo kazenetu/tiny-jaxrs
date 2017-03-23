@@ -74,7 +74,7 @@ public class UserModel extends Model{
         return users;
     }
 
-    private final int PAGE_COUNT = 10;
+    private final int PAGE_COUNT = 20;
     /**
      * 検索結果のページ総数を取得する
      * @return ページ総数(検索件数0件の場合は-1)
