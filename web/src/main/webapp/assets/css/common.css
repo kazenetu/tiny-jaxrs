@@ -15,6 +15,8 @@ html,body{
     background-color: green;
     margin-bottom: 0px !important;
     color:white !important;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 .error-area{
 	margin: 0px;
