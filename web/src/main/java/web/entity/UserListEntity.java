@@ -1,15 +1,15 @@
 package web.entity;
 
-public class UserList {
+public class UserListEntity {
 
     private String searchUserId;
 
     private int pageIndex;
 
-    public UserList(){
+    public UserListEntity(){
     }
 
-    public UserList(int pageIndex, String searchUserId){
+    public UserListEntity(int pageIndex, String searchUserId){
         this.setPageIndex(pageIndex);
         this.searchUserId = searchUserId;
     }

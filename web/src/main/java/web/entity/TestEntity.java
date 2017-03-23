@@ -1,15 +1,15 @@
 package web.entity;
 
-public class TestData {
+public class TestEntity {
     private String name;
     private int age;
 
-    public TestData(String name, int age) {
+    public TestEntity(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
-    public TestData() {
+    public TestEntity() {
         this.name = "";
         this.age = 0;
     }

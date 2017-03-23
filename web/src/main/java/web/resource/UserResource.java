@@ -29,10 +29,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import web.common.base.RequestEntity;
 import web.common.base.Resource;
 import web.common.util.PdfUtil;
-import web.entity.PasswordChange;
-import web.entity.TestData;
-import web.entity.UserData;
-import web.entity.UserList;
+import web.entity.PasswordChangeEntity;
+import web.entity.TestEntity;
+import web.entity.UserEntity;
+import web.entity.UserListEntity;
 import web.model.UserModel;
 
 @RequestScoped
@@ -60,9 +60,9 @@ public class UserResource extends Resource{
 
         try(UserModel userModel=new UserModel()){
             // json文字列をPasswordChangeにデシリアライズする
-            UserData instance = mapper.readValue(json, UserData.class);
+            UserEntity instance = mapper.readValue(json, UserEntity.class);
 
-            Optional<UserData> userData = userModel.login(instance.getId(), instance.getPassword());
+            Optional<UserEntity> userData = userModel.login(instance.getId(), instance.getPassword());
 
             String result =  userData.map(data->{
                 //SessionIDの破棄と生成を行う
@@ -117,7 +117,7 @@ public class UserResource extends Resource{
         try(UserModel userModel=new UserModel()){
 
             // json文字列をPasswordChangeにデシリアライズする
-            PasswordChange instance = mapper.readValue(json, PasswordChange.class);
+            PasswordChangeEntity instance = mapper.readValue(json, PasswordChangeEntity.class);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getId());
@@ -155,8 +155,8 @@ public class UserResource extends Resource{
         try(UserModel userModel=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
-            RequestEntity<UserData> instance = mapper.readValue(json, type);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
@@ -193,8 +193,8 @@ public class UserResource extends Resource{
         try(UserModel userModel=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
-            RequestEntity<UserData> instance = mapper.readValue(json, type);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
@@ -232,8 +232,8 @@ public class UserResource extends Resource{
         try(UserModel userModel=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
-            RequestEntity<UserData> instance = mapper.readValue(json, type);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
@@ -271,8 +271,8 @@ public class UserResource extends Resource{
         try(UserModel userModel = new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserList.class);
-            RequestEntity<UserList> instance = mapper.readValue(json, type);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserListEntity.class);
+            RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
@@ -307,15 +307,15 @@ public class UserResource extends Resource{
         try(UserModel userModel = new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserList.class);
-            RequestEntity<UserList> instance = mapper.readValue(json, type);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserListEntity.class);
+            RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
 
             // 検索条件での検索結果を取得する
-            List<UserData> users =  userModel.getUsers(instance.getRequestData());
+            List<UserEntity> users =  userModel.getUsers(instance.getRequestData());
 
             return Response.ok(mapper.writeValueAsString(users))
                     .build();
@@ -341,16 +341,16 @@ public class UserResource extends Resource{
         try(UserModel userModel=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserData.class);
-            RequestEntity<UserData> instance = mapper.readValue(json, type);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
             // ユーザーを検索
-            Optional<UserData> userData = userModel.getUser(instance.getRequestData().getId());
+            Optional<UserEntity> userData = userModel.getUser(instance.getRequestData().getId());
 
-            List<UserData> result = new ArrayList<>();
+            List<UserEntity> result = new ArrayList<>();
             if(userData.isPresent()){
                 result.add(userData.get());
             }
@@ -370,9 +370,9 @@ public class UserResource extends Resource{
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
-        List<TestData> list = new ArrayList<>();
+        List<TestEntity> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            list.add(new TestData("Name" + i, 20 + i));
+            list.add(new TestEntity("Name" + i, 20 + i));
         }
 
         String fileName = "テスト_" + userName + ".csv";
@@ -393,7 +393,7 @@ public class UserResource extends Resource{
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
-        List<UserData> users = new ArrayList<>();
+        List<UserEntity> users = new ArrayList<>();
         try(UserModel userModel=new UserModel();PdfUtil pdfUtil = new PdfUtil();){
             // DBからデータ取得
             users =  userModel.getUsers();

@@ -1,15 +1,15 @@
 package web.entity;
 
-public class PasswordChange {
+public class PasswordChangeEntity {
     private String id;
     private String password;
     private String newPassword;
 
-    public PasswordChange(){
+    public PasswordChangeEntity(){
 
     }
 
-    public PasswordChange(String id){
+    public PasswordChangeEntity(String id){
         this.id = id;
     }
 

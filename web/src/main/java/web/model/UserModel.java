@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import web.common.base.Model;
-import web.entity.UserData;
-import web.entity.UserList;
+import web.entity.UserEntity;
+import web.entity.UserListEntity;
 
 /**
  * ユーザーモデル
@@ -25,19 +25,19 @@ public class UserModel extends Model{
      * @return ユーザー情報(検索できない場合はnull)
      * @throws Exception
      */
-    public Optional<UserData> login(String userID, String password) throws Exception {
+    public Optional<UserEntity> login(String userID, String password) throws Exception {
         String sql = "select NAME from MT_USER where USER_ID=?;";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(userID);
 
-        UserData userData = null;
+        UserEntity userData = null;
         try {
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 Map<String,Object> row = result.get(0);
 
-                userData = new UserData();
+                userData = new UserEntity();
                 userData.setName(userID);
                 userData.setName((String)row.get("NAME"));
             }
@@ -54,16 +54,16 @@ public class UserModel extends Model{
      * @return ユーザー全レコードのリスト
      * @throws Exception
      */
-    public List<UserData> getUsers() throws Exception{
+    public List<UserEntity> getUsers() throws Exception{
         String sql = "select USER_ID,NAME,PASSWORD from MT_USER;";
 
-        List<UserData> users = new ArrayList<>();
+        List<UserEntity> users = new ArrayList<>();
 
         try {
             List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserData(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
+                    users.add(new UserEntity(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
                 });
             }
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class UserModel extends Model{
      * 検索結果のページ総数を取得する
      * @return ページ総数(検索件数0件の場合は-1)
      */
-    public int getUserPageCount(UserList seachCondition){
+    public int getUserPageCount(UserListEntity seachCondition){
         String sql = "select cast(count(USER_ID) as int) CNT from MT_USER ";
 
         // 検索条件
@@ -124,7 +124,7 @@ public class UserModel extends Model{
      * @return ユーザーのリスト
      * @throws Exception
      */
-    public List<UserData> getUsers(UserList seachCondition) throws Exception{
+    public List<UserEntity> getUsers(UserListEntity seachCondition) throws Exception{
         String sql = "select USER_ID,NAME,PASSWORD from MT_USER ";
 
         // 検索条件
@@ -141,13 +141,13 @@ public class UserModel extends Model{
         params.add(PAGE_COUNT);
         params.add(pageIndex*PAGE_COUNT);
 
-        List<UserData> users = new ArrayList<>();
+        List<UserEntity> users = new ArrayList<>();
 
         try {
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserData(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
+                    users.add(new UserEntity(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
                 });
             }
         } catch (Exception e) {
@@ -164,21 +164,21 @@ public class UserModel extends Model{
      * @return ユーザー情報(検索できない場合はnull)
      * @throws Exception
      */
-    public Optional<UserData> getUser(String userID) throws Exception{
+    public Optional<UserEntity> getUser(String userID) throws Exception{
         String sql = "select USER_ID,NAME,PASSWORD from MT_USER where USER_ID like ?;";
 
         // パラメータの設定
         ArrayList<Object> params = new ArrayList<>();
         params.add(userID);
 
-        UserData userData = null;
+        UserEntity userData = null;
 
         try {
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 Map<String,Object> row = result.get(0);
 
-                userData = new UserData();
+                userData = new UserEntity();
                 userData.setId((String)row.get("USER_ID"));
                 userData.setName((String)row.get("NAME"));
                 userData.setPassword((String)row.get("PASSWORD"));
@@ -197,7 +197,7 @@ public class UserModel extends Model{
      * @return 成否
      * @throws Exception
      */
-    public boolean insert(UserData userData){
+    public boolean insert(UserEntity userData){
         String sql = "insert into mt_user(user_id, name, password) values (?, ?,?);";
 
         ArrayList<Object> params = new ArrayList<>();
@@ -227,7 +227,7 @@ public class UserModel extends Model{
      * @param userData ユーザーデータ
      * @return 成否
      */
-    public boolean update(UserData userData){
+    public boolean update(UserEntity userData){
         String sql = "update MT_USER set Name = ?,PASSWORD=? where USER_ID=?;";
 
         ArrayList<Object> params = new ArrayList<>();
@@ -257,7 +257,7 @@ public class UserModel extends Model{
      * @param userData ユーザーデータ
      * @return 成否
      */
-    public boolean delete(UserData userData){
+    public boolean delete(UserEntity userData){
         String sql = "delete from MT_USER where USER_ID=?;";
 
         ArrayList<Object> params = new ArrayList<>();
