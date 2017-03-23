@@ -239,7 +239,7 @@ public class UserResource extends Resource{
 
             String result = "";
 
-            // 更新SQLを発行
+            // 削除SQLを発行
             if ( userModel.delete(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
             }else{
