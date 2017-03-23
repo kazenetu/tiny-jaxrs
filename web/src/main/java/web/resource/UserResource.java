@@ -10,11 +10,9 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -252,32 +250,6 @@ public class UserResource extends Resource{
 
             // 削除結果を返す
             return Response.ok(result) .build();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return Response.serverError().build();
-        }
-    }
-
-    /**
-     * ユーザー一覧取得
-     * @param servletRequest リクエストオブジェクト
-     * @param userId ユーザーID
-     * @return レスポンス
-     */
-    @GET
-    @Path("list")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response userlist(@QueryParam("userId") String userId) {
-        //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
-
-        List<UserData> users = new ArrayList<>();
-        try(UserModel userModel=new UserModel()){
-            users =  userModel.getUsers();
-
-            ObjectMapper mapper = new ObjectMapper();
-            return Response.ok(mapper.writeValueAsString(users))
-                    .build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
