@@ -168,7 +168,7 @@ public class UserResource extends Resource{
                 result = "{\"result\":\"NG\"}";
             }
 
-            // パスワード変更結果を返す
+            // 登録結果を返す
             return Response.ok(result) .build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -207,7 +207,7 @@ public class UserResource extends Resource{
                 result = "{\"result\":\"NG\"}";
             }
 
-            // パスワード変更結果を返す
+            // 変更結果を返す
             return Response.ok(result) .build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -246,7 +246,7 @@ public class UserResource extends Resource{
                 result = "{\"result\":\"NG\"}";
             }
 
-            // パスワード変更結果を返す
+            // 削除結果を返す
             return Response.ok(result) .build();
         } catch (Exception e) {
             logger.error(e.getMessage());
