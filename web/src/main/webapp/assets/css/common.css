@@ -6,14 +6,15 @@
 }
 
 html,body{
-    background-color: gainsboro;
+    background-color: #eee;
 	height:100%;
 }
 
 /* ヘッダー */
-.header{
-    background-color: mediumaquamarine;
+.header, .header small{
+    background-color: green;
     margin-bottom: 0px !important;
+    color:white !important;
 }
 .error-area{
 	margin: 0px;
