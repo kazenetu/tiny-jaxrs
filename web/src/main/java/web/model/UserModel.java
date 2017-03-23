@@ -195,6 +195,7 @@ public class UserModel extends Model{
      * ユーザーの登録
      * @param userData ユーザーデータ
      * @return 成否
+     * @throws Exception
      */
     public boolean insert(UserData userData){
         String sql = "insert into mt_user(user_id, name, password) values (?, ?,?);";
@@ -215,8 +216,7 @@ public class UserModel extends Model{
                 return false;
             }
         } catch (Exception e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return false;
@@ -246,8 +246,7 @@ public class UserModel extends Model{
                 return false;
             }
         } catch (Exception e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return false;
@@ -275,8 +274,7 @@ public class UserModel extends Model{
                 return false;
             }
         } catch (Exception e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return false;
@@ -308,8 +306,7 @@ public class UserModel extends Model{
                 return false;
             }
         } catch (Exception e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return false;
