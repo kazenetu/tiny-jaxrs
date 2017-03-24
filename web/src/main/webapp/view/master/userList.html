@@ -25,67 +25,67 @@ td
         <div class="scroll-area">
             <!-- 検索条件 -->
             <form class="form-inline">
-            <div class="form-group">
-                <label for="searchUserId">ユーザーID</label>
-                <input type="text" id = "searchUserId"  data-ng-model="ctrl.searchUserId">
+                <div class="form-group">
+                    <label for="searchUserId">ユーザーID</label>
+                    <input type="text" id = "searchUserId"  data-ng-model="ctrl.searchUserId">
+                </div>
+            </form>
+
+            <!-- ボタン類 -->
+            <div class="form-group buttons-row">
+                <div class="pull-right">
+                    <form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
+                        <input type="hidden" name="userId" value={{ctrl.userId}}>
+                        <input type="hidden" name="userName" value={{ctrl.userName}}>
+
+                        <input type="submit" class="btn" value="CSV出力">
+                    </form>
+                    <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
+                        <input type="hidden" name="userId" value={{ctrl.userId}}>
+                        <input type="hidden" name="userName" value={{ctrl.userName}}>
+
+                        <input type="submit" class="btn" value="PDF出力">
+
+                    </form>
+                    <input type="button" class="btn" data-ng-click="ctrl.search(0)"  value="検索">
+                </div>
             </div>
-        </form>
 
-        <!-- ボタン類 -->
-        <div class="form-group buttons-row">
-            <div class="pull-right">
-                <form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
-                    <input type="hidden" name="userId" value={{ctrl.userId}}>
-                    <input type="hidden" name="userName" value={{ctrl.userName}}>
+            <!-- 検索結果 -->
+            <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
 
-                    <input type="submit" class="btn" value="CSV出力">
-                </form>
-                <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
-                    <input type="hidden" name="userId" value={{ctrl.userId}}>
-                    <input type="hidden" name="userName" value={{ctrl.userName}}>
+            <table class="table table-bordered">
+                <tr class="success">
+                    <th class="text-center" style="width:10em;">
+                        ID
+                    </th>
+                    <th class="text-center" style="width:30em;">
+                        名前
+                    </th>
+                    <th class="text-center" style="width:10em;">
+                        パスワード
+                    </th>
+                    <th class="text-center" style="width:5em;">
+                        変更
+                    </th>
+                </tr>
+                <tr  data-ng-repeat="result in ctrl.searchResult">
+                    <td class="text-center">
+                        {{result.id}}
+                    </td>
+                    <td class="text-left">
+                        {{result.name}}
+                    </td>
+                    <td class="text-left">
+                        {{result.password}}
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm" data-ng-click="ctrl.edit(result.id)">編集</button>
+                    </td>
+                </tr>
+            </table>
 
-                    <input type="submit" class="btn" value="PDF出力">
-
-                </form>
-                <input type="button" class="btn" data-ng-click="ctrl.search(0)"  value="検索">
-            </div>
-        </div>
-
-        <!-- 検索結果 -->
-        <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
-
-        <table class="table table-bordered">
-            <tr class="success">
-                <th class="text-center" style="width:10em;">
-                    ID
-                </th>
-                <th class="text-center" style="width:30em;">
-                    名前
-                </th>
-                <th class="text-center" style="width:10em;">
-                    パスワード
-                </th>
-                <th class="text-center" style="width:5em;">
-                    変更
-                </th>
-            </tr>
-            <tr  data-ng-repeat="result in ctrl.searchResult">
-                <td class="text-center">
-                    {{result.id}}
-                </td>
-                <td class="text-left">
-                    {{result.name}}
-                </td>
-                <td class="text-left">
-                    {{result.password}}
-                </td>
-                <td class="text-center">
-                    <button class="btn btn-sm" data-ng-click="ctrl.edit(result.id)">編集</button>
-                </td>
-            </tr>
-        </table>
-
-        <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
+            <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
         </div>
     </div>
 </div>
