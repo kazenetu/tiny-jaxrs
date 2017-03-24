@@ -1,14 +1,11 @@
 
-<div class="container" data-ng-controller="loginController as login">
+<div class="height-100percent" data-ng-controller="loginController as login">
     <!-- ヘッダー -->
-    <div class="jumbotron header">
-          <h1>ログイン</h1>
-    </div>
-    <p class="bg-danger ng-hide" data-ng-show="$ctrl.isError">{{$ctrl.errorMsg}}</p>
+    <header data-on-send-root="login.sendRootHeader(src)" data-title-only="true"></header>
 
 
     <!-- メイン画面 -->
-    <div  class="main-area" data-ng-cloak >
+    <div  class="container main-area" data-ng-cloak >
         <p class="bg-danger" data-ng-show="login.isError">{{login.errorMsg}}</p>
         <form>
             <div class="row">

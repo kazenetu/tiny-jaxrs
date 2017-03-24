@@ -1,10 +1,11 @@
 front.controller.LoginController = function LoginController($location, webApiService, userService) {
+    front.common.utils.extendController(this, front.common.controller.PageBase);
+    this.setTitle('ログイン');
+
     var ctrl = this;
 
     ctrl.id = "";
     ctrl.password = "";
-    ctrl.isError = false;
-    ctrl.errorMsg = "";
 
     ctrl.login = function() {
 
@@ -13,10 +14,9 @@ front.controller.LoginController = function LoginController($location, webApiSer
             password : ctrl.password
         }, function(response) {
             if (response.result !== "OK") {
-                ctrl.errorMsg = "ログインできませんでした";
-                ctrl.isError = true;
+                ctrl.showError('ログインできませんでした');
             } else {
-                ctrl.isError = false;
+                ctrl.hideError();
                 userService.setId(ctrl.userId);
                 userService.setName(response.name);
                 $location.path('/main');
