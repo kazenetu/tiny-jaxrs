@@ -11,12 +11,12 @@ td
 </style>
 
 <!-- メイン画面 -->
-<div class="container" data-ng-controller="mainController as ctrl">
+<div class="height-100percent" data-ng-controller="mainController as ctrl">
     <!-- ヘッダー -->
     <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
 
     <!-- メイン画面 -->
-    <div  class="main-area" data-ng-cloak >
+    <div  class="container main-area" data-ng-cloak >
         <button data-ng-click="ctrl.gotoPage('/master/userlist')" class="btn">ユーザーマスタ検索</button>
     </div>
 </div>

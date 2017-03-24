@@ -35,6 +35,11 @@ html,body{
 .height-100percent{
     height:100% !important;
 }
+.scroll-area{
+    height:85%;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
 .buttons-row
 {
     height:2em;
