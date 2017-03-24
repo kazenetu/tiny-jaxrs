@@ -26,7 +26,7 @@ html,body{
 .main-area{
     background-color: cornsilk;
     padding:2em;
-    height:75%;
+    height:85%;
 }
 .main-area .table{
     margin-top:0.5em;
@@ -45,9 +45,6 @@ html,body{
     height:2em;
     padding-top:1em;
     padding-bottom:3em;
-}
-.container{
-    height:100% !important;
 }
 hr{
     border-color: black !important;
