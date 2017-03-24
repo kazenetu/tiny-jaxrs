@@ -3,15 +3,16 @@ td
 {
     padding-top:0.25em;
     padding-bottom:0.25em;
+    vertical-align: middle;
 }
 </style>
 
-<div class="container height-100percent" data-ng-init="ctrl.init()" data-ng-controller="userListController as ctrl">
+<div class="height-100percent" data-ng-init="ctrl.init()" data-ng-controller="userListController as ctrl">
     <!-- ヘッダー -->
     <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
 
     <!-- メイン画面 -->
-    <div  class="main-area" data-ng-cloak >
+    <div  class="container main-area" data-ng-cloak >
         <!-- ボタン類 -->
         <div class="form-group buttons-row">
             <input type="button" class="btn" data-ng-click="ctrl.back()"  value="戻る">
@@ -54,7 +55,7 @@ td
         <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
 
         <table class="table table-bordered">
-            <tr>
+            <tr class="success">
                 <th class="text-center" style="width:10em;">
                     ID
                 </th>

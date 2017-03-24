@@ -1,18 +1,22 @@
-<div class="jumbotron header">
-    <div class="row">
-        <h1 class="col-sm-7">{{ $ctrl.title }}</h1>
-        <h3 class="col-sm-5 text-right">{{ $ctrl.userName() }} </h3>
-    </div>
-    <div class="row">
-        <button class="btn btn-primary" data-ng-click="$ctrl.passwordChange()">パスワード変更</button>
-        <div class="pull-right">
-            <button class="btn btn-primary" data-ng-click="$ctrl.logout()">ログアウト</button>
+<div class="container header">
+    <div class="Jumbotron">
+        <div class="row">
+            <h1 class="col-sm-7">{{ $ctrl.title }}</h1>
+            <h3 class="col-sm-5 text-right">{{ $ctrl.userName() }} </h3>
+        </div>
+        <div>
+            <button class="btn btn-primary" data-ng-click="$ctrl.passwordChange()">パスワード変更</button>
+            <div class="pull-right">
+                <button class="btn btn-primary" data-ng-click="$ctrl.logout()">ログアウト</button>
+            </div>
         </div>
     </div>
 </div>
-<h3 class="error-area bg-danger ng-hide" data-ng-show="$ctrl.isError">
-{{$ctrl.errorMsg}}
-</h3>
+<div class="container" style="padding-left: 0px;padding-right: 0px;">
+    <h3 class="error-area bg-danger ng-hide" data-ng-show="$ctrl.isError">
+    {{$ctrl.errorMsg}}
+    </h3>
+</div>
 
 <!-- ダイアログ -->
 <div class="modal fade" id="confirm" role="dialog">

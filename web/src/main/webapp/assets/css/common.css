@@ -13,10 +13,9 @@ html,body{
 /* ヘッダー */
 .header, .header small{
     background-color: green;
-    margin-bottom: 0px !important;
     color:white !important;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 1em!important;
+    margin-bottom: 0px !important;
 }
 .error-area{
     margin: 0px;
@@ -30,7 +29,8 @@ html,body{
     height:75%;
 }
 .main-area .table{
-    margin-bottom:0eem;
+    margin-top:0.5em;
+    margin-bottom:0.5em;
 }
 .height-100percent{
     height:100% !important;
