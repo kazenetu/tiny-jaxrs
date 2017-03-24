@@ -4,6 +4,11 @@
 front.common.component.HeaderController = function HeaderController($location, userService, webApiService, storageService) {
     var ctrl = this;
 
+    /**
+     * すべて表示かタイトルだけ表示か
+     */
+    ctrl.isAllDisplay = true;
+
     ctrl.title = '';
     ctrl.isError = false;
     ctrl.errorMsg = '';
@@ -45,6 +50,10 @@ front.common.component.HeaderController = function HeaderController($location, u
     ctrl.$onInit = function() {
         // 呼び出し元にインスタンスを登録
         ctrl.onSendRoot({src:ctrl});
+
+        if(ctrl.titleOnly === 'true'){
+            ctrl.isAllDisplay = false;
+        }
 
         // 検索結果表示許可画面以外の場合は検索条件をクリア
         var paths = storageService.getValue(storageService.keys.enableConditionPaths);
@@ -117,7 +126,8 @@ front.common.component.HeaderController = function HeaderController($location, u
  */
 myApp.component("header", {
     bindings : {
-        onSendRoot:'&'
+        onSendRoot:'&',
+        titleOnly:'@'
     },
     templateUrl:'assets/common/component/header.html',
     controller : front.common.component.HeaderController

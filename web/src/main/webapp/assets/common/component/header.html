@@ -2,9 +2,9 @@
     <div class="Jumbotron">
         <div class="row">
             <h1 class="col-sm-7">{{ $ctrl.title }}</h1>
-            <h3 class="col-sm-5 text-right">{{ $ctrl.userName() }} </h3>
+            <h3 class="col-sm-5 text-right" data-ng-show="$ctrl.isAllDisplay">{{ $ctrl.userName() }} </h3>
         </div>
-        <div>
+        <div data-ng-show="$ctrl.isAllDisplay">
             <button class="btn btn-primary" data-ng-click="$ctrl.passwordChange()">パスワード変更</button>
             <div class="pull-right">
                 <button class="btn btn-primary" data-ng-click="$ctrl.logout()">ログアウト</button>
