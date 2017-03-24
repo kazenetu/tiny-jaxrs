@@ -40,7 +40,7 @@ front.common.controller.PageBase = function PageBase(){
      */
     ctrl.setTitle = function(title){
         ctrl.title = title;
-        document.title = 'Sample:' + title;
+        document.title = title;
     }
 
     /**
