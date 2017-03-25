@@ -1,5 +1,8 @@
 package web.model;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,7 +131,7 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public List<UserEntity> getUsers(UserListEntity seachCondition) throws Exception{
-        String sql = "select USER_ID,NAME,PASSWORD from MT_USER ";
+        String sql = "select * from MT_USER ";
 
         // 検索条件
         int pageIndex = seachCondition.getPageIndex();
@@ -150,10 +153,16 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserEntity(
+                    UserEntity entity = new UserEntity(
                             (String)getColumnValue(row,"USER_ID"),
                             (String)getColumnValue(row,"NAME"),
-                            (String)getColumnValue(row,"PASSWORD"),0));
+                            (String)getColumnValue(row,"PASSWORD"),0);
+
+                    entity.setDate((Date)getColumnValue(row,"date_data"));
+                    entity.setTime((Time)getColumnValue(row,"time_data"));
+                    entity.setTs((Timestamp)getColumnValue(row,"ts_data"));
+
+                    users.add(entity);
                 });
             }
         } catch (Exception e) {
