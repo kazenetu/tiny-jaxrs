@@ -1,5 +1,7 @@
 package web.common.base;
 
+import java.util.Map;
+
 import web.common.db.Database;
 import web.common.db.PostgreSql;
 import web.common.db.Sqlite;
@@ -16,9 +18,21 @@ public abstract class Model implements AutoCloseable {
     }
 
     /**
+     * カラムタイプ
+     */
+    private enum ColumnType{
+        UPPER,LOWER
+    }
+
+    /**
      * データベースインターフェース
      */
     protected Database db;
+
+    /**
+     * カラムタイプ
+     */
+    private ColumnType columnType;
 
     /**
      * コンストラクタ
@@ -35,10 +49,12 @@ public abstract class Model implements AutoCloseable {
         // dbのインスタンスを作成
         if (DBType.SQLite.toString().equals(dbName)) {
             db = new Sqlite();
+            columnType = ColumnType.UPPER;
             return;
         }
         if (DBType.PostgreSQL.toString().equals(dbName)) {
             db = new PostgreSql();
+            columnType = ColumnType.LOWER;
             return;
         }
     }
@@ -60,5 +76,21 @@ public abstract class Model implements AutoCloseable {
      */
     public boolean isNullorEmpty(String value){
         return (value == null || value.length() == 0);
+    }
+
+    /**
+     * カラム値取得
+     * @param row レコードオブジェクト
+     * @param columnName カラム名(大文字・小文字どちらでもOK)
+     * @return カラム値
+     */
+    protected Object getColumnValue(Map<String,Object> row,String columnName){
+        String key="";
+        if(columnType == ColumnType.UPPER){
+            key = columnName.toUpperCase();
+        }else{
+            key = columnName.toLowerCase();
+        }
+        return row.get(key);
     }
 }
