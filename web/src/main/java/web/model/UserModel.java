@@ -34,22 +34,22 @@ public class UserModel extends Model{
         ArrayList<Object> params = new ArrayList<>();
         params.add(userID);
 
-        UserEntity userData = null;
+        UserEntity entity = null;
         try {
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 Map<String,Object> row = result.get(0);
 
-                userData = new UserEntity();
-                userData.setName(userID);
-                userData.setName((String)getColumnValue(row,"NAME"));
+                entity = new UserEntity();
+                entity.setName(userID);
+                entity.setName((String)getColumnValue(row,"NAME"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new Exception(e);
         }
 
-        return Optional.ofNullable(userData);
+        return Optional.ofNullable(entity);
     }
 
     /**
@@ -60,13 +60,13 @@ public class UserModel extends Model{
     public List<UserEntity> getUsers() throws Exception{
         String sql = "select USER_ID,NAME,PASSWORD from MT_USER;";
 
-        List<UserEntity> users = new ArrayList<>();
+        List<UserEntity> entities = new ArrayList<>();
 
         try {
             List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserEntity(
+                    entities.add(new UserEntity(
                             (String)getColumnValue(row,"USER_ID"),
                             (String)getColumnValue(row,"NAME"),
                             (String)getColumnValue(row,"PASSWORD"),0));
@@ -77,7 +77,7 @@ public class UserModel extends Model{
             throw new Exception(e);
         }
 
-        return users;
+        return entities;
     }
 
     private final int PAGE_COUNT = 20;
@@ -147,7 +147,7 @@ public class UserModel extends Model{
         params.add(PAGE_COUNT);
         params.add(pageIndex*PAGE_COUNT);
 
-        List<UserEntity> users = new ArrayList<>();
+        List<UserEntity> entities = new ArrayList<>();
 
         try {
             List<Map<String,Object>> result = db.query(sql, params);
@@ -162,7 +162,7 @@ public class UserModel extends Model{
                     entity.setTime((Time)getColumnValue(row,"time_data"));
                     entity.setTs((Timestamp)getColumnValue(row,"ts_data"));
 
-                    users.add(entity);
+                    entities.add(entity);
                 });
             }
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class UserModel extends Model{
             throw new Exception(e);
         }
 
-        return users;
+        return entities;
     }
 
     /**
@@ -186,24 +186,24 @@ public class UserModel extends Model{
         ArrayList<Object> params = new ArrayList<>();
         params.add(userID);
 
-        UserEntity userData = null;
+        UserEntity entity = null;
 
         try {
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 Map<String,Object> row = result.get(0);
 
-                userData = new UserEntity();
-                userData.setId((String)getColumnValue(row,"USER_ID"));
-                userData.setName((String)getColumnValue(row,"NAME"));
-                userData.setPassword((String)getColumnValue(row,"PASSWORD"));
+                entity = new UserEntity();
+                entity.setId((String)getColumnValue(row,"USER_ID"));
+                entity.setName((String)getColumnValue(row,"NAME"));
+                entity.setPassword((String)getColumnValue(row,"PASSWORD"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new Exception(e);
         }
 
-        return Optional.ofNullable(userData);
+        return Optional.ofNullable(entity);
     }
 
     /**
