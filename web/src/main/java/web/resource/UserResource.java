@@ -58,13 +58,13 @@ public class UserResource extends Resource{
 
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel=new UserModel()){
+        try(UserModel model=new UserModel()){
             // json文字列をPasswordChangeにデシリアライズする
             UserEntity instance = mapper.readValue(json, UserEntity.class);
 
-            Optional<UserEntity> userData = userModel.login(instance.getId(), instance.getPassword());
+            Optional<UserEntity> entity = model.login(instance.getId(), instance.getPassword());
 
-            String result =  userData.map(data->{
+            String result =  entity.map(data->{
                 //SessionIDの破棄と生成を行う
                 refreshSessionId(servletRequest);
 
@@ -114,7 +114,7 @@ public class UserResource extends Resource{
     public Response passwordChange(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel=new UserModel()){
+        try(UserModel model=new UserModel()){
 
             // json文字列をPasswordChangeにデシリアライズする
             PasswordChangeEntity instance = mapper.readValue(json, PasswordChangeEntity.class);
@@ -126,7 +126,7 @@ public class UserResource extends Resource{
             String result = "";
 
             // パスワード変更SQLを発行
-            if ( userModel.passwordChange(instance.getId(), instance.getPassword(),instance.getNewPassword())) {
+            if ( model.passwordChange(instance.getId(), instance.getPassword(),instance.getNewPassword())) {
                 result = "{\"result\":\"OK\"}";
             }else{
                 result = "{\"result\":\"NG\"}";
@@ -152,7 +152,7 @@ public class UserResource extends Resource{
     public Response insert(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel=new UserModel()){
+        try(UserModel model=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
@@ -164,7 +164,7 @@ public class UserResource extends Resource{
             String result = "";
 
             // 登録SQLを発行
-            if ( userModel.insert(instance.getRequestData())) {
+            if ( model.insert(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
             }else{
                 result = "{\"result\":\"NG\"}";
@@ -190,7 +190,7 @@ public class UserResource extends Resource{
     public Response update(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel=new UserModel()){
+        try(UserModel model=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
@@ -203,7 +203,7 @@ public class UserResource extends Resource{
             String result = "";
 
             // 更新SQLを発行
-            if ( userModel.update(instance.getRequestData())) {
+            if ( model.update(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
             }else{
                 result = "{\"result\":\"NG\"}";
@@ -229,7 +229,7 @@ public class UserResource extends Resource{
     public Response delete(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel=new UserModel()){
+        try(UserModel model=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
@@ -242,7 +242,7 @@ public class UserResource extends Resource{
             String result = "";
 
             // 削除SQLを発行
-            if ( userModel.delete(instance.getRequestData())) {
+            if ( model.delete(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
             }else{
                 result = "{\"result\":\"NG\"}";
@@ -268,7 +268,7 @@ public class UserResource extends Resource{
     public Response totalPage(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel = new UserModel()){
+        try(UserModel model = new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserListEntity.class);
@@ -279,7 +279,7 @@ public class UserResource extends Resource{
 
 
             // 検索条件での検索件数を取得する
-            int pageCount =  userModel.getUserPageCount(instance.getRequestData());
+            int pageCount =  model.getUserPageCount(instance.getRequestData());
 
             String result = "";
             result = "{\"pageCount\":\"" + pageCount + "\"}";
@@ -304,7 +304,7 @@ public class UserResource extends Resource{
     public Response userlistPage(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel = new UserModel()){
+        try(UserModel model = new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserListEntity.class);
@@ -315,9 +315,9 @@ public class UserResource extends Resource{
 
 
             // 検索条件での検索結果を取得する
-            List<UserEntity> users =  userModel.getUsers(instance.getRequestData());
+            List<UserEntity> entities =  model.getUsers(instance.getRequestData());
 
-            return Response.ok(mapper.writeValueAsString(users))
+            return Response.ok(mapper.writeValueAsString(entities))
                     .build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -338,7 +338,7 @@ public class UserResource extends Resource{
 
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel userModel=new UserModel()){
+        try(UserModel model=new UserModel()){
 
             // json文字列をUserDataにデシリアライズする
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
@@ -348,11 +348,11 @@ public class UserResource extends Resource{
             authCheck(instance.getLoginUserId());
 
             // ユーザーを検索
-            Optional<UserEntity> userData = userModel.getUser(instance.getRequestData().getId());
+            Optional<UserEntity> entities = model.getUser(instance.getRequestData().getId());
 
             List<UserEntity> result = new ArrayList<>();
-            if(userData.isPresent()){
-                result.add(userData.get());
+            if(entities.isPresent()){
+                result.add(entities.get());
             }
 
             // 結果を返す
@@ -370,14 +370,14 @@ public class UserResource extends Resource{
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
-        List<TestEntity> list = new ArrayList<>();
+        List<TestEntity> entities = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            list.add(new TestEntity("Name" + i, 20 + i));
+            entities.add(new TestEntity("Name" + i, 20 + i));
         }
 
         String fileName = "テスト_" + userName + ".csv";
         try {
-            return Response.ok(list)
+            return Response.ok(entities)
                     .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
                     .build();
         } catch (Exception e) {
@@ -393,13 +393,13 @@ public class UserResource extends Resource{
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
-        List<UserEntity> users = new ArrayList<>();
-        try(UserModel userModel=new UserModel();PdfUtil pdfUtil = new PdfUtil();){
+        List<UserEntity> entities = new ArrayList<>();
+        try(UserModel model=new UserModel();PdfUtil pdfUtil = new PdfUtil();){
             // DBからデータ取得
-            users =  userModel.getUsers();
+            entities =  model.getUsers();
 
             // PDFのデータソースとして設定
-            JRDataSource dataSource = new JRBeanCollectionDataSource(users);
+            JRDataSource dataSource = new JRBeanCollectionDataSource(entities);
 
             Map<String, Object> params = new HashMap<>();
 
