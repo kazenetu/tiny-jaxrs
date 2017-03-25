@@ -39,7 +39,7 @@ public class UserModel extends Model{
 
                 userData = new UserEntity();
                 userData.setName(userID);
-                userData.setName((String)row.get("NAME"));
+                userData.setName((String)getColumnValue(row,"NAME"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -63,7 +63,10 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserEntity(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
+                    users.add(new UserEntity(
+                            getColumnValue(row,"USER_ID").toString(),
+                            getColumnValue(row,"NAME").toString(),
+                            getColumnValue(row,"PASSWORD").toString(),0));
                 });
             }
         } catch (Exception e) {
@@ -98,7 +101,7 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, params);
 
             Map<String,Object> row = result.get(0);
-            recordCount = (int)row.get("CNT");
+            recordCount = (int)getColumnValue(row,"CNT");
         } catch (Exception e) {
             logger.error(e.getMessage());
             //throw new Exception(e);
@@ -147,7 +150,10 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    users.add(new UserEntity(row.get("USER_ID").toString(),row.get("NAME").toString(),row.get("PASSWORD").toString(),0));
+                    users.add(new UserEntity(
+                            getColumnValue(row,"USER_ID").toString(),
+                            getColumnValue(row,"NAME").toString(),
+                            getColumnValue(row,"PASSWORD").toString(),0));
                 });
             }
         } catch (Exception e) {
@@ -179,9 +185,9 @@ public class UserModel extends Model{
                 Map<String,Object> row = result.get(0);
 
                 userData = new UserEntity();
-                userData.setId((String)row.get("USER_ID"));
-                userData.setName((String)row.get("NAME"));
-                userData.setPassword((String)row.get("PASSWORD"));
+                userData.setId((String)getColumnValue(row,"USER_ID"));
+                userData.setName((String)getColumnValue(row,"NAME"));
+                userData.setPassword((String)getColumnValue(row,"PASSWORD"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
