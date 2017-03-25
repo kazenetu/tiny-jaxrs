@@ -152,7 +152,7 @@ public class PostgreSql implements Database {
             while(result.next()){
                 Map<String,Object> recodeMap = new HashMap<>();
                 for(i=1;i<=colCount;i++){
-                    recodeMap.put(metaData.getColumnName(i).toUpperCase(), result.getObject(i));
+                    recodeMap.put(metaData.getColumnName(i), result.getObject(i));
                 }
                 resultList.add(recodeMap);
             }
