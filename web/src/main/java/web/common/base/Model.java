@@ -10,6 +10,12 @@ import web.common.db.Sqlite;
  * モデルクラスのスーパークラス
  */
 public abstract class Model implements AutoCloseable {
+
+    /**
+     * 1ページあたりのレコード数
+     */
+    protected final int PAGE_COUNT = 20;
+
     /**
      * DBの種類
      */
