@@ -64,9 +64,9 @@ public class UserModel extends Model{
             if (!result.isEmpty()) {
                 result.forEach(row->{
                     users.add(new UserEntity(
-                            getColumnValue(row,"USER_ID").toString(),
-                            getColumnValue(row,"NAME").toString(),
-                            getColumnValue(row,"PASSWORD").toString(),0));
+                            (String)getColumnValue(row,"USER_ID"),
+                            (String)getColumnValue(row,"NAME"),
+                            (String)getColumnValue(row,"PASSWORD"),0));
                 });
             }
         } catch (Exception e) {
@@ -151,9 +151,9 @@ public class UserModel extends Model{
             if (!result.isEmpty()) {
                 result.forEach(row->{
                     users.add(new UserEntity(
-                            getColumnValue(row,"USER_ID").toString(),
-                            getColumnValue(row,"NAME").toString(),
-                            getColumnValue(row,"PASSWORD").toString(),0));
+                            (String)getColumnValue(row,"USER_ID"),
+                            (String)getColumnValue(row,"NAME"),
+                            (String)getColumnValue(row,"PASSWORD"),0));
                 });
             }
         } catch (Exception e) {
