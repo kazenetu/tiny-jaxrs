@@ -99,4 +99,24 @@ public abstract class Model implements AutoCloseable {
         }
         return row.get(key);
     }
+
+    /**
+     * レコード数から総ページ数を取得
+     * @param recordCount レコード数
+     * @return 総ページ数(レコード数がゼロ件の場合は-1)
+     */
+    protected int getTotalPageCount(int recordCount){
+        int pageCount = -1;
+        if(recordCount > 0){
+            pageCount = recordCount / PAGE_COUNT;
+            if(recordCount <= PAGE_COUNT){
+                pageCount = 0;
+            }else{
+                if(recordCount - pageCount*PAGE_COUNT > 0){
+                    pageCount++;
+                }
+            }
+        }
+        return pageCount;
+    }
 }

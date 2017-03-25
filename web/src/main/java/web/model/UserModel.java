@@ -109,19 +109,8 @@ public class UserModel extends Model{
             //throw new Exception(e);
         }
 
-        int pageCount = -1;
-        if(recordCount > 0){
-            pageCount = recordCount / PAGE_COUNT;
-            if(recordCount <= PAGE_COUNT){
-                pageCount = 0;
-            }else{
-                if(recordCount - pageCount*PAGE_COUNT > 0){
-                    pageCount++;
-                }
-            }
-        }
-
-        return pageCount;
+        // トータルページ数を返す
+        return getTotalPageCount(recordCount);
     }
 
     /**
