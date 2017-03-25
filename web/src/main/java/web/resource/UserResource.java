@@ -37,7 +37,7 @@ import web.model.UserModel;
 
 @RequestScoped
 @Path("user")
-public class UserResource extends Resource{
+public class UserResource extends Resource {
     private static Logger logger = LoggerFactory.getLogger(UserResource.class);
 
     /**
@@ -49,22 +49,22 @@ public class UserResource extends Resource{
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(@Context final HttpServletRequest servletRequest,String json) {
+    public Response login(@Context final HttpServletRequest servletRequest, String json) {
 
         //すでにログイン済みの場合はSessionIDの破棄と生成を行う
-        if(session.getAttribute("userId") != null){
+        if (session.getAttribute("userId") != null) {
             refreshSessionId(servletRequest);
         }
 
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model=new UserModel()){
+        try (UserModel model = new UserModel()) {
             // json文字列をPasswordChangeにデシリアライズする
             UserEntity instance = mapper.readValue(json, UserEntity.class);
 
             Optional<UserEntity> entity = model.login(instance.getId(), instance.getPassword());
 
-            String result =  entity.map(data->{
+            String result = entity.map(data -> {
                 //SessionIDの破棄と生成を行う
                 refreshSessionId(servletRequest);
 
@@ -73,7 +73,7 @@ public class UserResource extends Resource{
                 return String.format("{\"result\":\"OK\",\"name\":\"%s\"}", data.getName());
             }).orElse("{\"result\":\"NG\"}");
 
-            return Response.ok(result) .build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -90,12 +90,12 @@ public class UserResource extends Resource{
     @Produces(MediaType.APPLICATION_JSON)
     public Response logout(@Context final HttpServletRequest servletRequest) {
 
-        try{
+        try {
             //セッションの破棄
             session.invalidate();
 
             String result = "{\"result\":\"OK\"}";
-            return Response.ok(result) .build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -114,7 +114,7 @@ public class UserResource extends Resource{
     public Response passwordChange(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model=new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をPasswordChangeにデシリアライズする
             PasswordChangeEntity instance = mapper.readValue(json, PasswordChangeEntity.class);
@@ -122,18 +122,17 @@ public class UserResource extends Resource{
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getId());
 
-
             String result = "";
 
             // パスワード変更SQLを発行
-            if ( model.passwordChange(instance.getId(), instance.getPassword(),instance.getNewPassword())) {
+            if (model.passwordChange(instance.getId(), instance.getPassword(), instance.getNewPassword())) {
                 result = "{\"result\":\"OK\"}";
-            }else{
+            } else {
                 result = "{\"result\":\"NG\"}";
             }
 
             // パスワード変更結果を返す
-            return Response.ok(result) .build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -152,10 +151,10 @@ public class UserResource extends Resource{
     public Response insert(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model=new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserEntity.class);
             RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
@@ -164,14 +163,14 @@ public class UserResource extends Resource{
             String result = "";
 
             // 登録SQLを発行
-            if ( model.insert(instance.getRequestData())) {
+            if (model.insert(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
-            }else{
+            } else {
                 result = "{\"result\":\"NG\"}";
             }
 
             // 登録結果を返す
-            return Response.ok(result) .build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -190,27 +189,26 @@ public class UserResource extends Resource{
     public Response update(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model=new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserEntity.class);
             RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-
             String result = "";
 
             // 更新SQLを発行
-            if ( model.update(instance.getRequestData())) {
+            if (model.update(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
-            }else{
+            } else {
                 result = "{\"result\":\"NG\"}";
             }
 
             // 変更結果を返す
-            return Response.ok(result) .build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -229,27 +227,26 @@ public class UserResource extends Resource{
     public Response delete(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model=new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserEntity.class);
             RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-
             String result = "";
 
             // 削除SQLを発行
-            if ( model.delete(instance.getRequestData())) {
+            if (model.delete(instance.getRequestData())) {
                 result = "{\"result\":\"OK\"}";
-            }else{
+            } else {
                 result = "{\"result\":\"NG\"}";
             }
 
             // 削除結果を返す
-            return Response.ok(result) .build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -268,18 +265,17 @@ public class UserResource extends Resource{
     public Response totalPage(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model = new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserListEntity.class);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
             RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-
             // 検索条件での検索件数を取得する
-            int pageCount =  model.getUserPageCount(instance.getRequestData());
+            int pageCount = model.getUserPageCount(instance.getRequestData());
 
             String result = "";
             result = "{\"pageCount\":\"" + pageCount + "\"}";
@@ -304,18 +300,17 @@ public class UserResource extends Resource{
     public Response userlistPage(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model = new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserListEntity.class);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
             RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-
             // 検索条件での検索結果を取得する
-            List<UserEntity> entities =  model.getUsers(instance.getRequestData());
+            List<UserEntity> entities = model.getUsers(instance.getRequestData());
 
             return Response.ok(mapper.writeValueAsString(entities))
                     .build();
@@ -338,10 +333,10 @@ public class UserResource extends Resource{
 
         ObjectMapper mapper = new ObjectMapper();
 
-        try(UserModel model=new UserModel()){
+        try (UserModel model = new UserModel()) {
 
             // json文字列をUserDataにデシリアライズする
-            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class,UserEntity.class);
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserEntity.class);
             RequestEntity<UserEntity> instance = mapper.readValue(json, type);
 
             //認証チェック（認証エラー時は401例外を出す）
@@ -351,12 +346,12 @@ public class UserResource extends Resource{
             Optional<UserEntity> entities = model.getUser(instance.getRequestData().getId());
 
             List<UserEntity> result = new ArrayList<>();
-            if(entities.isPresent()){
+            if (entities.isPresent()) {
                 result.add(entities.get());
             }
 
             // 結果を返す
-            return Response.ok(mapper.writeValueAsString(result)) .build();
+            return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -366,7 +361,7 @@ public class UserResource extends Resource{
     @POST
     @Path("download")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response download(@FormParam("userId") String userId,@FormParam("userName") String userName) {
+    public Response download(@FormParam("userId") String userId, @FormParam("userName") String userName) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
@@ -389,14 +384,14 @@ public class UserResource extends Resource{
     @POST
     @Path("downloadPDF")
     @Produces("application/pdf")
-    public Response downloadPDF(@FormParam("userId") String userId,@FormParam("userName") String userName) {
+    public Response downloadPDF(@FormParam("userId") String userId, @FormParam("userName") String userName) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
         List<UserEntity> entities = new ArrayList<>();
-        try(UserModel model=new UserModel();PdfUtil pdfUtil = new PdfUtil();){
+        try (UserModel model = new UserModel(); PdfUtil pdfUtil = new PdfUtil();) {
             // DBからデータ取得
-            entities =  model.getUsers();
+            entities = model.getUsers();
 
             // PDFのデータソースとして設定
             JRDataSource dataSource = new JRBeanCollectionDataSource(entities);
@@ -411,8 +406,8 @@ public class UserResource extends Resource{
 
             // 結果を返す
             return Response.ok(result)
-                     .header("Content-Disposition", "attachment; filename=" +
-                     URLEncoder.encode(fileName, "utf-8"))
+                    .header("Content-Disposition", "attachment; filename=" +
+                            URLEncoder.encode(fileName, "utf-8"))
                     .build();
 
         } catch (Exception e) {
