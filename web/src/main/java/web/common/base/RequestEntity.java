@@ -1,7 +1,7 @@
 package web.common.base;
 
 /**
- * リクエスト用エンティティクラスのスーパークラス
+ * リクエスト用エンティティクラスのジェネリクスクラス
  */
 public class RequestEntity<T> {
     /**
