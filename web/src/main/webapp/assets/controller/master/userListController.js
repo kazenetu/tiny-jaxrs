@@ -59,7 +59,7 @@ front.controller.UserListController =  function UserListController($location, we
                 searchUserId : ctrl.searchUserId
             }
         }, function(response) {
-            ctrl.totalPage = response.pageCount;
+            ctrl.totalPage = response.responseData;
 
             ctrl.hideError();
             if(ctrl.totalPage < 0){
@@ -83,14 +83,14 @@ front.controller.UserListController =  function UserListController($location, we
     }
 
     ctrl.getPage = function(pageIndex) {
-        webApiService.postQuery('api/user/page', {
+        webApiService.post('api/user/page', {
             loginUserId: userService.getId(),
             requestData:{
                 pageIndex : pageIndex,
                 searchUserId : ctrl.searchUserId
             }
         }, function(response) {
-            ctrl.searchResult = response;
+            ctrl.searchResult = response.responseData;
 
             setConditions(pageIndex)
         });

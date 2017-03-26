@@ -59,14 +59,14 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
             ctrl.userId = values.userId;
 
             // ユーザーデータ取得
-            webApiService.postQuery('api/user/find', {
+            webApiService.post('api/user/find', {
                 loginUserId: userService.getId(),
                 requestData:{
                     id : ctrl.userId
                 }
             }, function(response) {
-                ctrl.userName = response[0].name;
-                ctrl.password = response[0].password;
+                ctrl.userName = response.responseData.name;
+                ctrl.password = response.responseData.password;
             });
         }
     }
@@ -86,13 +86,13 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
             }
 
             // ユーザーデータ取得
-            webApiService.postQuery('api/user/find', {
+            webApiService.post('api/user/find', {
                 loginUserId: userService.getId(),
                 requestData:{
                     id : ctrl.userId
                 }
             }, function(response) {
-                if(response.length <= 0){
+                if(response.responseData === null){
                     // レコードがなければOKアイコン
                     ctrl.userIdIcon = ctrl.ICONS.OK;
                     ctrl.checkClearRequired('errorUserId');

@@ -18,7 +18,7 @@ front.controller.LoginController = function LoginController($location, webApiSer
             } else {
                 ctrl.hideError();
                 userService.setId(ctrl.userId);
-                userService.setName(response.name);
+                userService.setName(response.responseData.name);
                 $location.path('/main');
             }
         });
