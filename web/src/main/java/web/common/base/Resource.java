@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
+import web.common.util.MessageUtil;
+
 /**
  * リソースクラスのスーパークラス
  */
@@ -37,4 +39,12 @@ public abstract class Resource {
         }
     }
 
+    /**
+     * メッセージ取得
+     * @param key キー
+     * @return メッセージ
+     */
+    protected String getMessage(String key){
+        return MessageUtil.getInstance().getMessage(key);
+    }
 }

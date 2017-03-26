@@ -14,7 +14,7 @@ front.controller.LoginController = function LoginController($location, webApiSer
             password : ctrl.password
         }, function(response) {
             if (response.result !== "OK") {
-                ctrl.showError('ログインできませんでした');
+                ctrl.showError(response.errorMessage);
             } else {
                 ctrl.hideError();
                 userService.setId(ctrl.userId);

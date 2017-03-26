@@ -74,7 +74,7 @@ public class UserResource extends Resource {
 
                 // 結果を返す
                 return new ResposeEntity<UserEntity>(ResposeEntity.Result.OK,"",entity.get());
-            }).orElse(new ResposeEntity<UserEntity>(ResposeEntity.Result.NG,"",null));
+            }).orElse(new ResposeEntity<UserEntity>(ResposeEntity.Result.NG,getMessage("E0001"),null));
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class UserResource extends Resource {
             if (model.passwordChange(instance.getId(), instance.getPassword(), instance.getNewPassword())) {
                 result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
+                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage("E0002"),"");
             }
 
             // 結果を返す
@@ -173,7 +173,7 @@ public class UserResource extends Resource {
             if (model.insert(instance.getRequestData())) {
                 result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
+                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage("E0010"),"");
             }
 
             // 結果を返す
@@ -211,7 +211,7 @@ public class UserResource extends Resource {
             if (model.update(instance.getRequestData())) {
                 result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
+                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage("E0011"),"");
             }
 
             // 結果を返す
@@ -249,7 +249,7 @@ public class UserResource extends Resource {
             if (model.delete(instance.getRequestData())) {
                 result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
+                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage("E0012"),"");
             }
 
             // 結果を返す
@@ -286,7 +286,12 @@ public class UserResource extends Resource {
 
             // 結果を返す
             ResposeEntity<Integer> result = null;
-            result = new ResposeEntity<Integer>(ResposeEntity.Result.OK,"",pageCount);
+            if(pageCount >= 0){
+                result = new ResposeEntity<Integer>(ResposeEntity.Result.OK,"",pageCount);
+
+            }else{
+                result = new ResposeEntity<Integer>(ResposeEntity.Result.NG,getMessage("W0001"),pageCount);
+            }
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {

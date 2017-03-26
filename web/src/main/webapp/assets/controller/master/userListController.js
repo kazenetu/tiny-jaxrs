@@ -63,7 +63,7 @@ front.controller.UserListController =  function UserListController($location, we
 
             ctrl.hideError();
             if(ctrl.totalPage < 0){
-                ctrl.showError('検索結果が0件です');
+                ctrl.showError(response.errorMessage);
                 ctrl.totalPage = 0;
             }
 

@@ -145,7 +145,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                 }
             }, function(response) {
                 if (response.result !== 'OK') {
-                    ctrl.showError(ctrl.commmitButtonName + '失敗しました。');
+                    ctrl.showError(response.errorMessage);
                 } else {
                     ctrl.hideError();
 
@@ -185,7 +185,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                 }
             }, function(response) {
                 if (response.result !== 'OK') {
-                    ctrl.showError('削除失敗しました。');
+                    ctrl.showError(response.errorMessage);
                 } else {
                     ctrl.hideError();
 
@@ -222,11 +222,12 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                 return false;
             }
             // ユーザーID重複アイコンがNGの場合はエラー
+            /*
             if(ctrl.userIdIcon === ctrl.ICONS.NG){
                 ctrl.showError('ユーザーIDはすでに登録されています');
                 ctrl.errorUserId = 'has-error';
                 return false;
-            }
+            }*/
         }
 
         if(ctrl.userName === ''){

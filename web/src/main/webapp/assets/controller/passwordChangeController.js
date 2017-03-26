@@ -11,7 +11,7 @@ front.controller.PasswordChangeController = function PasswordChangeController($l
             newPassword : ctrl.newPassword
         }, function(response) {
             if (response.result !== 'OK') {
-                ctrl.header.showError('現在のパスワードが異なります');
+                ctrl.showError(response.errorMessage);
             } else {
                 ctrl.header.hideError();
                 $location.path('/main');
