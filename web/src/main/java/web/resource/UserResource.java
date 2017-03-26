@@ -72,6 +72,7 @@ public class UserResource extends Resource {
                 // セッションにログインIDを設定
                 session.setAttribute("userId", instance.getId());
 
+                // 結果を返す
                 return new ResposeEntity<UserEntity>(ResposeEntity.Result.OK,"",entity.get());
             }).orElse(new ResposeEntity<UserEntity>(ResposeEntity.Result.NG,"",null));
 
@@ -100,6 +101,7 @@ public class UserResource extends Resource {
 
             ResposeEntity<String> result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
 
+            // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -136,7 +138,7 @@ public class UserResource extends Resource {
                 result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
             }
 
-            // パスワード変更結果を返す
+            // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -174,7 +176,7 @@ public class UserResource extends Resource {
                 result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
             }
 
-            // 登録結果を返す
+            // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -212,7 +214,7 @@ public class UserResource extends Resource {
                 result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
             }
 
-            // 変更結果を返す
+            // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -250,7 +252,7 @@ public class UserResource extends Resource {
                 result = new ResposeEntity<String>(ResposeEntity.Result.NG,"","");
             }
 
-            // 削除結果を返す
+            // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -282,6 +284,7 @@ public class UserResource extends Resource {
             // 検索条件での検索件数を取得する
             int pageCount = model.getUserPageCount(instance.getRequestData());
 
+            // 結果を返す
             ResposeEntity<Integer> result = null;
             result = new ResposeEntity<Integer>(ResposeEntity.Result.OK,"",pageCount);
 
@@ -316,6 +319,7 @@ public class UserResource extends Resource {
             // 検索条件での検索結果を取得する
             List<UserEntity> entities = model.getUsers(instance.getRequestData());
 
+            // 結果を返す
             ResposeEntity<List<UserEntity>> result = null;
             result = new ResposeEntity<List<UserEntity>>(ResposeEntity.Result.OK,"",entities);
 
@@ -351,11 +355,11 @@ public class UserResource extends Resource {
             // ユーザーを検索
             Optional<UserEntity> entity = model.getUser(instance.getRequestData().getId());
 
+            // 結果を返す
             ResposeEntity<UserEntity> result = entity.map(data -> {
                 return new ResposeEntity<UserEntity>(ResposeEntity.Result.OK,"",entity.get());
             }).orElse(new ResposeEntity<UserEntity>(ResposeEntity.Result.NG,"",null));
 
-            // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
             logger.error(e.getMessage());
