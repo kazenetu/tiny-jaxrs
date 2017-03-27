@@ -25,7 +25,7 @@ public class ResposeEntity<T> {
     /**
      * ジェネリクス元を取得
      */
-    private T responsetData;
+    private T responseData;
 
     public ResposeEntity(Result result,String errorMessage){
         this.result = result;
@@ -35,7 +35,7 @@ public class ResposeEntity<T> {
     public ResposeEntity(Result result,String errorMessage,T responseData){
         this.result = result;
         this.errorMessage = errorMessage;
-        this.responsetData = responseData;
+        this.responseData = responseData;
     }
 
     /**
@@ -67,16 +67,16 @@ public class ResposeEntity<T> {
     }
 
     /**
-     * @return responsetData
+     * @return responseData
      */
     public T getResponseData() {
-        return responsetData;
+        return responseData;
     }
 
     /**
-     * @param responsetData セットする responsetData
+     * @param responseData セットする responseData
      */
     public void setResponseData(T responsetData) {
-        this.responsetData = responsetData;
+        this.responseData = responsetData;
     }
 }
