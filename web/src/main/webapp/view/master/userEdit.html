@@ -44,6 +44,16 @@
                     </div>
                 </div>
 
+                <div class="form-group {{ctrl.errorBirthDay}}">
+                    <div class=col-sm-2>
+                        <label class="control-label" for="birthDay">誕生日</label>
+                    </div>
+                    <div class=col-sm-2>
+                    <input type="date" id = "birthDay" class="form-control" data-ng-model="ctrl.birthDay"
+                        ng-blur="ctrl.checkClearRequired('errorBirthDay')">
+                    </div>
+                </div>
+
                 <div class="form-group {{ctrl.errorPassword}}">
                     <div class=col-sm-2>
                         <label class="control-label" for="password">パスワード</label>

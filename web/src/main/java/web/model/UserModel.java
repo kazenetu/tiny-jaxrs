@@ -168,7 +168,7 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public Optional<UserEntity> getUser(String userID) throws Exception{
-        String sql = "select USER_ID,NAME,PASSWORD from MT_USER where USER_ID like ?;";
+        String sql = "select * from MT_USER where USER_ID like ?;";
 
         // パラメータの設定
         ArrayList<Object> params = new ArrayList<>();
@@ -185,6 +185,9 @@ public class UserModel extends Model{
                 entity.setId((String)getColumnValue(row,"USER_ID"));
                 entity.setName((String)getColumnValue(row,"NAME"));
                 entity.setPassword((String)getColumnValue(row,"PASSWORD"));
+                entity.setDate((Date)getColumnValue(row,"date_data"));
+                entity.setTime((Time)getColumnValue(row,"time_data"));
+                entity.setTs((Timestamp)getColumnValue(row,"ts_data"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -200,12 +203,13 @@ public class UserModel extends Model{
      * @return 成否
      */
     public boolean insert(UserEntity userData){
-        String sql = "insert into mt_user(user_id, name, password) values (?, ?,?);";
+        String sql = "insert into mt_user(user_id, name, password, date_data) values (?, ?, ?, ?);";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(userData.getId());
         params.add(userData.getName());
         params.add(userData.getPassword());
+        params.add(userData.getDate());
 
         try {
             db.setTransaction();
@@ -230,11 +234,12 @@ public class UserModel extends Model{
      * @return 成否
      */
     public boolean update(UserEntity userData){
-        String sql = "update MT_USER set Name = ?,PASSWORD=? where USER_ID=?;";
+        String sql = "update MT_USER set Name = ?,PASSWORD=?,date_data=? where USER_ID=?;";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(userData.getName());
         params.add(userData.getPassword());
+        params.add(userData.getDate());
         params.add(userData.getId());
 
         try {
