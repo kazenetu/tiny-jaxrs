@@ -198,7 +198,6 @@ public class UserModel extends Model{
      * ユーザーの登録
      * @param userData ユーザーデータ
      * @return 成否
-     * @throws Exception
      */
     public boolean insert(UserEntity userData){
         String sql = "insert into mt_user(user_id, name, password) values (?, ?,?);";
