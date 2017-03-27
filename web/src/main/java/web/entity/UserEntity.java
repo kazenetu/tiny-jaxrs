@@ -3,16 +3,15 @@ package web.entity;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 
 public class UserEntity {
     private String id;
     private String name;
     private String password;
     private int age;
-    private String date;
-    private String time;
-    private String ts;
+    private Date date;
+    private Time time;
+    private Timestamp ts;
 
 
     public UserEntity() {
@@ -60,7 +59,7 @@ public class UserEntity {
     /**
      * @return date
      */
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -68,17 +67,13 @@ public class UserEntity {
      * @param date セットする date
      */
     public void setDate(Date date) {
-        this.date = null;
-        if(date != null){
-            DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            this.date = date.toLocalDate().format(f);
-        }
+        this.date = date;
     }
 
     /**
      * @return time
      */
-    public String getTime() {
+    public Time getTime() {
         return time;
     }
 
@@ -86,15 +81,13 @@ public class UserEntity {
      * @param time セットする time
      */
     public void setTime(Time time) {
-        if(time != null){
-            this.time = time.toString();
-        }
+        this.time = time;
     }
 
     /**
      * @return ts
      */
-    public String getTs() {
+    public Timestamp getTs() {
         return ts;
     }
 
@@ -102,11 +95,7 @@ public class UserEntity {
      * @param ts セットする ts
      */
     public void setTs(Timestamp ts) {
-        this.ts = null;
-        if(ts != null){
-            DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            this.ts =  ts.toLocalDateTime().format(f);
-        }
+       this.ts = ts;
     }
 
 }

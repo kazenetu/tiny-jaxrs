@@ -90,13 +90,13 @@ td
                     </td>
 
                     <td class="text-left">
-                        {{result.date}}
+                        {{result.date | date:'yyyy/MM/dd' }}
                     </td>
                     <td class="text-left">
-                        {{result.time}}
+                        {{result.time | date:'hh:mmm'}}
                     </td>
                     <td class="text-left">
-                        {{result.ts}}
+                        {{result.ts | date:'yyyy/MM/dd hh:mm:ss'}}
                     </td>
 
                     <td class="text-center">
