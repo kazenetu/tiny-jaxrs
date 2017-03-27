@@ -1,10 +1,13 @@
 package web.common.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +162,29 @@ public class Sqlite implements Database {
             while(result.next()){
                 Map<String,Object> recodeMap = new HashMap<>();
                 for(i=1;i<=colCount;i++){
-                    recodeMap.put(metaData.getColumnName(i), result.getObject(i));
+                    Object value = result.getObject(i);
+
+                    if(value != null && value.getClass() == String.class) {
+                        // タイムスタンプを取得
+                        Object convertResult =  getTimestamp((String)value);
+
+                        // 取得できない場合は日付を取得
+                        if(convertResult == null) {
+                            convertResult = getDate((String)value);
+                        }
+
+                        // 取得できない場合は時刻を取得
+                        if(convertResult == null) {
+                            convertResult = getTime((String)value);
+                        }
+
+                        // 日付系が取得できれば設定値に設定する
+                        if(convertResult != null) {
+                            value = convertResult;
+                        }
+                    }
+
+                    recodeMap.put(metaData.getColumnName(i), value);
                 }
                 resultList.add(recodeMap);
             }
@@ -168,5 +193,44 @@ public class Sqlite implements Database {
             throw new Exception(e);
         }
         return resultList;
+    }
+
+    /**
+     * 文字列をタイムスタンプに変換
+     * @param value 文字列
+     * @return タイムスタンプ(変換できない場合はnull)
+     */
+    private Timestamp getTimestamp(String value) {
+        try{
+            return Timestamp.valueOf(value.replace('/', '-'));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 文字列を日付に変換
+     * @param value 文字列
+     * @return 日付(変換できない場合はnull)
+     */
+    private Date getDate(String value) {
+        try{
+            return Date.valueOf(value.replace('/', '-'));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 文字列を時刻に変換
+     * @param value 文字列
+     * @return 時刻(変換できない場合はnull)
+     */
+    private Time getTime(String value) {
+        try{
+            return Time.valueOf(value);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
