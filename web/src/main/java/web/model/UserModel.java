@@ -203,13 +203,15 @@ public class UserModel extends Model{
      * @return 成否
      */
     public boolean insert(UserEntity userData){
-        String sql = "insert into mt_user(user_id, name, password, date_data) values (?, ?, ?, ?);";
+        String sql = "insert into mt_user(user_id, name, password, date_data, time_data, ts_data) values (?, ?, ?, ?, ?, ?);";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(userData.getId());
         params.add(userData.getName());
         params.add(userData.getPassword());
         params.add(userData.getDate());
+        params.add(userData.getTime());
+        params.add(userData.getTs());
 
         try {
             db.setTransaction();
@@ -234,12 +236,14 @@ public class UserModel extends Model{
      * @return 成否
      */
     public boolean update(UserEntity userData){
-        String sql = "update MT_USER set Name = ?,PASSWORD=?,date_data=? where USER_ID=?;";
+        String sql = "update MT_USER set Name = ?,PASSWORD=?,date_data=?,time_data=?,ts_data=? where USER_ID=?;";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(userData.getName());
         params.add(userData.getPassword());
         params.add(userData.getDate());
+        params.add(userData.getTime());
+        params.add(userData.getTs());
         params.add(userData.getId());
 
         try {

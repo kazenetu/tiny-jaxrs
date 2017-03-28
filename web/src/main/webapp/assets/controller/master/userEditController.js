@@ -9,12 +9,16 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
     ctrl.userName = "";
     ctrl.password = "";
     ctrl.birthDay = null;
+    ctrl.time = null;
+    ctrl.ts = null;
 
     // 入力情報のエラークラス
     ctrl.errorUserId = "";
     ctrl.errorUserName = "";
     ctrl.errorPassword = "";
     ctrl.errorBirthDay = "";
+    ctrl.errorTime = "";
+    ctrl.errorTs = "";
 
     /**
      * ユーザーIDの編集可否
@@ -71,6 +75,12 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                 ctrl.password = response.responseData.password;
                 if(response.responseData.date !== null){
                     ctrl.birthDay = new Date(response.responseData.date);
+                }
+                if(response.responseData.time !== null){
+                    ctrl.time = new Date("1970/01/01 " + response.responseData.time);
+                }
+                if(response.responseData.ts !== null){
+                    ctrl.ts = new Date(response.responseData.ts);
                 }
             });
         }
@@ -147,6 +157,8 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                     id :ctrl.userId,
                     name :ctrl.userName,
                     date :ctrl.birthDay,
+                    time :ctrl.time.toLocaleTimeString(),
+                    ts :ctrl.ts,
                     password :ctrl.password
                 }
             }, function(response) {
