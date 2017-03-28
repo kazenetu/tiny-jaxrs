@@ -17,12 +17,12 @@ front.controller.UserListController =  function UserListController($location, we
      * 検索条件Storageの設定
      */
     function setConditions(pageIndex){
-        var valus =
+        var values =
         {
-            searchUserId : ctrl.searchUserId,
-            pageIndex:pageIndex
+            searchUserId : ctrl.searchUserId
         };
-        storageService.setValue(storageService.keys.condition,valus);
+        values['pageIndex'] = pageIndex;
+        storageService.setValue(storageService.keys.condition,values);
     }
 
     /**
