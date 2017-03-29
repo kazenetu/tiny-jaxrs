@@ -5,7 +5,9 @@ front.controller.UserListController =  function UserListController($location, we
     var ctrl = this;
     ctrl.totalPage = 0;
 
-    // ページ設定
+    /**
+     * ページ設定
+     */
     var settings = {
         totalPageApiUrl : 'api/user/totalpage',
         getPageApiUrl : 'api/user/page',
@@ -20,6 +22,39 @@ front.controller.UserListController =  function UserListController($location, we
             ctrl.searchUserId = values.searchUserId;
         }
     };
+
+    /**
+     * 戻るボタンクリック
+     */
+    ctrl.back = function(){
+        $location.path('/main');
+    }
+
+    /**
+     * 新規作成ボタンクリック
+     */
+    ctrl.create = function(){
+        var values={
+                userId : null
+        };
+        storageService.setValue(storageService.keys.updateKeys,values);
+        $location.path(settings.editPage);
+    }
+
+    /**
+     * 一覧編集ボタンクリック
+     */
+    ctrl.edit = function(id){
+        // 主キーの連想配列を変更キーStorageに設定
+        var values={
+                userId : id
+        };
+
+        storageService.setValue(storageService.keys.updateKeys,values);
+
+        // 編集画面に遷移
+        $location.path(settings.editPage);
+    }
 
     /**
      * リクエストデータ取得
@@ -70,24 +105,6 @@ front.controller.UserListController =  function UserListController($location, we
     }
 
     /**
-     * 戻るボタンクリック
-     */
-    ctrl.back = function(){
-        $location.path('/main');
-    }
-
-    /**
-     * 新規作成ボタンクリック
-     */
-    ctrl.create = function(){
-        var values={
-                userId : null
-        };
-        storageService.setValue(storageService.keys.updateKeys,values);
-        $location.path(settings.editPage);
-    }
-
-    /**
      * 検索処理
      * ボタンクリック時はpageIndexは0固定
      */
@@ -115,21 +132,6 @@ front.controller.UserListController =  function UserListController($location, we
             var values = [settings.thisPage, settings.editPage];
             storageService.setValue(storageService.keys.enableConditionPaths,values);
         });
-    }
-
-    /**
-     * 一覧編集ボタンクリック
-     */
-    ctrl.edit = function(id){
-        // 主キーの連想配列を変更キーStorageに設定
-        var values={
-                userId : id
-        };
-
-        storageService.setValue(storageService.keys.updateKeys,values);
-
-        // 編集画面に遷移
-        $location.path(settings.editPage);
     }
 
     /**
