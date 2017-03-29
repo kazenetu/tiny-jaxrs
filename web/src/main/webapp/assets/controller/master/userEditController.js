@@ -48,8 +48,8 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                     id :ctrl.userId
             };
         },
-        setEditMode : function(values) {
-        settings.createMode = (values.userId === null);
+        setCreateMode : function(values) {
+            settings.createMode = (values.userId === null);
         },
         setEditControls : function(values) {
             ctrl.userName = values.name;
@@ -176,7 +176,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         var values= storageService.getValue(storageService.keys.updateKeys);
 
         // 新規作成モードか否かの設定
-        settings.setEditMode(values);
+        settings.setCreateMode(values);
 
         // 新規作成モードか否かによって表示内容を変更
         if(settings.isCreateMode()){
