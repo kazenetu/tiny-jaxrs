@@ -5,6 +5,30 @@ front.controller.UserListController =  function UserListController($location, we
     var ctrl = this;
     ctrl.totalPage = 0;
 
+    // ページ設定
+    var settings = {
+        totalPageApiUrl : 'api/user/totalpage',
+        getPageApiUrl : 'api/user/page',
+        thisPage : '/master/userlist',
+        editPage : '/master/useredit',
+        getSearchParam : function() {
+            return {
+                searchUserId : ctrl.searchUserId
+            };
+        },
+        setSearchControls : function(values) {
+            ctrl.searchUserId = values.searchUserId;
+        }
+    };
+
+    /**
+     * リクエストデータ取得
+     */
+    function getRequestData(pageIndex){
+        var requestData =settings.getSearchParam();
+        requestData['pageIndex'] = pageIndex;
+        return requestData;
+    }
 
     /**
      * 検索条件Storageの削除
@@ -17,11 +41,7 @@ front.controller.UserListController =  function UserListController($location, we
      * 検索条件Storageの設定
      */
     function setConditions(pageIndex){
-        var values =
-        {
-            searchUserId : ctrl.searchUserId
-        };
-        values['pageIndex'] = pageIndex;
+        var values = getRequestData(pageIndex);
         storageService.setValue(storageService.keys.condition,values);
     }
 
@@ -34,7 +54,7 @@ front.controller.UserListController =  function UserListController($location, we
         // 検索条件Storageが設定されていれば検索を行う
         if('pageIndex' in values){
             // 検索条件
-            ctrl.searchUserId = values.searchUserId;
+            settings.setSearchControls(values);
 
             // 検索(ページ指定)
             ctrl.search(values.pageIndex);
@@ -64,7 +84,7 @@ front.controller.UserListController =  function UserListController($location, we
                 userId : null
         };
         storageService.setValue(storageService.keys.updateKeys,values);
-        $location.path('/master/useredit');
+        $location.path(settings.editPage);
     }
 
     /**
@@ -76,12 +96,9 @@ front.controller.UserListController =  function UserListController($location, we
         clearCondition();
 
         // 総ページ数の取得
-        webApiService.post('api/user/totalpage', {
-            loginUserId: userService.getId(),
-            requestData:{
-                pageIndex : pageIndex,
-                searchUserId : ctrl.searchUserId
-            }
+        webApiService.post(settings.totalPageApiUrl, {
+            loginUserId : userService.getId(),
+            requestData : getRequestData(pageIndex)
         }, function(response) {
             ctrl.totalPage = response.responseData;
 
@@ -95,7 +112,7 @@ front.controller.UserListController =  function UserListController($location, we
             ctrl.paging(pageIndex,null);
 
             // 検索条件保存画面の指定(それ以外はヘッダーコントロールで削除)
-            var values = ['/master/userlist','/master/useredit'];
+            var values = [settings.thisPage, settings.editPage];
             storageService.setValue(storageService.keys.enableConditionPaths,values);
         });
     }
@@ -108,10 +125,11 @@ front.controller.UserListController =  function UserListController($location, we
         var values={
                 userId : id
         };
+
         storageService.setValue(storageService.keys.updateKeys,values);
 
         // 編集画面に遷移
-        $location.path('/master/useredit');
+        $location.path(settings.editPage);
     }
 
     /**
@@ -119,12 +137,9 @@ front.controller.UserListController =  function UserListController($location, we
      */
     ctrl.getPage = function(pageIndex) {
         // 対象ページのレコードを取得
-        webApiService.post('api/user/page', {
-            loginUserId: userService.getId(),
-            requestData:{
-                pageIndex : pageIndex,
-                searchUserId : ctrl.searchUserId
-            }
+        webApiService.post(settings.getPageApiUrl, {
+            loginUserId : userService.getId(),
+            requestData : getRequestData(pageIndex)
         }, function(response) {
             // 検索結果のレコードを設定
             ctrl.searchResult = response.responseData;
