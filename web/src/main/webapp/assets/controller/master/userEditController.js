@@ -21,25 +21,6 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
     ctrl.errorTs = "";
 
     /**
-     * ユーザーID重複チェック
-     */
-    ctrl.userIdIcon = '';
-
-    /**
-     * キー重複チェック用列挙体
-     */
-    ctrl.ICONS = {
-        NONE:'none',
-        OK: 'glyphicon-ok',
-        NG: 'glyphicon-remove',
-    };
-
-    /**
-     * DB反映ボタンの表示名
-     */
-    ctrl.commmitButtonName = '';
-
-    /**
      * ページ設定
      */
     var settings = {
@@ -92,35 +73,9 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
     };
 
     /**
-     * 初期化イベント
+     * ユーザーID重複チェック
      */
-    ctrl.init = function(){
-        // 検索画面から取得したキー情報を設定
-        var values= storageService.getValue(storageService.keys.updateKeys);
-
-        // 新規作成モードか否かの設定
-        settings.setEditMode(values);
-
-        // 新規作成モードか否かによって表示内容を変更
-        if(settings.isCreateMode()){
-            // 新規作成
-            ctrl.commmitButtonName = '登録';
-
-        }else{
-            // 更新
-            ctrl.commmitButtonName = '更新';
-            ctrl.userId = values.userId;
-
-            // データ取得
-            webApiService.post(settings.findApiUrl, {
-                loginUserId : userService.getId(),
-                requestData : settings.getFindRequestData()
-            }, function(response) {
-                // 取得結果をコントロールに設定
-                settings.setEditControls(response.responseData);
-            });
-        }
-    }
+    ctrl.userIdIcon = '';
 
     /**
      * キーカラム重複チェック
@@ -136,7 +91,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                 return;
             }
 
-            // ユーザーデータ取得
+            // データ取得
             webApiService.post(settings.findApiUrl, {
                 loginUserId : userService.getId(),
                 requestData : settings.getRequestData()
@@ -151,98 +106,6 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
                 }
             });
         }
-    }
-
-    /**
-     * 必須入力エラー後に入力があるか
-     */
-    ctrl.checkClearRequired = function(target){
-        if(this[target] !== ''){
-            this[target] = '';
-            ctrl.hideError();
-        }
-    }
-
-    /**
-     * 登録または更新イベント
-     */
-    ctrl.insertOrUpdate = function(){
-        // 入力チェック
-        if(!validateCheck()){
-            return;
-        }
-
-        var d = $q.defer();
-        d.promise
-        .then(ctrl.showConfirm($q,ctrl.commmitButtonName + 'の確認',
-                'このユーザーを' + ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する'))
-        .then(function(){
-            var deferrred = $q.defer();
-
-            var apiUrl = settings.updateApiUrl;
-            if(settings.isCreateMode()){
-                apiUrl = settings.insertApiUrl;
-            }
-
-            // ユーザーデータ更新
-            webApiService.post(apiUrl, {
-                loginUserId: userService.getId(),
-                requestData : settings.getInsUpdRequestData()
-            }, function(response) {
-                if (response.result !== 'OK') {
-                    ctrl.showError(response.errorMessage);
-                } else {
-                    ctrl.hideError();
-
-                    deferrred.resolve();
-                }
-            });
-
-            return deferrred.promise;
-        })
-        .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
-                'このユーザーを' + ctrl.commmitButtonName +'しました', '確認'))
-        .then(function(){
-            $location.path(settings.listPage);
-            storageService.clearValue(storageService.keys.updateKeys);
-        });
-        // 発火
-        d.resolve();
-    }
-
-    /**
-     * 削除イベント
-     */
-    ctrl.delete = function(){
-        var d = $q.defer();
-        d.promise
-        .then(ctrl.showConfirm($q,'削除の確認','このユーザーを削除しますか','削除する'))
-        .then(function(){
-            var deferrred = $q.defer();
-
-            // データ削除
-            webApiService.post(settings.deleteApiUrl, {
-                loginUserId: userService.getId(),
-                requestData : settings.getDeleteRequestData()
-            }, function(response) {
-                if (response.result !== 'OK') {
-                    ctrl.showError(response.errorMessage);
-                } else {
-                    ctrl.hideError();
-
-                    deferrred.resolve();
-                }
-            });
-
-            return deferrred.promise;
-        })
-        .then(ctrl.showMsgDialog($q,'削除の報告','このユーザーを削除しました', '確認'))
-        .then(function(){
-            $location.path(settings.listPage);
-            storageService.clearValue(storageService.keys.updateKeys);
-        });
-        // 発火
-        d.resolve();
     }
 
     /**
@@ -289,6 +152,143 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         }
 
         return true;
+    }
+
+    /**
+     * キー重複チェック用列挙体
+     */
+    ctrl.ICONS = {
+        NONE:'none',
+        OK: 'glyphicon-ok',
+        NG: 'glyphicon-remove',
+    };
+
+    /**
+     * DB反映ボタンの表示名
+     */
+    ctrl.commmitButtonName = '';
+
+    /**
+     * 初期化イベント
+     */
+    ctrl.init = function(){
+        // 検索画面から取得したキー情報を設定
+        var values= storageService.getValue(storageService.keys.updateKeys);
+
+        // 新規作成モードか否かの設定
+        settings.setEditMode(values);
+
+        // 新規作成モードか否かによって表示内容を変更
+        if(settings.isCreateMode()){
+            // 新規作成
+            ctrl.commmitButtonName = '登録';
+
+        }else{
+            // 更新
+            ctrl.commmitButtonName = '更新';
+            ctrl.userId = values.userId;
+
+            // データ取得
+            webApiService.post(settings.findApiUrl, {
+                loginUserId : userService.getId(),
+                requestData : settings.getFindRequestData()
+            }, function(response) {
+                // 取得結果をコントロールに設定
+                settings.setEditControls(response.responseData);
+            });
+        }
+    }
+
+    /**
+     * 必須入力エラー後に入力があるか
+     */
+    ctrl.checkClearRequired = function(target){
+        if(this[target] !== ''){
+            this[target] = '';
+            ctrl.hideError();
+        }
+    }
+
+    /**
+     * 登録または更新イベント
+     */
+    ctrl.insertOrUpdate = function(){
+        // 入力チェック
+        if(!validateCheck()){
+            return;
+        }
+
+        var d = $q.defer();
+        d.promise
+        .then(ctrl.showConfirm($q,ctrl.commmitButtonName + 'の確認',
+                ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する'))
+        .then(function(){
+            var deferrred = $q.defer();
+
+            var apiUrl = settings.updateApiUrl;
+            if(settings.isCreateMode()){
+                apiUrl = settings.insertApiUrl;
+            }
+
+            // データ更新
+            webApiService.post(apiUrl, {
+                loginUserId: userService.getId(),
+                requestData : settings.getInsUpdRequestData()
+            }, function(response) {
+                if (response.result !== 'OK') {
+                    ctrl.showError(response.errorMessage);
+                } else {
+                    ctrl.hideError();
+
+                    deferrred.resolve();
+                }
+            });
+
+            return deferrred.promise;
+        })
+        .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
+                 ctrl.commmitButtonName +'しました', '確認'))
+        .then(function(){
+            $location.path(settings.listPage);
+            storageService.clearValue(storageService.keys.updateKeys);
+        });
+        // 発火
+        d.resolve();
+    }
+
+    /**
+     * 削除イベント
+     */
+    ctrl.delete = function(){
+        var d = $q.defer();
+        d.promise
+        .then(ctrl.showConfirm($q,'削除の確認','削除しますか','削除する'))
+        .then(function(){
+            var deferrred = $q.defer();
+
+            // データ削除
+            webApiService.post(settings.deleteApiUrl, {
+                loginUserId: userService.getId(),
+                requestData : settings.getDeleteRequestData()
+            }, function(response) {
+                if (response.result !== 'OK') {
+                    ctrl.showError(response.errorMessage);
+                } else {
+                    ctrl.hideError();
+
+                    deferrred.resolve();
+                }
+            });
+
+            return deferrred.promise;
+        })
+        .then(ctrl.showMsgDialog($q,'削除の報告','削除しました', '確認'))
+        .then(function(){
+            $location.path(settings.listPage);
+            storageService.clearValue(storageService.keys.updateKeys);
+        });
+        // 発火
+        d.resolve();
     }
 
     /**
