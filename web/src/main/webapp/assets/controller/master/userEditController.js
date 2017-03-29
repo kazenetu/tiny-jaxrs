@@ -26,7 +26,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
     ctrl.userIdIcon = '';
 
     /**
-     * ユーザーID重複チェック用列挙体
+     * キー重複チェック用列挙体
      */
     ctrl.ICONS = {
         NONE:'none',
@@ -47,26 +47,41 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         insertApiUrl : 'api/user/insert',
         updateApiUrl : 'api/user/update',
         deleteApiUrl : 'api/user/delete',
-        getRequestData : function() {
+        getFindRequestData : function() {
             return {
                 id : ctrl.userId
+            };
+        },
+        getInsUpdRequestData : function() {
+            return {
+                id :ctrl.userId,
+                name :ctrl.userName,
+                date :ctrl.birthDay,
+                time :ctrl.time.toLocaleTimeString(),
+                ts :ctrl.ts,
+                password :ctrl.password
+            };
+        },
+        getDeleteRequestData : function() {
+            return {
+                    id :ctrl.userId
             };
         },
         setEditMode : function(values) {
         settings.createMode = (values.userId === null);
         },
         setEditControls : function(values) {
-                ctrl.userName = values.name;
-                ctrl.password = values.password;
-                if(values.date !== null){
-                    ctrl.birthDay = new Date(values.date);
-                }
-                if(values.time !== null){
-                    ctrl.time = new Date("1970/01/01 " + values.time);
-                }
-                if(values.ts !== null){
-                    ctrl.ts = new Date(values.ts);
-                }
+            ctrl.userName = values.name;
+            ctrl.password = values.password;
+            if(values.date !== null){
+                ctrl.birthDay = new Date(values.date);
+            }
+            if(values.time !== null){
+                ctrl.time = new Date("1970/01/01 " + values.time);
+            }
+            if(values.ts !== null){
+                ctrl.ts = new Date(values.ts);
+            }
         },
         listPage : '/master/userlist',
 
@@ -99,7 +114,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
             // データ取得
             webApiService.post(settings.findApiUrl, {
                 loginUserId : userService.getId(),
-                requestData : settings.getRequestData()
+                requestData : settings.getFindRequestData()
             }, function(response) {
                 // 取得結果をコントロールに設定
                 settings.setEditControls(response.responseData);
@@ -172,14 +187,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
             // ユーザーデータ更新
             webApiService.post(apiUrl, {
                 loginUserId: userService.getId(),
-                requestData:{
-                    id :ctrl.userId,
-                    name :ctrl.userName,
-                    date :ctrl.birthDay,
-                    time :ctrl.time.toLocaleTimeString(),
-                    ts :ctrl.ts,
-                    password :ctrl.password
-                }
+                requestData : settings.getInsUpdRequestData()
             }, function(response) {
                 if (response.result !== 'OK') {
                     ctrl.showError(response.errorMessage);
@@ -215,11 +223,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
             // データ削除
             webApiService.post(settings.deleteApiUrl, {
                 loginUserId: userService.getId(),
-                requestData:{
-                    id :ctrl.userId,
-                    name :ctrl.userName,
-                    password :ctrl.password
-                }
+                requestData : settings.getDeleteRequestData()
             }, function(response) {
                 if (response.result !== 'OK') {
                     ctrl.showError(response.errorMessage);
