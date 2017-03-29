@@ -1,5 +1,5 @@
 // TODO Xxxxをコントロール名に置き換える（頭文字を大文字） ※最終行も編集すること
-front.controller.XxxxEdit = function XxxxEdit($q, $location, webApiService, userService,storageService) {
+front.controller.XxxxEditController = function XxxxEditController($q, $location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.PageBase);
     this.setTitle('ユーザー編集');
 
@@ -328,4 +328,4 @@ front.controller.XxxxEdit = function XxxxEdit($q, $location, webApiService, user
 
 // TODO Xxxxをコントロール名に置き換える（頭文字を大文字）
 // TODO xxxxをコントロール名に置き換える（すべて小文字）
-angular.module('App').controller('xxxxEdit', front.controller.XxxxEdit);
+angular.module('App').controller('xxxxEditController', front.controller.XxxxEditController);
