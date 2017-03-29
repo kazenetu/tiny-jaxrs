@@ -21,13 +21,6 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
     ctrl.errorTs = "";
 
     /**
-     * ユーザーIDの編集可否
-     * true：編集不可（編集モード）
-     * false：編集可（新規作成モード）
-     */
-    ctrl.disabledUserId = true;
-
-    /**
      * ユーザーID重複チェック
      */
     ctrl.userIdIcon = '';
@@ -47,65 +40,91 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
     ctrl.commmitButtonName = '';
 
     /**
+     * ページ設定
+     */
+    var settings = {
+        findApiUrl : 'api/user/find',
+        insertApiUrl : 'api/user/insert',
+        updateApiUrl : 'api/user/update',
+        deleteApiUrl : 'api/user/delete',
+        getRequestData : function() {
+            return {
+                id : ctrl.userId
+            };
+        },
+        setEditMode : function(values) {
+        settings.createMode = (values.userId === null);
+        },
+        setEditControls : function(values) {
+                ctrl.userName = values.name;
+                ctrl.password = values.password;
+                if(values.date !== null){
+                    ctrl.birthDay = new Date(values.date);
+                }
+                if(values.time !== null){
+                    ctrl.time = new Date("1970/01/01 " + values.time);
+                }
+                if(values.ts !== null){
+                    ctrl.ts = new Date(values.ts);
+                }
+        },
+        listPage : '/master/userlist',
+
+        createMode : false,
+        isCreateMode : function() {
+            return settings.createMode;
+        }
+    };
+
+    /**
      * 初期化イベント
      */
     ctrl.init = function(){
         // 検索画面から取得したキー情報を設定
         var values= storageService.getValue(storageService.keys.updateKeys);
 
-        if(values.userId === null){
+        // 新規作成モードか否かの設定
+        settings.setEditMode(values);
+
+        // 新規作成モードか否かによって表示内容を変更
+        if(settings.isCreateMode()){
             // 新規作成
-            ctrl.disabledUserId = false;
             ctrl.commmitButtonName = '登録';
 
         }else{
             // 更新
-            ctrl.disabledUserId = true;
             ctrl.commmitButtonName = '更新';
             ctrl.userId = values.userId;
 
-            // ユーザーデータ取得
-            webApiService.post('api/user/find', {
-                loginUserId: userService.getId(),
-                requestData:{
-                    id : ctrl.userId
-                }
+            // データ取得
+            webApiService.post(settings.findApiUrl, {
+                loginUserId : userService.getId(),
+                requestData : settings.getRequestData()
             }, function(response) {
-                ctrl.userName = response.responseData.name;
-                ctrl.password = response.responseData.password;
-                if(response.responseData.date !== null){
-                    ctrl.birthDay = new Date(response.responseData.date);
-                }
-                if(response.responseData.time !== null){
-                    ctrl.time = new Date("1970/01/01 " + response.responseData.time);
-                }
-                if(response.responseData.ts !== null){
-                    ctrl.ts = new Date(response.responseData.ts);
-                }
+                // 取得結果をコントロールに設定
+                settings.setEditControls(response.responseData);
             });
         }
     }
 
     /**
-     * ユーザーID重複チェック
+     * キーカラム重複チェック
      */
     ctrl.duplicateUserId = function(){
         // ユーザーIDの重複アイコンは「なし」
         ctrl.userIdIcon = ctrl.ICONS.NONE;
 
         // 新規作成時のみチェックする
-        if(!ctrl.disabledUserId){
+        if(settings.isCreateMode()){
             if(ctrl.userId === ''){
                 ctrl.userIdIcon = ctrl.ICONS.NG;
                 return;
             }
 
             // ユーザーデータ取得
-            webApiService.post('api/user/find', {
-                loginUserId: userService.getId(),
-                requestData:{
-                    id : ctrl.userId
-                }
+            webApiService.post(settings.findApiUrl, {
+                loginUserId : userService.getId(),
+                requestData : settings.getRequestData()
             }, function(response) {
                 if(response.responseData === null){
                     // レコードがなければOKアイコン
@@ -145,13 +164,13 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         .then(function(){
             var deferrred = $q.defer();
 
-            var method = 'insert';
-            if(ctrl.disabledUserId){
-                method = 'update';
+            var apiUrl = settings.updateApiUrl;
+            if(settings.isCreateMode()){
+                apiUrl = settings.insertApiUrl;
             }
 
             // ユーザーデータ更新
-            webApiService.post('api/user/' + method, {
+            webApiService.post(apiUrl, {
                 loginUserId: userService.getId(),
                 requestData:{
                     id :ctrl.userId,
@@ -176,7 +195,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
                 'このユーザーを' + ctrl.commmitButtonName +'しました', '確認'))
         .then(function(){
-            $location.path('/master/userlist');
+            $location.path(settings.listPage);
             storageService.clearValue(storageService.keys.updateKeys);
         });
         // 発火
@@ -193,8 +212,8 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         .then(function(){
             var deferrred = $q.defer();
 
-            // ユーザーデータ削除
-            webApiService.post('api/user/delete', {
+            // データ削除
+            webApiService.post(settings.deleteApiUrl, {
                 loginUserId: userService.getId(),
                 requestData:{
                     id :ctrl.userId,
@@ -215,7 +234,7 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
         })
         .then(ctrl.showMsgDialog($q,'削除の報告','このユーザーを削除しました', '確認'))
         .then(function(){
-            $location.path('/master/userlist');
+            $location.path(settings.listPage);
             storageService.clearValue(storageService.keys.updateKeys);
         });
         // 発火
@@ -272,10 +291,16 @@ front.controller.UserEdit = function UserEdit($q, $location, webApiService, user
      * 戻るイベント
      */
     ctrl.cancel = function(){
-        $location.path('/master/userlist');
+        $location.path(settings.listPage);
         storageService.clearValue(storageService.keys.updateKeys);
     }
 
+    /**
+     * 新規モードか否か
+     */
+    ctrl.isCreateMode = function() {
+        return settings.isCreateMode();
+    }
 }
 
 angular.module('App').controller('userEdit', front.controller.UserEdit);

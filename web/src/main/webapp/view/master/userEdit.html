@@ -9,7 +9,7 @@
         <div class="form-group buttons-row">
             <input type="button" class="btn" data-ng-click="ctrl.cancel()"  value="戻る">
             <div class="pull-right">
-                <input type="button" class="btn" data-ng-click="ctrl.delete()"  value="削除" data-ng-show="ctrl.disabledUserId">
+                <input type="button" class="btn" data-ng-click="ctrl.delete()"  value="削除" data-ng-show="!ctrl.isCreateMode()">
 
                 <input type="button" class="btn" data-ng-click="ctrl.insertOrUpdate()"  value="{{ctrl.commmitButtonName}}">
             </div>
@@ -24,13 +24,13 @@
                         <label class="control-label" for="userId">ユーザーID</label>
                     </div>
                     <div class=col-sm-2>
-                    <input type="text" id = "userId" data-ng-disabled="ctrl.disabledUserId" class="form-control"
+                    <input type="text" id = "userId" data-ng-disabled="!ctrl.isCreateMode()" class="form-control"
                         data-ng-blur='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
                     </div>
-                    <div class=col-sm-5>
+                    <div class=col-sm-5 data-ng-show="ctrl.isCreateMode()">
                         <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.OK" class="glyphicon {{ctrl.userIdIcon}} text-success" aria-hidden="true">登録できます</span>
-                        <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG && ctrl.userId !== ''" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">すでに登録されています</span>
-                        <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG && ctrl.userId === ''" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">入力してください</span>
+                        <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">すでに登録されています</span>
+                        <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.NG" class="glyphicon {{ctrl.userIdIcon}} text-danger" aria-hidden="true">入力してください</span>
                     </div>
                 </div>
 
