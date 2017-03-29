@@ -1,12 +1,81 @@
-// TODO Xxxxをコントロール名に置き換える（頭文字を大文字）
-// TODO xxxxをコントロール名に置き換える（すべて小文字）
+// TODO Xxxxをコントロール名に置き換える（頭文字を大文字） ※最終行も編集すること
 front.controller.XxxxListController =  function XxxxListController($location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.SearchBase);
-    this.setTitle('画面名'); //TODO 画面名を入力する
+    this.setTitle('ユーザー検索');
 
     var ctrl = this;
     // TODO プロパティを追加（ctrl.プロパティ名）
     ctrl.totalPage = 0; //例
+
+    /**
+     * ページ設定
+     */
+    var settings = {
+        // TODO 総ページ数取得APIを設定する
+        totalPageApiUrl : 'api/user/totalpage',
+        // TODO 対象ページのレコード取得APIを設定する
+        getPageApiUrl : 'api/user/page',
+        // TODO 現在のページを設定する
+        thisPage : '/master/userlist',
+        // TODO 編集ページを設定する
+        editPage : '/master/useredit',
+        getSearchParam : function() {
+            // TODO 検索条件を設定する
+            return {
+                searchUserId : ctrl.searchUserId
+            };
+        },
+        setSearchControls : function(values) {
+            // TODO 検索条件を復元する
+            ctrl.searchUserId = values.searchUserId; //例
+        }
+    };
+
+    /**
+     * 戻るボタンクリック
+     */
+    ctrl.back = function(){
+        // TODO 戻り先を設定
+        $location.path('/main');
+    }
+
+    /**
+     * 新規作成ボタンクリック
+     */
+    ctrl.create = function(){
+        var values={
+            // TODO 主キー名を設定する(値はnull)
+            userId : null
+        };
+        storageService.setValue(storageService.keys.updateKeys,values);
+
+        // 編集画面に遷移
+        $location.path(settings.editPage);
+    }
+
+    /**
+     * 一覧編集ボタンクリック
+     */
+    ctrl.edit = function(id){
+        // 主キーの連想配列を変更キーStorageに設定
+        var values={
+            // TODO 編集画面に渡す値を設定する
+            userId : id
+        };
+        storageService.setValue(storageService.keys.updateKeys,values);
+
+        // 編集画面に遷移
+        $location.path(settings.editPage);
+    }
+
+    /**
+     * リクエストデータ取得
+     */
+    function getRequestData(pageIndex){
+        var requestData =settings.getSearchParam();
+        requestData['pageIndex'] = pageIndex;
+        return requestData;
+    }
 
     /**
      * 検索条件Storageの削除
@@ -19,13 +88,8 @@ front.controller.XxxxListController =  function XxxxListController($location, we
      * 検索条件Storageの設定
      */
     function setConditions(pageIndex){
-      // TODO 検索条件を設定する
-      var values =
-      {
-          searchUserId : ctrl.searchUserId //例
-      };
-      values['pageIndex'] = pageIndex;
-      storageService.setValue(storageService.keys.condition,values);
+        var values = getRequestData(pageIndex);
+        storageService.setValue(storageService.keys.condition,values);
     }
 
     /**
@@ -36,8 +100,8 @@ front.controller.XxxxListController =  function XxxxListController($location, we
 
         // 検索条件Storageが設定されていれば検索を行う
         if('pageIndex' in values){
-            // TODO 検索条件を設定する
-            ctrl.searchUserId = values.searchUserId; //例
+            // 検索条件
+            settings.setSearchControls(values);
 
             // 検索(ページ指定)
             ctrl.search(values.pageIndex);
@@ -53,29 +117,6 @@ front.controller.XxxxListController =  function XxxxListController($location, we
     }
 
     /**
-     * 戻るボタンクリック
-     */
-    ctrl.back = function(){
-        // TODO 戻り先を設定
-        $location.path('/戻り先');
-    }
-
-    /**
-     * 新規作成ボタンクリック
-     */
-    ctrl.create = function(){
-        // TODO 編集画面に渡す値を設定する
-        var values={
-                userId : null
-        };
-
-        storageService.setValue(storageService.keys.updateKeys,values);
-
-        // TODO 編集画面を設定する
-        $location.path('/master/useredit');
-    }
-
-    /**
      * 検索処理
      * ボタンクリック時はpageIndexは0固定
      */
@@ -84,14 +125,9 @@ front.controller.XxxxListController =  function XxxxListController($location, we
         clearCondition();
 
         // 総ページ数の取得
-        // TODO 総ページ数取得APIを設定する
-        webApiService.post('api/user/totalpage', {
-            loginUserId: userService.getId(),
-            requestData:{
-                pageIndex : pageIndex,
-                // TODO 検索条件を設定する
-                searchUserId : ctrl.searchUserId
-            }
+        webApiService.post(settings.totalPageApiUrl, {
+            loginUserId : userService.getId(),
+            requestData : getRequestData(pageIndex)
         }, function(response) {
             ctrl.totalPage = response.responseData;
 
@@ -105,26 +141,9 @@ front.controller.XxxxListController =  function XxxxListController($location, we
             ctrl.paging(pageIndex,null);
 
             // 検索条件保存画面の指定(それ以外はヘッダーコントロールで削除)
-            // TODO 検索画面と編集画面を設定する
-            var values = ['/master/userlist','/master/useredit'];
-
+            var values = [settings.thisPage, settings.editPage];
             storageService.setValue(storageService.keys.enableConditionPaths,values);
         });
-    }
-
-    /**
-     * 一覧編集ボタンクリック
-     */
-    ctrl.edit = function(id){
-        // TODO 編集画面に渡す値を設定する
-        var values={
-                userId : id
-        };
-
-        storageService.setValue(storageService.keys.updateKeys,values);
-
-        // TODO 編集画面を設定する
-        $location.path('/master/useredit');
     }
 
     /**
@@ -132,14 +151,9 @@ front.controller.XxxxListController =  function XxxxListController($location, we
      */
     ctrl.getPage = function(pageIndex) {
         // 対象ページのレコードを取得
-        // TODO 対象ページのレコード取得APIを設定する
-        webApiService.post('api/user/page', {
-            loginUserId: userService.getId(),
-            requestData:{
-                pageIndex : pageIndex,
-                // TODO 検索条件を設定する
-                searchUserId : ctrl.searchUserId
-            }
+        webApiService.post(settings.getPageApiUrl, {
+            loginUserId : userService.getId(),
+            requestData : getRequestData(pageIndex)
         }, function(response) {
             // 検索結果のレコードを設定
             ctrl.searchResult = response.responseData;
@@ -154,4 +168,6 @@ front.controller.XxxxListController =  function XxxxListController($location, we
     ctrl.userName = userService.getName();
 }
 
+// TODO Xxxxをコントロール名に置き換える（頭文字を大文字）
+// TODO xxxxをコントロール名に置き換える（すべて小文字）
 angular.module('App').controller('xxxxListController', front.controller.XxxxListController);
