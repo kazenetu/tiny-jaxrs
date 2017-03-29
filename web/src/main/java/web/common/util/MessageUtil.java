@@ -33,7 +33,7 @@ public class MessageUtil {
          * @throws Exception
          */
         public Map<String,String> selectAll() throws Exception{
-            String sql = "select message_id,message from MT_MSG;";
+            String sql = "select message_kind,message_id,message from MT_MSG;";
 
             Map<String,String> entities = new HashMap<>();
 
@@ -41,7 +41,8 @@ public class MessageUtil {
                 List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
                 if (!result.isEmpty()) {
                     result.forEach(row->{
-                        entities.put((String)getColumnValue(row,"message_id"), (String)getColumnValue(row,"message"));
+                        String key = String.format("%s%04d", (String)getColumnValue(row,"message_kind"), (int)getColumnValue(row,"message_id"));
+                        entities.put(key, (String)getColumnValue(row,"message"));
                     });
                 }
             } catch (Exception e) {

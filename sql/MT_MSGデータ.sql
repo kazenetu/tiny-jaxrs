@@ -1,7 +1,7 @@
-﻿INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('E0001', 'ログインできませんでした');
-INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('E0002', '現在のパスワードが異なります');
-INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('E0003', 'データを取得できませんでした');
-INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('E0010', '登録失敗しました');
-INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('E0011', '更新失敗しました');
-INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('E0012', '削除失敗しました');
-INSERT INTO MT_MSG(MESSAGE_ID, MESSAGE) VALUES ('W0001', '検索結果が0件です');
+﻿insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('E',1,'ログインできませんでした');
+insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('E',2,'現在のパスワードが異なります');
+insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('E',3,'データを取得できませんでした');
+insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('E',10,'登録失敗しました');
+insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('E',11,'更新失敗しました');
+insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('E',12,'削除失敗しました');
+insert into MT_MSG(MESSAGE_KIND,MESSAGE_ID,MESSAGE) values ('W',1,'検索結果が0件です');

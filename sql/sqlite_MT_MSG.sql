@@ -1,7 +1,7 @@
--- SQLite用メッセージマスタテーブル作成DDL
+﻿-- SQLite用メッセージマスタテーブル作成DDL
 create table MT_MSG (
-  MESSAGE_ID character varying(5) not null
-  , MESSAGE character varying(50)
-  , constraint MT_MSG_PKC primary key (MESSAGE_ID)
-) ;
-
+  MESSAGE_KIND CHARACTER VARYING
+  , MESSAGE_ID INTEGER
+  , MESSAGE CHARACTER VARYING
+  , primary key (MESSAGE_KIND,MESSAGE_ID)
+);
