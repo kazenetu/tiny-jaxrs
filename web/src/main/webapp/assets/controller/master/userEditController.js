@@ -94,7 +94,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
             // データ取得
             webApiService.post(settings.findApiUrl, {
                 loginUserId : userService.getId(),
-                requestData : settings.getRequestData()
+                requestData : settings.getFindRequestData()
             }, function(response) {
                 if(response.responseData === null){
                     // レコードがなければOKアイコン
