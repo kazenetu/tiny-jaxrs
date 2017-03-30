@@ -109,7 +109,7 @@ front.controller.XxxxEditController = function XxxxEditController($q, $location,
             // データ取得
             webApiService.post(settings.findApiUrl, {
                 loginUserId : userService.getId(),
-                requestData : settings.getRequestData()
+                requestData : settings.getFindRequestData()
             }, function(response) {
                 if(response.responseData === null){
                     // TODO キー重複アイコンプロパティを設定する
@@ -128,7 +128,7 @@ front.controller.XxxxEditController = function XxxxEditController($q, $location,
     /**
      * DB反映前の入力チェック
      */
-    function validateCheck(){
+    function validateInput(){
         // エラーなし状態に設定
         ctrl.hideError();
         // TODO 入力エラー用プロパティを初期化
@@ -233,7 +233,7 @@ front.controller.XxxxEditController = function XxxxEditController($q, $location,
      */
     ctrl.insertOrUpdate = function(){
         // 入力チェック
-        if(!validateCheck()){
+        if(!validateInput()){
             return;
         }
 
