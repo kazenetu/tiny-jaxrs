@@ -11,6 +11,10 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         templateUrl : 'view/master/userList.html',
     }).when('/master/useredit', {
         templateUrl : 'view/master/userEdit.html',
+
+    }).when('/sample/upload', {
+        templateUrl : 'view/sample/upload.html',
+
     }).otherwise({
         redirectTo : '/'
     });

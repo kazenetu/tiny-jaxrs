@@ -1,0 +1,14 @@
+<!-- メイン画面 -->
+<div class="height-100percent" data-ng-init="ctrl.init()" data-ng-controller="uploadController as ctrl">
+    <!-- ヘッダー -->
+    <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
+
+    <!-- メイン画面 -->
+    <div  class="container main-area" data-ng-cloak >
+        <div id="dadArea" style="width:200px;height: 200px;background-color: skyblue;">
+            <img data-ng-src="{{ctrl.imageData}}" style="width:200px;height: 200px;" data-ng-src="{{ctrl.imageData}}" />
+        </div>
+
+
+    </div>
+</div>
