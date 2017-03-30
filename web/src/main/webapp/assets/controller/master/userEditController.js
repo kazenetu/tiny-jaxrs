@@ -111,7 +111,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
     /**
      * DB反映前の入力チェック
      */
-    function validateCheck(){
+    function validateInput(){
         // エラーなし状態に設定
         ctrl.hideError();
         ctrl.errorUserId = '';
@@ -214,7 +214,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
      */
     ctrl.insertOrUpdate = function(){
         // 入力チェック
-        if(!validateCheck()){
+        if(!validateInput()){
             return;
         }
 
