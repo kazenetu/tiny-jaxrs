@@ -6,6 +6,14 @@ front.common.service.UserService = function UserService(){
     this.name = "";
 
     /**
+     * ユーザー情報のクリア
+     */
+    this.clear = function(){
+        this.userId = "";
+        this.name = "";
+    };
+
+    /**
      * ログインユーザーID設定
      */
     this.setId = function(id){
