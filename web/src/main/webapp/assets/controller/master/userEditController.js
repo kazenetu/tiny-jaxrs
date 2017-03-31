@@ -117,6 +117,9 @@ front.controller.UserEditController = function UserEditController($q, $location,
         ctrl.errorUserId = '';
         ctrl.errorUserName = '';
         ctrl.errorPassword = '';
+        ctrl.errorBirthDay = "";
+        ctrl.errorTime = "";
+        ctrl.errorTs = "";
 
         // 新規作成モードのみのチェック
         if(!ctrl.disabledUserId){

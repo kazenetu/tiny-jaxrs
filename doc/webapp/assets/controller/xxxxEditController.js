@@ -135,6 +135,9 @@ front.controller.XxxxEditController = function XxxxEditController($q, $location,
         ctrl.errorUserId = '';
         ctrl.errorUserName = '';
         ctrl.errorPassword = '';
+        ctrl.errorBirthDay = "";
+        ctrl.errorTime = "";
+        ctrl.errorTs = "";
 
         // TODO 入力チェックを行う
         // 新規作成モードのみのチェック
