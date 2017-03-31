@@ -141,7 +141,7 @@ front.controller.XxxxEditController = function XxxxEditController($q, $location,
 
         // TODO 入力チェックを行う
         // 新規作成モードのみのチェック
-        if(!ctrl.disabledUserId){
+        if(settings.isCreateMode()){
             if(ctrl.userId === ''){
                 ctrl.showError('ユーザーIDを入力してください');
                 ctrl.errorUserId = 'has-error';
