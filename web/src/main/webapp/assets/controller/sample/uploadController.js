@@ -3,7 +3,9 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
     this.setTitle('アップロードテスト');
 
     var ctrl = this;
+    ctrl.imageName = "";
     ctrl.imageData = "";
+    ctrl.uploadPath = "";
 
     /**
      * 初期化イベント
@@ -46,11 +48,16 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
           reader.onload = function(e) {
               //resultImageにイメージ表示
               ctrl.imageData = e.target.result;
+              ctrl.imageName;
               $scope.$apply();
           };
 
+          ctrl.imageName = f.name;
+
           // dataURLで読み込み
           reader.readAsDataURL(f);
+
+          break;
         }
     };
 
@@ -61,25 +68,25 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
 
         var d = $q.defer();
         d.promise
-        .then(ctrl.showConfirm($q,ctrl.commmitButtonName + 'の確認',
-                ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する'))
+        .then(ctrl.showConfirm($q,'確認',
+                '登録しますか','登録する'))
         .then(function(){
             var deferrred = $q.defer();
 
-            var apiUrl = settings.updateApiUrl;
-            if(settings.isCreateMode()){
-                apiUrl = settings.insertApiUrl;
-            }
-
             // データ更新
-            webApiService.post(apiUrl, {
+            webApiService.post('api/upload/test', {
                 loginUserId: userService.getId(),
-                requestData : settings.getInsUpdRequestData()
+                requestData : {
+                    fileName : ctrl.imageName,
+                    imageData : ctrl.imageData
+                }
             }, function(response) {
                 if (response.result !== 'OK') {
                     ctrl.showError(response.errorMessage);
                 } else {
                     ctrl.hideError();
+                    ctrl.uploadPath = response.responseData;
+                    ctrl.showError(response.responseData);
 
                     deferrred.resolve();
                 }
@@ -87,12 +94,8 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
 
             return deferrred.promise;
         })
-        .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
-                 ctrl.commmitButtonName +'しました', '確認'))
-        .then(function(){
-            $location.path(settings.listPage);
-            storageService.clearValue(storageService.keys.updateKeys);
-        });
+        .then(ctrl.showMsgDialog($q,'登録の報告',
+                '登録しました', '確認'));
         // 発火
         d.resolve();
     }

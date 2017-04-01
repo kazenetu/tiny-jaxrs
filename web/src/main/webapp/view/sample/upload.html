@@ -8,7 +8,11 @@
         <div id="dadArea" style="width:200px;height: 200px;background-color: skyblue;">
             <img data-ng-src="{{ctrl.imageData}}" style="width:200px;height: 200px;" data-ng-src="{{ctrl.imageData}}" />
         </div>
+        <span>ファイル名：{{ctrl.imageName}}</span>
 
+        <div>
+            <button data-ng-click="ctrl.insertOrUpdate()" data-ng-disabled="ctrl.imageName===''" class="btn">登録(ファイル作成)</button>
+        </div>
 
     </div>
 </div>
