@@ -62,6 +62,11 @@ front.controller.UserListController =  function UserListController($location, we
     function getRequestData(pageIndex){
         var requestData =settings.getSearchParam();
         requestData['pageIndex'] = pageIndex;
+
+        // ソート処理
+        requestData['sortKey'] = ctrl.sortKey;
+        requestData['sortType'] = ctrl.sortType;
+
         return requestData;
     }
 
@@ -90,6 +95,11 @@ front.controller.UserListController =  function UserListController($location, we
         if('pageIndex' in values){
             // 検索条件
             settings.setSearchControls(values);
+
+            // ソート処理
+            ctrl.sortKey = values.sortKey;
+            ctrl.sortType = values.sortType;
+
 
             // 検索(ページ指定)
             ctrl.search(values.pageIndex);
@@ -149,6 +159,30 @@ front.controller.UserListController =  function UserListController($location, we
             // 検索条件Storageの設定
             setConditions(pageIndex)
         });
+    }
+
+    // カラムソート
+    ctrl.searchResult = null;
+    ctrl.oldSortKey = '';
+    ctrl.sortKey = '';
+    ctrl.sortType = '';
+    ctrl.changeSort = function(sortKey) {
+        ctrl.sortKey = sortKey;
+
+        if(ctrl.oldSortKey !== sortKey){
+            ctrl.sortType = 'ASC';
+        }else{
+            if(ctrl.sortType === 'ASC'){
+                ctrl.sortType = 'DESC';
+            }
+            else{
+                ctrl.sortType = 'ASC';
+            }
+        }
+
+        ctrl.oldSortKey = sortKey;
+
+        ctrl.search(0);
     }
 
     // ダウンロード処理用のID、名前を設定

@@ -57,22 +57,58 @@ td
             <table class="table table-bordered">
                 <tr class="success">
                     <th class="text-center" style="width:10em;">
-                        ID
+                        <button type="button" class="btn-link" data-ng-disabled="ctrl.searchResult === null" data-ng-click="ctrl.changeSort('USER_ID')">
+                            ID
+                            <span data-ng-show="ctrl.sortKey==='USER_ID' && ctrl.searchResult !== null">
+                                <span data-ng-show="ctrl.sortType==='ASC'">▲</span>
+                                <span data-ng-show="ctrl.sortType==='DESC'">▼</span>
+                            </span>
+                        </button>
                     </th>
                     <th class="text-center" style="width:30em;">
-                        名前
+                        <button type="button" class="btn-link" data-ng-disabled="ctrl.searchResult === null" data-ng-click="ctrl.changeSort('NAME')">
+                            名前
+                            <span data-ng-show="ctrl.sortKey==='NAME' && ctrl.searchResult !== null">
+                                <span data-ng-show="ctrl.sortType==='ASC'">▲</span>
+                                <span data-ng-show="ctrl.sortType==='DESC'">▼</span>
+                            </span>
+                        </button>
                     </th>
                     <th class="text-center" style="width:10em;">
-                        パスワード
+                        <button type="button" class="btn-link" data-ng-disabled="ctrl.searchResult === null" data-ng-click="ctrl.changeSort('PASSWORD')">
+                            パスワード
+                            <span data-ng-show="ctrl.sortKey==='PASSWORD' && ctrl.searchResult !== null">
+                                <span data-ng-show="ctrl.sortType==='ASC'">▲</span>
+                                <span data-ng-show="ctrl.sortType==='DESC'">▼</span>
+                            </span>
+                        </button>
                     </th>
-                    <th class="text-center" style="width:5em;">
-                        Date
+                    <th class="text-center" style="width:7em;">
+                        <button type="button" class="btn-link" data-ng-disabled="ctrl.searchResult === null" data-ng-click="ctrl.changeSort('date_data')">
+                            Date
+                            <span data-ng-show="ctrl.sortKey==='date_data' && ctrl.searchResult !== null">
+                                <span data-ng-show="ctrl.sortType==='ASC'">▲</span>
+                                <span data-ng-show="ctrl.sortType==='DESC'">▼</span>
+                            </span>
+                        </button>
                     </th>
-                    <th class="text-center" style="width:5em;">
-                        Time
+                    <th class="text-center" style="width:7em;">
+                        <button type="button" class="btn-link" data-ng-disabled="ctrl.searchResult === null" data-ng-click="ctrl.changeSort('time_data')">
+                            Time
+                            <span data-ng-show="ctrl.sortKey==='time_data' && ctrl.searchResult !== null">
+                                <span data-ng-show="ctrl.sortType==='ASC'">▲</span>
+                                <span data-ng-show="ctrl.sortType==='DESC'">▼</span>
+                            </span>
+                        </button>
                     </th>
-                    <th class="text-center" style="width:5em;">
-                        TS
+                    <th class="text-center" style="width:7em;">
+                        <button type="button" class="btn-link" data-ng-disabled="ctrl.searchResult === null" data-ng-click="ctrl.changeSort('ts_data')">
+                            TS
+                            <span data-ng-show="ctrl.sortKey==='ts_data' && ctrl.searchResult !== null">
+                                <span data-ng-show="ctrl.sortType==='ASC'">▲</span>
+                                <span data-ng-show="ctrl.sortType==='DESC'">▼</span>
+                            </span>
+                        </button>
                     </th>
                     <th class="text-center" style="width:5em;">
                         変更

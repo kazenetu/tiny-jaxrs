@@ -125,13 +125,23 @@ public class UserModel extends Model{
         int pageIndex = seachCondition.getPageIndex();
         String searchUserId = seachCondition.getSearchUserId();
 
+        // ソートキー
+        String sortKey = "USER_ID";
+        if(!"".equals(seachCondition.getSortKey())){
+            sortKey = seachCondition.getSortKey() + " ";
+        }
+        if(!"".equals(seachCondition.getSortType())){
+            sortKey += seachCondition.getSortType();
+        }
+
         // パラメータの設定
         ArrayList<Object> params = new ArrayList<>();
         if(!isNullorEmpty(searchUserId)){
             sql += "where USER_ID like ? ";
             params.add("%" + searchUserId + "%");
         }
-        sql += " ORDER BY USER_ID LIMIT ? OFFSET ?";
+        sql += " ORDER BY " + sortKey;
+        sql += " LIMIT ? OFFSET ?";
         params.add(PAGE_COUNT);
         params.add(pageIndex*PAGE_COUNT);
 
