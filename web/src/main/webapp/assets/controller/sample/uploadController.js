@@ -7,6 +7,8 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
     ctrl.imageData = "";
     ctrl.uploadPath = "";
 
+    ctrl.searchResult = null;
+
     /**
      * 初期化イベント
      */
@@ -16,6 +18,9 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
         //dadArea.addEventListener('dragenter',ctrl.dragStart,true);
         dadArea.addEventListener('dragover',ctrl.dragOver,true);
         dadArea.addEventListener('drop',ctrl.drop,true);
+
+        // リスト取得
+        ctrl.getList();
     }
 
     ctrl.dragStart = function(event){
@@ -62,7 +67,7 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
     };
 
     /**
-     * 登録または更新イベント
+     * 登録(ファイル作成)イベント
      */
     ctrl.insertOrUpdate = function(){
 
@@ -98,6 +103,66 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
                 '登録しました', '確認'));
         // 発火
         d.resolve();
+    }
+
+    /**
+     * テーブル登録
+     */
+    ctrl.uploadData = function(){
+
+        var d = $q.defer();
+        d.promise
+        .then(ctrl.showConfirm($q,'確認',
+                '登録しますか','登録する'))
+        .then(function(){
+            var deferrred = $q.defer();
+
+            // データ更新
+            webApiService.post('api/upload/insert', {
+                loginUserId: userService.getId(),
+                requestData : {
+                    fileName : ctrl.imageName,
+                    imageData : ctrl.imageData
+                }
+            }, function(response) {
+                if (response.result !== 'OK') {
+                    ctrl.showError(response.errorMessage);
+                } else {
+                    ctrl.hideError();
+
+                    deferrred.resolve();
+                }
+            })
+
+            return deferrred.promise;
+        })
+        .then(ctrl.showMsgDialog($q,'登録の報告','登録しました', '確認'))
+        .then(function(){
+            ctrl.getList();
+        });
+
+        // 発火
+        d.resolve();
+    }
+
+    /**
+     * リスト取得
+     */
+    ctrl.getList = function(){
+        // データ取得
+        webApiService.post('api/upload/list', {
+            loginUserId: userService.getId(),
+            requestData : {
+            }
+        }, function(response) {
+            if (response.result !== 'OK') {
+                ctrl.showError(response.errorMessage);
+            } else {
+                ctrl.hideError();
+
+                ctrl.searchResult = response.responseData;
+            }
+        });
     }
 
 }
