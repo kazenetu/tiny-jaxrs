@@ -9,11 +9,6 @@ public class UserListEntity {
     public UserListEntity(){
     }
 
-    public UserListEntity(int pageIndex, String searchUserId){
-        this.setPageIndex(pageIndex);
-        this.searchUserId = searchUserId;
-    }
-
     public int getPageIndex() {
         return pageIndex;
     }
