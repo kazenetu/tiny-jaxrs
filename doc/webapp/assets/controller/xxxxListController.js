@@ -74,6 +74,11 @@ front.controller.XxxxListController =  function XxxxListController($location, we
     function getRequestData(pageIndex){
         var requestData =settings.getSearchParam();
         requestData['pageIndex'] = pageIndex;
+
+        // ソート処理
+        requestData['sortKey'] = ctrl.sortKey;
+        requestData['sortType'] = ctrl.sortType;
+
         return requestData;
     }
 
@@ -102,6 +107,10 @@ front.controller.XxxxListController =  function XxxxListController($location, we
         if('pageIndex' in values){
             // 検索条件
             settings.setSearchControls(values);
+
+            // ソート処理
+            ctrl.sortKey = values.sortKey;
+            ctrl.sortType = values.sortType;
 
             // 検索(ページ指定)
             ctrl.search(values.pageIndex);

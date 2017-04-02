@@ -50,25 +50,44 @@
             <pager total-page={{ctrl.totalPage}} on-paging="ctrl.paging(pageIndex,sender)" on-send-root="ctrl.sendRoot(src)" />
 
             <table class="table table-bordered">
-                <!-- TODO 検索結果の表題を追加する -->
+                <!-- TODO 検索結果の表題を追加する( title と key を設定する) -->
                 <tr class="success">
                     <th class="text-center" style="width:10em;">
-                        ID
+                        <listColumn title="ID" key="USER_ID"
+                            active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                            exist-record="{{ctrl.searchResult!==null}}"
+                            on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
                     <th class="text-center" style="width:30em;">
-                        名前
+                        <listColumn title="名前" key="NAME"
+                            active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                            exist-record="{{ctrl.searchResult!==null}}"
+                            on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+
                     </th>
                     <th class="text-center" style="width:10em;">
-                        パスワード
+                        <listColumn title="パスワード" key="PASSWORD"
+                            active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                            exist-record="{{ctrl.searchResult!==null}}"
+                            on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
-                    <th class="text-center" style="width:5em;">
-                        Date
+                    <th class="text-center" style="width:7em;">
+                        <listColumn title="Date" key="date_data"
+                            active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                            exist-record="{{ctrl.searchResult!==null}}"
+                            on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
-                    <th class="text-center" style="width:5em;">
-                        Time
+                    <th class="text-center" style="width:7em;">
+                        <listColumn title="Time" key="time_data"
+                            active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                            exist-record="{{ctrl.searchResult!==null}}"
+                            on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
-                    <th class="text-center" style="width:5em;">
-                        TS
+                    <th class="text-center" style="width:7em;">
+                        <listColumn title="TS" key="ts_data"
+                            active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                            exist-record="{{ctrl.searchResult!==null}}"
+                            on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
                     <th class="text-center" style="width:5em;">
                         変更
