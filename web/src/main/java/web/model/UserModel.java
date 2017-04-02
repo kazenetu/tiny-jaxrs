@@ -126,7 +126,7 @@ public class UserModel extends Model{
         String searchUserId = seachCondition.getSearchUserId();
 
         // ソートキー
-        String sortKey = "USER_ID";
+        String sortKey = "USER_ID ";
         if(!isNullorEmpty(seachCondition.getSortKey())){
             sortKey = seachCondition.getSortKey() + " ";
         }
