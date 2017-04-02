@@ -6,7 +6,31 @@ front.common.controller.SearchBase = function SearchBase(){
 
     var ctrl = this;
 
+    /**
+     * 検索結果の初期化
+     */
+    ctrl.searchResult = null;
+
+    /**
+     * ページャーコントロールのインスタンスリスト
+     */
     ctrl.childlen = [];
+
+    /**
+     * ソート対象のカラムキー
+     */
+    ctrl.sortKey = '';
+
+    /**
+     * ソート順
+     */
+    ctrl.sortType = '';
+
+    /**
+     * 結果一覧のカラムコントロールのインスタンスリスト
+     */
+    ctrl.columnChildlen = [];
+
 
     /**
      * ページコントロールから呼び出し元に自身のインスタンスを登録
@@ -37,6 +61,24 @@ front.common.controller.SearchBase = function SearchBase(){
             }
             index++;
         }
+    }
+
+    /**
+     * 検索結果カラムコントロールから呼び出し元に自身のインスタンスを登録
+     */
+    ctrl.sendColumn = function(src) {
+        if (ctrl.columnChildlen.indexOf(src) == -1) {
+            ctrl.columnChildlen.push(src);
+        }
+    }
+
+    /**
+     * 検索結果カラムコントロールクリックイベント
+     */
+    ctrl.clickColumn = function(sortKey,sortType){
+        ctrl.sortKey = sortKey;
+        ctrl.sortType = sortType;
+        ctrl.getPage(0);
     }
 
 }

@@ -161,29 +161,6 @@ front.controller.UserListController =  function UserListController($location, we
         });
     }
 
-    // カラムソート
-    ctrl.searchResult = null;
-    ctrl.oldSortKey = '';
-    ctrl.sortKey = '';
-    ctrl.sortType = '';
-    ctrl.changeSort = function(sortKey) {
-        ctrl.sortKey = sortKey;
-
-        if(ctrl.oldSortKey !== sortKey){
-            ctrl.sortType = 'ASC';
-        }else{
-            if(ctrl.sortType === 'ASC'){
-                ctrl.sortType = 'DESC';
-            }
-            else{
-                ctrl.sortType = 'ASC';
-            }
-        }
-
-        ctrl.oldSortKey = sortKey;
-
-        ctrl.search(0);
-    }
 
     // ダウンロード処理用のID、名前を設定
     ctrl.userId = userService.getId();
