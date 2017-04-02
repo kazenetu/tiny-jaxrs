@@ -57,7 +57,7 @@ td
             <table class="table table-bordered">
                 <tr class="success">
                     <th class="text-center" style="width:10em;">
-                        <listColumn title="ID" key="USER_ID"
+                        <listColumn title="ID" key="ID"
                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                             exist-record="{{ctrl.searchResult!==null}}"
                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
@@ -76,19 +76,19 @@ td
                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
                     <th class="text-center" style="width:7em;">
-                        <listColumn title="Date" key="date_data"
+                        <listColumn title="Date" key="DATE"
                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                             exist-record="{{ctrl.searchResult!==null}}"
                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
                     <th class="text-center" style="width:7em;">
-                        <listColumn title="Time" key="time_data"
+                        <listColumn title="Time" key="TIME"
                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                             exist-record="{{ctrl.searchResult!==null}}"
                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                     </th>
                     <th class="text-center" style="width:7em;">
-                        <listColumn title="TS" key="ts_data"
+                        <listColumn title="TS" key="TS"
                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                             exist-record="{{ctrl.searchResult!==null}}"
                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />

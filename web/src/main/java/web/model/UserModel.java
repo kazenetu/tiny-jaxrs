@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -126,12 +127,27 @@ public class UserModel extends Model{
         String searchUserId = seachCondition.getSearchUserId();
 
         // ソートキー
+        Map<String,String> sortKeys = new HashMap<>();
+        sortKeys.put("ID", "USER_ID");
+        sortKeys.put("NAME", "NAME");
+        sortKeys.put("PASSWORD", "PASSWORD");
+        sortKeys.put("DATE", "date_data");
+        sortKeys.put("TIME", "time_data");
+        sortKeys.put("TS", "ts_data");
+
         String sortKey = "USER_ID ";
         if(!isNullorEmpty(seachCondition.getSortKey())){
-            sortKey = seachCondition.getSortKey() + " ";
+            String tempKey = sortKeys.get(seachCondition.getSortKey());
+            if(tempKey != null){
+                sortKey = tempKey + " ";
+            }
         }
         if(!isNullorEmpty(seachCondition.getSortType())){
-            sortKey += seachCondition.getSortType();
+            String tempType = seachCondition.getSortType().toUpperCase();
+            if(!"ASC".equals(tempType) && !"DESC".equals(tempType)){
+                tempType = "";
+            }
+            sortKey += tempType;
         }
 
         // パラメータの設定
