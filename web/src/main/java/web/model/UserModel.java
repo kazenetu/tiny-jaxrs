@@ -127,10 +127,10 @@ public class UserModel extends Model{
 
         // ソートキー
         String sortKey = "USER_ID";
-        if(!"".equals(seachCondition.getSortKey())){
+        if(!isNullorEmpty(seachCondition.getSortKey())){
             sortKey = seachCondition.getSortKey() + " ";
         }
-        if(!"".equals(seachCondition.getSortType())){
+        if(!isNullorEmpty(seachCondition.getSortType())){
             sortKey += seachCondition.getSortType();
         }
 
