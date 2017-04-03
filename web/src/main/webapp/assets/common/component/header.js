@@ -57,6 +57,11 @@ front.common.component.HeaderController = function HeaderController($location, u
         if(Array.isArray(paths) && paths.indexOf(currentPath) < 0){
             storageService.clearValue(storageService.keys.condition);
         }
+
+        var buttons = $(".buttons-row:first").children(".btn:first");
+        if(buttons.length > 0){
+            buttons.after('<a href="index.html#!/main" class="btn btn-primary" style="margin-left:1em;">メニュー</a>');
+        }
     };
 
     /**
