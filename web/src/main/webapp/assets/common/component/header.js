@@ -40,10 +40,6 @@ front.common.component.HeaderController = function HeaderController($location, u
         return userService.getName();
     };
 
-    ctrl.passwordChange = function() {
-        $location.path('/passwordChange');
-    };
-
     /**
      * ロード完了イベント
      */
