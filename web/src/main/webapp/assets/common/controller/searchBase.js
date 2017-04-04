@@ -78,7 +78,7 @@ front.common.controller.SearchBase = function SearchBase(){
     ctrl.clickColumn = function(sortKey,sortType){
         ctrl.sortKey = sortKey;
         ctrl.sortType = sortType;
-        ctrl.getPage(0);
+        ctrl.paging(0, null);
     }
 
 }
