@@ -9,6 +9,35 @@ front.common.component.PagerController = function PagerController() {
      */
     ctrl.pageIndex = 0;
 
+
+    ctrl.getPages = function() {
+        var lastPageIndex = ctrl.totalPage-1;
+        var pages= [];
+
+        var index = ctrl.pageIndex-2;
+        if(index < 0){
+            index = 0;
+        }
+        else{
+            if(ctrl.pageIndex >= lastPageIndex-2) {
+                index = lastPageIndex-4;
+                if(index < 0){
+                    index = 0;
+                }
+            }
+        }
+
+        for(var i=0;i<5;i++){
+            pages.push(index+i);
+            if(index+i >= lastPageIndex){
+                i = 5;
+            }
+        }
+
+        return pages;
+    }
+
+
     /**
      * 表示用現在ページ
      */
@@ -24,6 +53,14 @@ front.common.component.PagerController = function PagerController() {
             ctrl.pageIndex --;
             ctrl.onPaging({pageIndex:ctrl.pageIndex,sender:ctrl });
         }
+    }
+
+    /**
+     * ページリンク クリック
+     */
+    ctrl.selectPage = function(pageIndex){
+        ctrl.pageIndex= pageIndex;
+        ctrl.onPaging({pageIndex:ctrl.pageIndex,sender:ctrl });
     }
 
     /**
