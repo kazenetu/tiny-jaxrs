@@ -19,6 +19,16 @@ public class CsvEntity<T> {
 
 
     /**
+     * 必要なパラメータを設定
+     * @param columns 出力対象カラムのgetメソッドのリスト
+     * @param csvData 出力レコードデータ
+     */
+    public CsvEntity(List<String> columns,List<T> csvData){
+        this.columns = columns;
+        this.csvData = csvData;
+    }
+
+    /**
      * 出力カラム名が設定されているか否か
      * @return
      */
@@ -34,25 +44,10 @@ public class CsvEntity<T> {
     }
 
     /**
-     * @param columns セットする columns
-     */
-    public void setColumns(List<String> columns) {
-        this.columns = columns;
-    }
-
-
-    /**
      * @return csvData
      */
     public List<T> getCsvData() {
         return csvData;
-    }
-
-    /**
-     * @param csvData セットする csvData
-     */
-    public void setCsvData(List<T> csvData) {
-        this.csvData = csvData;
     }
 
 

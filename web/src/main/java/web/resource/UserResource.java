@@ -385,10 +385,8 @@ public class UserResource extends Resource {
             List<UserEntity> entities = new ArrayList<>();
             entities = model.getUsers();
 
-            CsvEntity<UserEntity> entity = new CsvEntity<>();
-            entity.setCsvData(entities);
-            entity.setColumns(Arrays.asList("getId","getName"));
-
+            // CSV出力対象設定
+            CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName"), entities);
 
             // サンプルのファイル名
             String fileName = "テスト_" + userName + ".csv";
