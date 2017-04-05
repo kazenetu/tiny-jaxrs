@@ -56,11 +56,11 @@ front.controller.XxxxListController =  function XxxxListController($location, we
     /**
      * 一覧編集ボタンクリック
      */
-    ctrl.edit = function(id){
+    ctrl.edit = function(result){
         // 主キーの連想配列を変更キーStorageに設定
         var values={
             // TODO 編集画面に渡す値を設定する
-            userId : id
+            userId : result.id
         };
         storageService.setValue(storageService.keys.updateKeys,values);
 
