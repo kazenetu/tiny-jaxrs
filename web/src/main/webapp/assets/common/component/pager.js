@@ -99,7 +99,7 @@ front.common.component.PagerController = function PagerController() {
      * 現在ページ変更イベント
      * （呼び出しもとから呼び出される）
      */
-    ctrl.setPagetIndex = function(index){
+    ctrl.setPageIndex = function(index){
         ctrl.pageIndex = index;
     }
 

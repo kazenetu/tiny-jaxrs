@@ -57,7 +57,7 @@ front.common.controller.SearchBase = function SearchBase(){
         var index = 0;
         while (index < ctrl.childlen.length) {
             if (ctrl.childlen[index] !== sender) {
-                ctrl.childlen[index].setPagetIndex(pageIndex);
+                ctrl.childlen[index].setPageIndex(pageIndex);
             }
             index++;
         }
