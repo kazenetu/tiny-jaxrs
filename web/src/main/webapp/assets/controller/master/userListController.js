@@ -44,10 +44,10 @@ front.controller.UserListController =  function UserListController($location, we
     /**
      * 一覧編集ボタンクリック
      */
-    ctrl.edit = function(id){
+    ctrl.edit = function(result){
         // 主キーの連想配列を変更キーStorageに設定
         var values={
-                userId : id
+                userId : result.id
         };
 
         storageService.setValue(storageService.keys.updateKeys,values);
