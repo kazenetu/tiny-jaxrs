@@ -2,6 +2,7 @@ package web.resource;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import web.common.base.CsvEntity;
 import web.common.base.RequestEntity;
 import web.common.base.Resource;
 import web.common.base.ResposeEntity;
 import web.common.util.PdfUtil;
 import web.entity.PasswordChangeEntity;
-import web.entity.TestEntity;
 import web.entity.UserEntity;
 import web.entity.UserListEntity;
 import web.model.UserModel;
@@ -379,16 +380,24 @@ public class UserResource extends Resource {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
-        List<TestEntity> entities = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            entities.add(new TestEntity("Name" + i, 20 + i));
-        }
+        try (UserModel model = new UserModel()) {
+            // DBからデータ取得
+            List<UserEntity> entities = new ArrayList<>();
+            entities = model.getUsers();
 
-        String fileName = "テスト_" + userName + ".csv";
-        try {
-            return Response.ok(entities)
+            CsvEntity<UserEntity> entity = new CsvEntity<>();
+            entity.setCsvData(entities);
+            entity.setColumns(Arrays.asList("getId","getName"));
+
+
+            // サンプルのファイル名
+            String fileName = "テスト_" + userName + ".csv";
+
+            // 結果を返す
+            return Response.ok(entity)
                     .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
                     .build();
+
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();

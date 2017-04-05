@@ -24,9 +24,11 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
 
+import web.common.base.CsvEntity;
+
 @Provider
 @Produces(MediaType.TEXT_PLAIN)
-public class CsvWriter<E> implements MessageBodyWriter<List<E>> {
+public class CsvWriter<E> implements MessageBodyWriter<CsvEntity<E>> {
 
     @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
@@ -34,29 +36,31 @@ public class CsvWriter<E> implements MessageBodyWriter<List<E>> {
     }
 
     @Override
-    public long getSize(List<E> entities, Class<?> type, Type genericType, Annotation[] annotations,
+    public long getSize(CsvEntity<E> csvEntity, Class<?> type, Type genericType, Annotation[] annotations,
             MediaType mediaType) {
         // サイズは気にしない
         return -1;
     }
 
     @Override
-    public void writeTo(List<E> entities, Class<?> type, Type genericType, Annotation[] annotations,
+    public void writeTo(CsvEntity<E> csvEntity, Class<?> type, Type genericType, Annotation[] annotations,
             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
             throws IOException, WebApplicationException {
-        if (entities.isEmpty()) {
+
+        if (!csvEntity.isExitstColumns()) {
             return;
         }
 
+        List<String> columns = csvEntity.getColumns();
         try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(entityStream, Charset.forName("Windows-31J")));
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.RFC4180.withQuoteMode(QuoteMode.NON_NUMERIC));) {
 
-            Class<?> entityClass = entities.get(0).getClass();
+            Class<?> entityClass = csvEntity.getCsvData().get(0).getClass();
             List<Method> accessors = Stream.of(entityClass.getMethods())
-                    .filter(m -> m.getReturnType() != void.class && m.getDeclaringClass() == entityClass)
+                    .filter(m -> m.getReturnType() != void.class && m.getDeclaringClass() == entityClass && columns.contains(m.getName()))
                     .collect(Collectors.toList());
 
-            for (E entity : entities) {
+            for (E entity : csvEntity.getCsvData()) {
                 for (Method accessor : accessors) {
                     printer.print(accessor.invoke(entity));
                 }
