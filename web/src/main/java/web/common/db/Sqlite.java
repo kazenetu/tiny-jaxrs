@@ -8,6 +8,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,6 +143,10 @@ public class Sqlite implements Database {
                         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                         value = ((Timestamp)param).toLocalDateTime().format(f);
                     }
+                    if(value.getClass() == LocalDateTime.class) {
+                        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                        value = ((LocalDateTime)param).format(f);
+                    }
                 }
 
                 statement.setObject(i, value);
@@ -219,7 +224,7 @@ public class Sqlite implements Database {
      */
     private Timestamp getTimestamp(String value) {
         try{
-            return Timestamp.valueOf(value.replace('/', '-'));
+            return Timestamp.valueOf(value.replace('T', ' ').replace('/', '-'));
         } catch (Exception e) {
             return null;
         }
