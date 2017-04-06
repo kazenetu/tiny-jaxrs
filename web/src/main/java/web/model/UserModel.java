@@ -239,6 +239,14 @@ public class UserModel extends Model{
         params.add(userData.getTime());
         params.add(userData.getTs());
 
+        /*
+        // システム日時を設定する場合の処理
+        LocalDateTime dt = LocalDateTime.now().withNano(0);
+        params.add(dt.toLocalDate());
+        params.add(dt.toLocalTime());
+        params.add(dt);
+        */
+
         try {
             db.setTransaction();
 
