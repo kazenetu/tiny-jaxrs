@@ -130,26 +130,37 @@ public class Sqlite implements Database {
             int i = 1;
             for (Object param : params) {
                 Object value = param;
+                boolean isChangedString = true;
 
                 if(value != null){
                     if(value.getClass() == Date.class) {
-                        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         value = ((Date)param).toLocalDate().format(f);
+                        isChangedString = true;
                     }
                     if(value.getClass() == Time.class) {
                         value = ((Time)param).toString();
+                        isChangedString = true;
                     }
                     if(value.getClass() == Timestamp.class) {
                         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                         value = ((Timestamp)param).toLocalDateTime().format(f);
+                        isChangedString = true;
                     }
                     if(value.getClass() == LocalDateTime.class) {
                         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                         value = ((LocalDateTime)param).format(f);
+                        isChangedString = true;
                     }
                 }
 
-                statement.setObject(i, value);
+                if(isChangedString){
+                    statement.setString(i, value.toString());
+                }
+                else{
+                    statement.setObject(i, value);
+                }
+
                 i++;
             }
 
