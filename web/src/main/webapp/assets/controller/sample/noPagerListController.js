@@ -5,12 +5,28 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
     var ctrl = this;
     ctrl.totalPage = 0;
 
+    ctrl.getOrder = function(){
+        var result=ctrl.sortKey;
+        if(ctrl.sortType !== ''){
+            if(ctrl.sortType === 'DESC') {
+                result = '-' +result;
+            }
+        }
+        return result;
+    }
+
+    ctrl.getFilter = function(){
+        return {
+            id : ctrl.searchUserId
+        };
+    }
+
     /**
      * ページ設定
      */
     var settings = {
         totalPageApiUrl : 'api/user/totalpage',
-        getPageApiUrl : 'api/user/page',
+        getPageApiUrl : 'api/user/pages',
         thisPage : '/master/userlist',
         editPage : '/master/useredit',
         getSearchParam : function() {
@@ -136,7 +152,7 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             }
 
             // 対象ページのレコードを取得
-            ctrl.paging(pageIndex,null);
+            ctrl.getPages(pageIndex);
 
             // 検索条件保存画面の指定(それ以外はヘッダーコントロールで削除)
             var values = [settings.thisPage, settings.editPage];
@@ -148,6 +164,13 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
      * 検索ページ変更処理
      */
     ctrl.getPage = function(pageIndex) {
+        setConditions(pageIndex)
+    }
+
+    /**
+     * 検索ページ取得処理
+     */
+    ctrl.getPages = function(pageIndex) {
         // 対象ページのレコードを取得
         webApiService.post(settings.getPageApiUrl, {
             loginUserId : userService.getId(),
@@ -160,7 +183,6 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             setConditions(pageIndex)
         });
     }
-
 
     // ダウンロード処理用のID、名前を設定
     ctrl.userId = userService.getId();
