@@ -59,7 +59,7 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public List<UserEntity> getUsers() throws Exception{
-        String sql = "select USER_ID,NAME,PASSWORD from MT_USER;";
+        String sql = "select * from MT_USER;";
 
         List<UserEntity> entities = new ArrayList<>();
 
@@ -67,10 +67,16 @@ public class UserModel extends Model{
             List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
             if (!result.isEmpty()) {
                 result.forEach(row->{
-                    entities.add(new UserEntity(
+                    UserEntity entity = new UserEntity(
                             (String)getColumnValue(row,"USER_ID"),
                             (String)getColumnValue(row,"NAME"),
-                            (String)getColumnValue(row,"PASSWORD"),0));
+                            (String)getColumnValue(row,"PASSWORD"),0);
+
+                    entity.setDate((Date)getColumnValue(row,"date_data"));
+                    entity.setTime((Time)getColumnValue(row,"time_data"));
+                    entity.setTs((Timestamp)getColumnValue(row,"ts_data"));
+
+                    entities.add(entity);
                 });
             }
         } catch (Exception e) {
