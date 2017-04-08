@@ -8,7 +8,8 @@ front.common.service.StorageService = function StorageService(){
     this.keys = {
         condition:'condition',
         enableConditionPaths:'enableConditionPaths',
-        updateKeys:'updateKeys'
+        updateKeys:'updateKeys',
+        searchFilter:'searchFilter'
     };
 
     /**
