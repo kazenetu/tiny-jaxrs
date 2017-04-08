@@ -56,6 +56,7 @@ front.common.component.HeaderController = function HeaderController($location, u
         var currentPath = $location.path();
         if(Array.isArray(paths) && paths.indexOf(currentPath) < 0){
             storageService.clearValue(storageService.keys.condition);
+            storageService.clearValue(storageService.keys.searchFilter);
         }
 
         var buttons = $(".buttons-row:first").children(".btn:first");
