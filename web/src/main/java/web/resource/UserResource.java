@@ -337,6 +337,41 @@ public class UserResource extends Resource {
     }
 
     /**
+     * ユーザー一覧取得(全ページ)
+     * @param json ログインユーザーIDと検索条件
+     * @return レスポンス
+     */
+    @POST
+    @Path("pages")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userlistPages(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try (UserModel model = new UserModel()) {
+
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
+            RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
+            // 検索条件での検索結果を取得する
+            List<UserEntity> entities = model.getUsers();
+
+            // 結果を返す
+            ResposeEntity<List<UserEntity>> result = null;
+            result = new ResposeEntity<List<UserEntity>>(ResposeEntity.Result.OK,"",entities);
+
+            return Response.ok(mapper.writeValueAsString(result)).build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    /**
      * ユーザー情報の検索
      * @param json ログインユーザーIDと変更情報
      * @return レスポンス
