@@ -58,13 +58,23 @@ public class UserModel extends Model{
      * @return ユーザー全レコードのリスト
      * @throws Exception
      */
-    public List<UserEntity> getUsers() throws Exception{
-        String sql = "select * from MT_USER;";
+    public List<UserEntity> getAllUsers(UserListEntity seachCondition) throws Exception{
+        String sql = "select * from MT_USER";
+
+        // 検索条件
+        String searchUserId = seachCondition.getSearchUserId();
 
         List<UserEntity> entities = new ArrayList<>();
 
+        // パラメータの設定
+        ArrayList<Object> params = new ArrayList<>();
+        if(!isNullorEmpty(searchUserId)){
+            sql += " where USER_ID like ? ";
+            params.add("%" + searchUserId + "%");
+        }
+
         try {
-            List<Map<String,Object>> result = db.query(sql, new ArrayList<>());
+            List<Map<String,Object>> result = db.query(sql, params);
             if (!result.isEmpty()) {
                 result.forEach(row->{
                     UserEntity entity = new UserEntity(

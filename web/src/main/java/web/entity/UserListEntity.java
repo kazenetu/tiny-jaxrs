@@ -13,6 +13,10 @@ public class UserListEntity {
     public UserListEntity(){
     }
 
+    public UserListEntity(String searchUserId){
+        this.searchUserId = searchUserId;
+    }
+
     public int getPageIndex() {
         return pageIndex;
     }

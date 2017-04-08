@@ -358,7 +358,7 @@ public class UserResource extends Resource {
             authCheck(instance.getLoginUserId());
 
             // 検索条件での検索結果を取得する
-            List<UserEntity> entities = model.getUsers();
+            List<UserEntity> entities = model.getAllUsers(instance.getRequestData());
 
             // 結果を返す
             ResposeEntity<List<UserEntity>> result = null;
@@ -411,14 +411,14 @@ public class UserResource extends Resource {
     @POST
     @Path("download")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response download(@FormParam("userId") String userId, @FormParam("userName") String userName) {
+    public Response download(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
         try (UserModel model = new UserModel()) {
             // DBからデータ取得
             List<UserEntity> entities = new ArrayList<>();
-            entities = model.getUsers();
+            entities = model.getUsers(new UserListEntity(searchUserId));
 
             // CSV出力対象設定
             CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName"), entities);
@@ -440,14 +440,14 @@ public class UserResource extends Resource {
     @POST
     @Path("downloadPDF")
     @Produces("application/pdf")
-    public Response downloadPDF(@FormParam("userId") String userId, @FormParam("userName") String userName) {
+    public Response downloadPDF(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
         List<UserEntity> entities = new ArrayList<>();
         try (UserModel model = new UserModel(); PdfUtil pdfUtil = new PdfUtil();) {
             // DBからデータ取得
-            entities = model.getUsers();
+            entities = model.getUsers(new UserListEntity(searchUserId));
 
             // PDFのデータソースとして設定
             JRDataSource dataSource = new JRBeanCollectionDataSource(entities);

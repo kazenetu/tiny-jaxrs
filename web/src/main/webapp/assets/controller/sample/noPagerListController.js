@@ -5,6 +5,9 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
     var ctrl = this;
     ctrl.totalPage = 0;
 
+    ctrl.columnId = '';
+    ctrl.columnName = '';
+
     ctrl.getOrder = function(){
         var result=ctrl.sortKey;
         if(ctrl.sortType !== ''){
@@ -17,7 +20,8 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
 
     ctrl.getFilter = function(){
         return {
-            id : ctrl.searchUserId
+            id : ctrl.columnId,
+            name : ctrl.columnName
         };
     }
 

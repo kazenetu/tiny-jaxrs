@@ -17,7 +17,9 @@ td
         <div class="form-group buttons-row" style="padding-left: 2em;padding-right: 2em;">
             <input type="button" class="btn" data-ng-click="ctrl.back()"  value="戻る">
             <div class="pull-right">
+                <!--
                 <input type="button" class="btn" data-ng-click="ctrl.create()"  value="新規作成">
+                 -->
             </div>
         </div>
         <hr>
@@ -38,12 +40,14 @@ td
                         <form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
                             <input type="hidden" name="userId" value={{ctrl.userId}}>
                             <input type="hidden" name="userName" value={{ctrl.userName}}>
+                            <input type="hidden" name="searchUserId" value={{ctrl.searchUserId}}>
 
                             <input type="submit" class="btn" value="CSV出力">
                         </form>
                         <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
                             <input type="hidden" name="userId" value={{ctrl.userId}}>
                             <input type="hidden" name="userName" value={{ctrl.userName}}>
+                            <input type="hidden" name="searchUserId" value={{ctrl.searchUserId}}>
 
                             <input type="submit" class="btn" value="PDF出力">
 
@@ -61,6 +65,9 @@ td
                                     active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                     exist-record="{{ctrl.searchResult!==null}}"
                                     on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+
+                                <br>
+                                <input type="text" id = "columnId"  data-ng-model="ctrl.columnId">
                             </th>
                             <th class="text-center" style="width:30em;">
                                 <listColumn title="名前" key="name"
@@ -68,12 +75,15 @@ td
                                     exist-record="{{ctrl.searchResult!==null}}"
                                     on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
+                                <br>
+                                <input type="text" id = "columnName"  data-ng-model="ctrl.columnName">
                             </th>
                             <th class="text-center" style="width:10em;">
                                 <listColumn title="パスワード" key="password"
                                     active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                     exist-record="{{ctrl.searchResult!==null}}"
                                     on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+
                             </th>
                             <th class="text-center" style="width:7em;">
                                 <listColumn title="Date" key="date"
