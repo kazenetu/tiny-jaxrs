@@ -5,6 +5,20 @@ td
     padding-bottom:0.25em;
     vertical-align: middle;
 }
+.fixed-header
+{
+    margin-bottom: 0px !important;
+    border-bottom-width: 0px !important;
+    border-left-width: 0px !important;
+}
+.fixed-header th
+{
+    border-bottom-width: 1px !important;
+}
+.fixed-header td
+{
+    border-top-width: 0px !important;
+}
 </style>
 
 <div class="height-100percent" data-ng-init="ctrl.init()" data-ng-controller="noPagerListController as ctrl">
@@ -58,52 +72,55 @@ td
 
                 <!-- 検索結果 -->
                 <div class="scroll-area" style="height:100%;">
-                    <table class="table table-bordered">
-                        <tr class="success">
-                            <th class="text-center" style="width:10em;">
-                                <listColumn title="ID" key="id"
-                                    active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
-                                    exist-record="{{ctrl.searchResult!==null}}"
-                                    on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+                    <table class="table table-bordered fixed-header">
+                        <thead fix-head>
+                            <tr class="success">
+                                <th class="text-center" style="width:10em;">
+                                    <listColumn title="ID" key="id"
+                                        active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                                        exist-record="{{ctrl.searchResult!==null}}"
+                                        on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
-                                <br>
-                                <input type="text" id = "columnId"  data-ng-model="ctrl.columnId" data-ng-change='ctrl.changeFilter()'>
-                            </th>
-                            <th class="text-center" style="width:30em;">
-                                <listColumn title="名前" key="name"
-                                    active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
-                                    exist-record="{{ctrl.searchResult!==null}}"
-                                    on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+                                    <br>
+                                    <input type="text" id = "columnId"  data-ng-model="ctrl.columnId" data-ng-change='ctrl.changeFilter()'>
+                                </th>
+                                <th class="text-center" style="width:30em;">
+                                    <listColumn title="名前" key="name"
+                                        active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                                        exist-record="{{ctrl.searchResult!==null}}"
+                                        on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
-                                <br>
-                                <input type="text" id = "columnName"  data-ng-model="ctrl.columnName" data-ng-change='ctrl.changeFilter()'>
-                            </th>
-                            <th class="text-center" style="width:10em;">
-                                <listColumn title="パスワード" key="password"
-                                    active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
-                                    exist-record="{{ctrl.searchResult!==null}}"
-                                    on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+                                    <br>
+                                    <input type="text" id = "columnName"  data-ng-model="ctrl.columnName" data-ng-change='ctrl.changeFilter()'>
+                                </th>
+                                <th class="text-center" style="width:10em;">
+                                    <listColumn title="パスワード" key="password"
+                                        active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                                        exist-record="{{ctrl.searchResult!==null}}"
+                                        on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
-                            </th>
-                            <th class="text-center" style="width:7em;">
-                                <listColumn title="Date" key="date"
-                                    active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
-                                    exist-record="{{ctrl.searchResult!==null}}"
-                                    on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
-                            </th>
-                            <th class="text-center" style="width:7em;">
-                                <listColumn title="Time" key="time"
-                                    active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
-                                    exist-record="{{ctrl.searchResult!==null}}"
-                                    on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
-                            </th>
-                            <th class="text-center" style="width:7em;">
-                                <listColumn title="TS" key="ts"
-                                    active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
-                                    exist-record="{{ctrl.searchResult!==null}}"
-                                    on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
-                            </th>
-                        </tr>
+                                </th>
+                                <th class="text-center" style="width:7em;">
+                                    <listColumn title="Date" key="date"
+                                        active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                                        exist-record="{{ctrl.searchResult!==null}}"
+                                        on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+                                </th>
+                                <th class="text-center" style="width:7em;">
+                                    <listColumn title="Time" key="time"
+                                        active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                                        exist-record="{{ctrl.searchResult!==null}}"
+                                        on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+                                </th>
+                                <th class="text-center" style="width:7em;">
+                                    <listColumn title="TS" key="ts"
+                                        active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
+                                        exist-record="{{ctrl.searchResult!==null}}"
+                                        on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <tr  data-ng-repeat="result in ctrl.searchResult | filter:ctrl.filter() | orderBy:ctrl.order()">
                             <td class="text-center">
                                 <a class="btn btn-link" data-ng-click="ctrl.clickCell('columnId',result.id)">
@@ -129,6 +146,7 @@ td
                                 {{result.ts | date:'yyyy/MM/dd HH:mm:ss':'+0900'}}
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
 
