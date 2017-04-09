@@ -8,21 +8,54 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
     ctrl.columnId = '';
     ctrl.columnName = '';
 
-    ctrl.getOrder = function(){
+    /**
+     * ソート情報の取得
+     */
+    ctrl.order = function(){
         var result=ctrl.sortKey;
         if(ctrl.sortType !== ''){
             if(ctrl.sortType === 'DESC') {
                 result = '-' +result;
             }
         }
+
         return result;
     }
 
-    ctrl.getFilter = function(){
+    /**
+     * フィルター設定
+     */
+    ctrl.filter = function(){
         return {
             id : ctrl.columnId,
             name : ctrl.columnName
         };
+    }
+
+    /**
+     * セッションからフィルター情報の復元
+     */
+    function getFilter() {
+        var values = storageService.getValue(storageService.keys.searchFilter);
+        ctrl.columnId = values.id;
+        ctrl.columnName = values.name
+
+    }
+
+    /**
+     * セッションにフィルダー情報を設定
+     */
+    ctrl.changeFilter = function () {
+        var values = ctrl.filter();
+        storageService.setValue(storageService.keys.searchFilter,values);
+    }
+
+    /**
+     * データ行のセルクリックでフィルターに設定値を設定
+     */
+    ctrl.clickCell = function(targetFilter,value) {
+        ctrl[targetFilter] = value;
+        ctrl.changeFilter();
     }
 
     /**
@@ -31,7 +64,7 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
     var settings = {
         totalPageApiUrl : 'api/user/totalpage',
         getPageApiUrl : 'api/user/pages',
-        thisPage : '/master/userlist',
+        thisPage : '/sample/nopagerlist',
         editPage : '/master/useredit',
         getSearchParam : function() {
             return {
@@ -124,6 +157,9 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             // 検索(ページ指定)
             ctrl.search(values.pageIndex);
         }
+
+        // フィルター情報を復元
+        getFilter();
     }
 
     /**
@@ -168,7 +204,11 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
      * 検索ページ変更処理
      */
     ctrl.getPage = function(pageIndex) {
-        setConditions(pageIndex)
+        // ソート情報を更新
+        var values = storageService.getValue(storageService.keys.condition);
+        values['sortKey'] = ctrl.sortKey;
+        values['sortType'] = ctrl.sortType;
+        storageService.setValue(storageService.keys.condition,values);
     }
 
     /**

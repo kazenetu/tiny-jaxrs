@@ -67,7 +67,7 @@ td
                                     on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
                                 <br>
-                                <input type="text" id = "columnId"  data-ng-model="ctrl.columnId">
+                                <input type="text" id = "columnId"  data-ng-model="ctrl.columnId" data-ng-change='ctrl.changeFilter()'>
                             </th>
                             <th class="text-center" style="width:30em;">
                                 <listColumn title="名前" key="name"
@@ -76,7 +76,7 @@ td
                                     on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
                                 <br>
-                                <input type="text" id = "columnName"  data-ng-model="ctrl.columnName">
+                                <input type="text" id = "columnName"  data-ng-model="ctrl.columnName" data-ng-change='ctrl.changeFilter()'>
                             </th>
                             <th class="text-center" style="width:10em;">
                                 <listColumn title="パスワード" key="password"
@@ -104,12 +104,16 @@ td
                                     on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                             </th>
                         </tr>
-                        <tr  data-ng-repeat="result in ctrl.searchResult | filter:ctrl.getFilter() | orderBy:ctrl.getOrder()">
+                        <tr  data-ng-repeat="result in ctrl.searchResult | filter:ctrl.filter() | orderBy:ctrl.order()">
                             <td class="text-center">
-                                {{result.id}}
+                                <a class="btn btn-link" data-ng-click="ctrl.clickCell('columnId',result.id)">
+                                    {{result.id}}
+                                </a>
                             </td>
                             <td class="text-left">
-                                {{result.name}}
+                                <a class="btn btn-link" data-ng-click="ctrl.clickCell('columnName',result.name)">
+                                    {{result.name}}
+                                </a>
                             </td>
                             <td class="text-left">
                                 {{result.password}}
