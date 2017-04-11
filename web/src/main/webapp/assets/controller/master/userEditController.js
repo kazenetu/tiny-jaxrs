@@ -124,7 +124,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
         // 新規作成モードのみのチェック
         if(settings.isCreateMode()){
             if(ctrl.userId === ''){
-                ctrl.showError('ユーザーIDを入力してください');
+                ctrl.showError(ctrl.getMessage('E0013',['ユーザーID']));
                 ctrl.errorUserId = 'has-error';
                 return false;
             }
@@ -137,19 +137,19 @@ front.controller.UserEditController = function UserEditController($q, $location,
         }
 
         if(ctrl.userName === ''){
-            ctrl.showError('ユーザー名を入力してください');
+            ctrl.showError(ctrl.getMessage('E0013',['ユーザー名']));
             ctrl.errorUserName = 'has-error';
             return false;
         }
 
         if(ctrl.birthDay === null){
-            ctrl.showError('誕生日を入力してください');
+            ctrl.showError(ctrl.getMessage('E0013',['誕生日']));
             ctrl.errorBirthDay = 'has-error';
             return false;
         }
 
         if(ctrl.password === ''){
-            ctrl.showError('パスワードを入力してください');
+            ctrl.showError(ctrl.getMessage('E0013',['パスワード']));
             ctrl.errorPassword = 'has-error';
             return false;
         }

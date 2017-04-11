@@ -32,7 +32,8 @@ var front = {
         component:{},
         controller:{},
         service:{},
-        utils:{}
+        utils:{},
+        messages:{}
     },
     controller:{},
 };

@@ -76,4 +76,21 @@ front.common.controller.PageBase = function PageBase(){
             return deferrred.promise;
         }
     }
+
+    /**
+     * メッセージ取得
+     */
+    ctrl.getMessage = function(messageId,params){
+        var message = messageId;
+        if(messageId in front.common.messages){
+            var message = front.common.messages[messageId];
+
+            var index=0;
+            while(index < params.length){
+                message = message.replace('{'+index+'}', params[index]);
+                index++;
+            }
+        }
+        return message;
+    }
 }

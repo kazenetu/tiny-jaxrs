@@ -63,6 +63,13 @@ front.common.component.HeaderController = function HeaderController($location, u
         if(buttons.length > 0){
             buttons.after('<a href="index.html#!/main" class="btn btn-primary" style="margin-left:1em;">メニュー</a>');
         }
+
+        // メッセージjsonを取得する
+        if(JSON.stringify(front.common.messages).length <= 2){
+            webApiService.get('message.json', {} , function(response) {
+                front.common.messages = response;
+            });
+        }
     };
 
     /**
