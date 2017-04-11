@@ -124,7 +124,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
         // 新規作成モードのみのチェック
         if(settings.isCreateMode()){
             if(ctrl.userId === ''){
-                ctrl.showError(ctrl.getMessage('E0013',['ユーザーID']));
+                ctrl.showError('E0013',['ユーザーID']);
                 ctrl.errorUserId = 'has-error';
                 return false;
             }
@@ -137,19 +137,19 @@ front.controller.UserEditController = function UserEditController($q, $location,
         }
 
         if(ctrl.userName === ''){
-            ctrl.showError(ctrl.getMessage('E0013',['ユーザー名']));
+            ctrl.showError('E0013',['ユーザー名']);
             ctrl.errorUserName = 'has-error';
             return false;
         }
 
         if(ctrl.birthDay === null){
-            ctrl.showError(ctrl.getMessage('E0013',['誕生日']));
+            ctrl.showError('E0013',['誕生日']);
             ctrl.errorBirthDay = 'has-error';
             return false;
         }
 
         if(ctrl.password === ''){
-            ctrl.showError(ctrl.getMessage('E0013',['パスワード']));
+            ctrl.showError('E0013',['パスワード']);
             ctrl.errorPassword = 'has-error';
             return false;
         }
@@ -221,10 +221,17 @@ front.controller.UserEditController = function UserEditController($q, $location,
             return;
         }
 
+        var confirmMessageId = 'I0002';
+        var resultMessageId = 'I0004';
+        if(settings.isCreateMode()){
+            confirmMessageId = 'I0001';
+            resultMessageId = 'I0003';
+        }
+
         var d = $q.defer();
         d.promise
         .then(ctrl.showConfirm($q,ctrl.commmitButtonName + 'の確認',
-                ctrl.commmitButtonName +'しますか', ctrl.commmitButtonName +'する'))
+                confirmMessageId, ctrl.commmitButtonName +'する'))
         .then(function(){
             var deferrred = $q.defer();
 
@@ -250,7 +257,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
             return deferrred.promise;
         })
         .then(ctrl.showMsgDialog($q,ctrl.commmitButtonName + 'の報告',
-                 ctrl.commmitButtonName +'しました', '確認'))
+                resultMessageId, '確認'))
         .then(function(){
             $location.path(settings.listPage);
             storageService.clearValue(storageService.keys.updateKeys);

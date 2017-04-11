@@ -20,10 +20,16 @@ front.common.controller.PageBase = function PageBase(){
     /**
      * エラーメッセージの表示
      */
-    ctrl.showError = function(message){
+    ctrl.showError = function(message, params){
         if(ctrl.header === null) return;
 
-        ctrl.header.showError(message);
+        // メッセージ取得
+        var argParam = params;
+        if(!params){
+            argParam = [];
+        }
+        var formattedMessage = getMessage(message, argParam);
+        ctrl.header.showError(formattedMessage);
     }
 
     /**
@@ -46,13 +52,23 @@ front.common.controller.PageBase = function PageBase(){
     /**
      * 確認メッセージの表示
      */
-    ctrl.showConfirm = function($q,title,message,buttonText){
+    ctrl.showConfirm = function($q,title,message,buttonText,params){
         if(ctrl.header === null) return;
 
         return function(){
             var deferrred = $q.defer();
 
-            ctrl.header.showConfirm(title,message,buttonText,function(){
+            // メッセージ取得
+            var argParam = params;
+            if(!params){
+                argParam = [];
+            }
+            var formattedMessage = getMessage(message, argParam);
+
+            // タイトル取得
+            var formattedTitle = getMessage(title, []);
+
+            ctrl.header.showConfirm(formattedTitle,formattedMessage,buttonText,function(){
                 deferrred.resolve();
             });
 
@@ -63,13 +79,23 @@ front.common.controller.PageBase = function PageBase(){
     /**
      * メッセージダイアログの表示
      */
-    ctrl.showMsgDialog = function($q,title,message,buttonText){
+    ctrl.showMsgDialog = function($q,title,message,buttonText,params){
         if(ctrl.header === null) return;
 
         return function(){
             var deferrred = $q.defer();
 
-            ctrl.header.showMsgDialog(title,message,buttonText,function(){
+            // メッセージ取得
+            var argParam = params;
+            if(!params){
+                argParam = [];
+            }
+            var formattedMessage = getMessage(message, argParam);
+
+            // タイトル取得
+            var formattedTitle = getMessage(title, []);
+
+            ctrl.header.showMsgDialog(formattedTitle,formattedMessage,buttonText,function(){
                 deferrred.resolve();
             });
 
@@ -80,7 +106,7 @@ front.common.controller.PageBase = function PageBase(){
     /**
      * メッセージ取得
      */
-    ctrl.getMessage = function(messageId,params){
+    function getMessage(messageId,params){
         var message = messageId;
         if(messageId in front.common.messages){
             var message = front.common.messages[messageId];
