@@ -1,0 +1,25 @@
+<div class="height-100percent" data-ng-init="ctrl.init()" data-ng-controller="inputcheckController as ctrl">
+    <!-- ヘッダー -->
+    <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
+
+    <!-- メイン画面 -->
+    <div  class="container main-area" data-ng-cloak style="padding-left:2em;padding-right:0em;">
+        <div>
+            <input type="text" data-ng-model="ctrl.inputTest">
+            ※英数字・10桁まで
+
+        </div>
+        <div>
+            <input type="text" data-ng-model="ctrl.inputAlpha"> ※英字のみ
+        </div>
+        <div>
+            <input type="text" data-ng-model="ctrl.inputKana"> ※全角カタカナのみ
+        </div>
+        <div>
+            <input type="text" data-ng-model="ctrl.inputSingle" data-ng-change="ctrl.singleKeyDown(e)">※半角のみ
+        </div>
+
+        <button data-ng-click="ctrl.inputCheck()">入力チェック</button>
+    </div>
+
+</div>
