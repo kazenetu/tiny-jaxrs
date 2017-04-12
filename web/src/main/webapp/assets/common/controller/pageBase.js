@@ -119,4 +119,43 @@ front.common.controller.PageBase = function PageBase(){
         }
         return message;
     }
+
+    /**
+     * 最大桁数超過チェック
+     */
+    ctrl.isOverMaxLength = function(src, maxLength) {
+        if(!src){
+            return false;
+        }
+        return src.toString().length > maxLength;
+    }
+
+    /**
+     * 英数字チェック
+     */
+    ctrl.isNumAlpha = function(src) {
+        if(!src){
+            return false;
+        }
+        return /^[0-9A-Za-z]+$/.test(src);
+    }
+
+    /**
+     * 英字チェック
+     */
+    ctrl.isAlpha = function(src) {
+        if(!src){
+            return false;
+        }
+        return /^[A-Za-z]+$/.test(src);
+    }
+
+
+    ctrl.isKana = function(src) {
+        if(!src){
+            return false;
+        }
+        return /^[ア-ン]+$/.test(src);
+    }
+
 }
