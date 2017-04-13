@@ -150,7 +150,9 @@ front.common.controller.PageBase = function PageBase(){
         return /^[A-Za-z]+$/.test(src);
     }
 
-
+    /**
+     * カタカナチェック
+     */
     ctrl.isKana = function(src) {
         if(!src){
             return false;
