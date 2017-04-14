@@ -157,7 +157,7 @@ front.common.controller.PageBase = function PageBase(){
         if(!src){
             return false;
         }
-        return /^[ア-ン]+$/.test(src);
+        return /^[ァ-ンヴー| |　]+$/.test(src);
     }
 
 }
