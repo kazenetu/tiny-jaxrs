@@ -16,7 +16,7 @@
             <input type="text" data-ng-model="ctrl.inputKana"> ※全角カタカナのみ
         </div>
         <div>
-            <input type="text" data-ng-model="ctrl.inputSingle" data-ng-change="ctrl.singleByteChangeEvent('inputSingle')">※半角のみ
+            <input type="text" class="ime-disabled" data-ng-model="ctrl.inputSingle" data-ng-change="ctrl.singleByteChangeEvent('inputSingle')">※半角のみ
         </div>
 
         <button data-ng-click="ctrl.inputCheck()">入力チェック</button>

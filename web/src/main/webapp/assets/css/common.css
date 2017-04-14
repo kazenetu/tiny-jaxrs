@@ -49,3 +49,6 @@ html,body{
 hr{
     border-color: black !important;
 }
+.ime-disabled{
+    ime-mode:disabled !important;
+}
