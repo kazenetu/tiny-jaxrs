@@ -50,10 +50,16 @@ front.controller.InputcheckController =  function InputcheckController($location
 
     ctrl.inputSingle = '';
 
-    ctrl.singleKeyDown = function(e) {
-        var debug = ctrl.inputSingle;
-        ctrl.inputSingle = ctrl.inputSingle.replace(/[^\b\w]/g,'');
-        debug = ' -> ' + ctrl.inputSingle;
+    ctrl.singleByteChangeEvent = function(fieldName) {
+        if(!this[fieldName]){
+            return;
+        }
+
+        var debug = '['+ctrl.inputSingle;
+
+        this[fieldName] = this[fieldName].replace(/[^\s\w]/g,'').replace(/　/g,'');
+
+        debug += ']->[' + ctrl.inputSingle+']';
         console.log(debug);
     }
 }
