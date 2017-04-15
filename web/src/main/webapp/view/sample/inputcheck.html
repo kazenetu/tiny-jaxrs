@@ -16,7 +16,16 @@
             <input type="text" data-ng-model="ctrl.inputKana"> ※全角カタカナのみ
         </div>
         <div>
-            <input type="text" class="ime-disabled" data-ng-model="ctrl.inputSingle" data-ng-change="ctrl.singleByteChangeEvent('inputSingle')">※半角のみ
+            <input type="text" class="ime-disabled" data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('TEST')">※半角のみ
+        </div>
+
+        <div>
+            <inputex type="text" class="ime-disabled" id="dummy" placeholder="半角のみ"
+             data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('DUMMY_A')"></inputex>※input拡張コンポーネント
+        </div>
+        <div>
+            <inputex type="text" id="dummy" placeholder="全角・半角" maxlength="10"
+             data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('DUMMY_B')"></inputex>※input拡張コンポーネント
         </div>
 
         <button data-ng-click="ctrl.inputCheck()">入力チェック</button>

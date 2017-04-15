@@ -48,6 +48,10 @@ front.controller.InputcheckController =  function InputcheckController($location
         ctrl.hideError();
     }
 
+    ctrl.blur = function(name){
+        console.log(name+' blur');
+    }
+
     ctrl.inputSingle = '';
 
     ctrl.singleByteChangeEvent = function(fieldName) {
