@@ -4,6 +4,7 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
 
     var ctrl = this;
     ctrl.totalPage = 0;
+    ctrl.searchUserId = '';
 
     ctrl.columnId = '';
     ctrl.columnName = '';

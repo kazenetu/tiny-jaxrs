@@ -4,6 +4,7 @@ front.controller.UserListController =  function UserListController($location, we
 
     var ctrl = this;
     ctrl.totalPage = 0;
+    ctrl.searchUserId = '';
 
     /**
      * ページ設定
