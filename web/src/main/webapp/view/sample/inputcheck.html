@@ -5,28 +5,48 @@
     <!-- メイン画面 -->
     <div  class="container main-area" data-ng-cloak style="padding-left:2em;padding-right:0em;">
         <div>
-            <input type="text" data-ng-model="ctrl.inputTest">
-            ※英数字・10桁まで
+            <label>入力チェック用</label>
+            <div>
+                <input type="text" data-ng-model="ctrl.inputTest">
+                ※英数字・10桁まで
+
+            </div>
+            <div>
+                <input type="text" data-ng-model="ctrl.inputAlpha"> ※英字のみ
+            </div>
+            <div>
+                <input type="text" data-ng-model="ctrl.inputKana"> ※全角カタカナのみ
+            </div>
+            <div>
+                <input type="text" class="ime-disabled" data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('TEST')">※半角のみ
+            </div>
+        </div>
+
+        <div>
+            <label>入力規制※input拡張コンポーネント「inputex」利用</label>
+            <div>
+                <inputex type="text" class="ime-disabled" id="dummy" placeholder="半角のみ"
+                 data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('DUMMY_A')"></inputex>※半角のみ
+            </div>
+            <div>
+                <inputex type="text" id="dummy" placeholder="全角・半角" maxlength="10"
+                 data-ng-model="ctrl.inputTest" ></inputex>※全角・半角
+            </div>
 
         </div>
-        <div>
-            <input type="text" data-ng-model="ctrl.inputAlpha"> ※英字のみ
-        </div>
-        <div>
-            <input type="text" data-ng-model="ctrl.inputKana"> ※全角カタカナのみ
-        </div>
-        <div>
-            <input type="text" class="ime-disabled" data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('TEST')">※半角のみ
-        </div>
 
         <div>
-            <inputex type="text" class="ime-disabled" id="dummy" placeholder="半角のみ"
-             data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('DUMMY_A')"></inputex>※input拡張コンポーネント
+            <label>入力規制※input拡張ディレクティブ「text-ex」利用</label>
+            <div>
+                <input type="text" data-text-ex  class="ime-disabled" id="dummy" placeholder="半角のみ"
+                data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('DUMMY_Ba')">※半角のみ
+            </div>
+            <div>
+                <input type="text" data-text-ex  id="dummy" placeholder="全角・半角"
+                data-ng-model="ctrl.inputTest" data-ng-blur="ctrl.blur('DUMMY_Bb')">※全角・半角
+            </div>
         </div>
-        <div>
-            <inputex type="text" id="dummy" placeholder="全角・半角" maxlength="10"
-             data-ng-model="ctrl.inputSingle" data-ng-blur="ctrl.blur('DUMMY_B')"></inputex>※input拡張コンポーネント
-        </div>
+
 
         <button data-ng-click="ctrl.inputCheck()">入力チェック</button>
     </div>
