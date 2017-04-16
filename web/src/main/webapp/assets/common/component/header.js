@@ -126,7 +126,7 @@ front.common.component.HeaderController = function HeaderController($location, u
         ctrl.dialogTitle = title;
         ctrl.dialogMessage = message;
         ctrl.dialogCommitText = buttonText;
-        $('#confirm').modal('show');
+        $('#confirm').modal({backdrop:'static',keybord:false,show:true});
         dialogCallback = callFunction;
     }
 }
