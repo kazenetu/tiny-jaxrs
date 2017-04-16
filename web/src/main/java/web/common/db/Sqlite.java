@@ -154,7 +154,7 @@ public class Sqlite implements Database {
                     }
                 }
 
-                if(isChangedString){
+                if(value != null && isChangedString){
                     statement.setString(i, value.toString());
                 }
                 else{
