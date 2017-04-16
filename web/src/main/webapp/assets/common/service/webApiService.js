@@ -12,7 +12,7 @@ front.common.service.WebApiService = function WebApiService($resource, $location
      * GET(配列取得)メソッド
      */
     this.query = function(action,params,callFunction){
-      var result = $resource(this.baseUri + action).query(params);
+      var result = $resource(this.baseUri + action).query(getParams(params));
 
       result.$promise.then(function (response) {
           callFunction(response);
@@ -25,7 +25,7 @@ front.common.service.WebApiService = function WebApiService($resource, $location
      * GETメソッド
      */
     this.get = function(action,params,callFunction){
-      var result = $resource(this.baseUri + action).get(params);
+      var result = $resource(this.baseUri + action).get(getParams(params));
 
       result.$promise.then(function (response) {
           callFunction(response);
@@ -38,7 +38,7 @@ front.common.service.WebApiService = function WebApiService($resource, $location
      * POSTメソッド
      */
     this.post = function(action,params,callFunction){
-      var result = $resource(this.baseUri + action).save(params);
+      var result = $resource(this.baseUri + action).save(getParams(params));
 
       result.$promise.then(function (response) {
           callFunction(response);
@@ -51,7 +51,7 @@ front.common.service.WebApiService = function WebApiService($resource, $location
      * POST(配列取得)メソッド
      */
     this.postQuery = function(action,params,callFunction){
-        var result = $resource(this.baseUri + action,null,{query: {method: 'post', isArray: true}}).query(params);
+        var result = $resource(this.baseUri + action,null,{query: {method: 'post', isArray: true}}).query(getParams(params));
 
       result.$promise.then(function (response) {
           callFunction(response);
@@ -59,6 +59,33 @@ front.common.service.WebApiService = function WebApiService($resource, $location
           $location.path('/');
       });
     };
+
+    /**
+     * 整備済の送信パラメータ取得
+     */
+    function getParams(srcParam){
+        var result = {};
+
+        var keys = Object.keys(srcParam);
+        for(var keyIndex=0;keyIndex<keys.length;keyIndex++){
+            var key = keys[keyIndex];
+            var value = srcParam[key];
+            var type = 'none';
+
+            type = Object.prototype.toString.call(value).slice(8, -1);
+
+            if(type === 'Object'){
+                value = getParams(value);
+            }else{
+                if(type == 'String'){
+                    // 後ろスペース除去
+                    value = value.replace(/[\s]+$/g,'')
+                }
+            }
+            result[key] = value;
+        }
+        return result;
+    }
 }
 
 angular.module('webApiService',[]).service('webApiService', front.common.service.WebApiService);
