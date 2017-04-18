@@ -18,6 +18,8 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         templateUrl : 'view/sample/noPagerList.html',
     }).when('/sample/inputcheck', {
         templateUrl : 'view/sample/inputcheck.html',
+    }).when('/sample/numbercheck', {
+        templateUrl : 'view/sample/numbercheck.html',
 
     }).otherwise({
         redirectTo : '/'
