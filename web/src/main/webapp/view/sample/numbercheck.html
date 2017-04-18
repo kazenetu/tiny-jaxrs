@@ -4,7 +4,12 @@
 
     <!-- メイン画面 -->
     <div  class="container main-area" data-ng-cloak style="padding-left:2em;padding-right:0em;">
-
+        <div>
+            入力値：<input type="text" style="text-align:right;" data-ng-model="ctrl.inputNumber">
+        </div>
+        <div>
+            制限桁数：<input type="number" min=1 style="width:3em;text-align:right;" data-ng-model="ctrl.intPartCount">．<input type="number" style="width:3em;text-align:right;" data-ng-model="ctrl.decimalPartCount">
+        </div>
 
         <button data-ng-click="ctrl.inputCheck()">入力チェック</button>
     </div>
