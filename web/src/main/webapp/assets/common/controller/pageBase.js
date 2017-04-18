@@ -160,4 +160,36 @@ front.common.controller.PageBase = function PageBase(){
         return /^[ァ-ンヴー| |　]+$/.test(src);
     }
 
+    /**
+     * 数値チェック
+     *  @param {string} {src} - 入力値
+     *  @param {number} {intPartCount} - 整数部の桁数
+     *  @param {number} [decimalPartCount=0] - 小数部の桁数(省略可能)
+     */
+    ctrl.isNumber = function(src, intPartCount, decimalPartCount) {
+        if(src === null || src === undefined) {
+            return true;
+        }
+
+        if(decimalPartCount === null || decimalPartCount === undefined) {
+            decimalPartCount = 0;
+        }
+        var regString = '';
+        var count;
+        // 整数部
+        if(intPartCount>1){
+            regString += '[1-9]?';
+            intPartCount -= 1;
+        }
+        regString += '[0-9]{1,' + intPartCount + '}';
+
+        // 小数部
+        if(decimalPartCount > 0){
+            regString += '[.]?[0-9]{0,' + decimalPartCount + '}';
+            for(count=decimalPartCount;count>0;count--){
+            }
+        }
+
+        return new RegExp('^'+ regString + '$').test(src);
+    }
 }

@@ -26,38 +26,6 @@ front.controller.NumbercheckController =  function NumbercheckController($locati
 
         ctrl.hideError();
     }
-
-    /**
-     * 数値チェック
-     */
-    ctrl.isNumber = function(src, intPartCount, decimalPartCount) {
-        if(src === null || src === undefined) {
-            return true;
-        }
-
-        if(decimalPartCount === null || decimalPartCount === undefined) {
-            decimalPartCount = 0;
-        }
-        var regString = '';
-        var count;
-        // 整数部
-        if(intPartCount>1){
-            regString += '[1-9]?';
-            intPartCount -= 1;
-        }
-        regString += '[0-9]{1,' + intPartCount + '}';
-
-        // 小数部
-        if(decimalPartCount > 0){
-            regString += '[.]?[0-9]{0,' + decimalPartCount + '}';
-            for(count=decimalPartCount;count>0;count--){
-            }
-        }
-
-        return new RegExp('^'+ regString + '$').test(src);
-    }
-
-
 }
 
 angular.module('App').controller('numbercheckController', front.controller.NumbercheckController);
