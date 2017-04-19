@@ -113,6 +113,10 @@ public class PostgreSql implements Database {
      * @throws Exception 実行時例外エラー
      */
     public int execute(String sql, List<Object> params) throws Exception {
+        if(!isSetTransaction) {
+            throw new Exception("setTransactionメソッドが実行されていません");
+        }
+
         try (PreparedStatement statement = con.prepareStatement(sql);) {
 
             int i = 1;
