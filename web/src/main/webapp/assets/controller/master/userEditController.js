@@ -34,11 +34,16 @@ front.controller.UserEditController = function UserEditController($q, $location,
             };
         },
         getInsUpdRequestData : function() {
+            var localeTimeString = null;
+            if(ctrl.time !== null){
+                localeTimeString = ctrl.time.toLocaleTimeString();
+            }
+
             return {
                 id :ctrl.userId,
                 name :ctrl.userName,
                 date :ctrl.birthDay,
-                time :ctrl.time.toLocaleTimeString(),
+                time :localeTimeString,
                 ts :ctrl.ts,
                 password :ctrl.password
             };
