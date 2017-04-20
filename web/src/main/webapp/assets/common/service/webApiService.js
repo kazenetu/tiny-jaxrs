@@ -77,7 +77,7 @@ front.common.service.WebApiService = function WebApiService($resource, $location
             if(type === 'Object'){
                 value = getParams(value);
             }else{
-                if(type == 'String'){
+                if(type === 'String'){
                     // 後ろスペース除去
                     value = value.replace(/[\s]+$/g,'')
                 }
