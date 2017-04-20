@@ -34,6 +34,7 @@ public class PostgreSql implements Database {
             InitialContext context = new InitialContext();
             DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/PostgreSql");
             con = ds.getConnection();
+            con.setAutoCommit(false);
             context.close();
             return;
         } catch (Exception e1) {
@@ -46,6 +47,7 @@ public class PostgreSql implements Database {
         try {
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testDB","test","test");
+            con.setAutoCommit(false);
         } catch (Exception e) {
             logger.debug("デバッグ用コネクション取得失敗："+e.getMessage());
         }
@@ -71,7 +73,6 @@ public class PostgreSql implements Database {
      */
     public void setTransaction() throws Exception {
         try {
-            con.setAutoCommit(false);
             con.setSavepoint();
             isSetTransaction = true;
         } catch (SQLException e) {
