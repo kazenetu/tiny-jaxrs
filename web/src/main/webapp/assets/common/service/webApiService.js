@@ -72,12 +72,12 @@ front.common.service.WebApiService = function WebApiService($resource, $location
             var value = srcParam[key];
             var type = 'none';
 
-            type = Object.prototype.toString.call(value).slice(8, -1);
+            type = Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
-            if(type === 'Object'){
+            if(type === 'object'){
                 value = getParams(value);
             }else{
-                if(type === 'String'){
+                if(type === 'string'){
                     // 後ろスペース除去
                     value = value.replace(/[\s]+$/g,'')
                 }
