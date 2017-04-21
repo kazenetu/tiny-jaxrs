@@ -21,6 +21,13 @@ angular.module('App')
              */
             var isTextType = attrs.type === 'text';
 
+            /**
+             * typeが'number'か否か
+             */
+            var isNumberType = attrs.type === 'number';
+
+            var elem = element;
+
             // ime-disabledがclassに設定されていれば、半角入力制限をする
             if(!!attrs.class && attrs.class.indexOf('ime-disabled') >= 0){
                 singleByteMode = true;
@@ -42,6 +49,7 @@ angular.module('App')
 
             // 値変更イベント
             if (attrs.ngModel) {
+                scope.element = element;
                 scope.$parent.$watch(attrs.ngModel, textChange);
             }
 
@@ -49,13 +57,29 @@ angular.module('App')
              * 値変更
              */
             function textChange(newVal, oldVal){
-                if(!newVal || !isTextType){
-                    return;
-                }
-
                 // 半角文字以外を削除
                 if(singleByteMode){
-                    newVal = newVal.replace(/[^\s\w]/g,'').replace(/　/g,'');
+                    if(isNumberType){
+                        if(newVal === undefined) {
+                            if(oldVal === null){
+                                // 前回の値がnullの場合は0を設定
+                                newVal = 0;
+                            }else{
+                                // 入力値が不正な値である場合、前回の値を設定
+                                newVal = oldVal;
+                            }
+                        }
+                    }
+                    if(isTextType) {
+                        if(!newVal){
+                            return;
+                        }
+                        var type = Object.prototype.toString.call(newVal).slice(8, -1).toLowerCase();
+                        if(type === 'string'){
+                            // 半角文字以外を削除
+                            newVal = newVal.replace(/[^\s\w]/g,'').replace(/　/g,'');
+                        }
+                    }
                 }
 
                 // 結果を反映
