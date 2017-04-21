@@ -26,8 +26,6 @@ angular.module('App')
              */
             var isNumberType = attrs.type === 'number';
 
-            var elem = element;
-
             // ime-disabledがclassに設定されていれば、半角入力制限をする
             if(!!attrs.class && attrs.class.indexOf('ime-disabled') >= 0){
                 singleByteMode = true;
@@ -49,7 +47,6 @@ angular.module('App')
 
             // 値変更イベント
             if (attrs.ngModel) {
-                scope.element = element;
                 scope.$parent.$watch(attrs.ngModel, textChange);
             }
 
