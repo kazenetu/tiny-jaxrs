@@ -6,6 +6,7 @@ front.controller.InputcheckController =  function InputcheckController($location
     ctrl.inputTest = '';
     ctrl.inputAlpha = '';
     ctrl.inputKana = '';
+    ctrl.inputNumber = 0;
 
     /**
      * 入力チェック
