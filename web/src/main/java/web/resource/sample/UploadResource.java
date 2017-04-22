@@ -99,7 +99,7 @@ public class UploadResource extends Resource {
     }
 
     /**
-     * 全レコードを取得k
+     * 全レコードを取得
      */
     @POST
     @Path("list")
