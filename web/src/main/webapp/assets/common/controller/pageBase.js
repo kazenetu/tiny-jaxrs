@@ -192,4 +192,34 @@ front.common.controller.PageBase = function PageBase(){
 
         return new RegExp('^'+ regString + '$').test(src);
     }
+
+    /**
+     * Dateから文字列(yyyyMMdd)に変換
+     */
+    ctrl.dateToString = function(src) {
+        var type = Object.prototype.toString.call(src).slice(8, -1).toLowerCase();
+        if(type === 'date'){
+            return String(src.getFullYear()) +
+                    ('0'+(src.getMonth()+1)).slice(-2) +
+                    ('0'+src.getDate()).slice(-2);
+        }
+
+        return '';
+    }
+
+    /**
+     * 文字列(yyyyMMdd)からDateに変換
+     */
+    ctrl.stringToDate = function(src) {
+        var type = Object.prototype.toString.call(src).slice(8, -1).toLowerCase();
+        if(type === 'string' && src !== ''){
+            var year  = parseInt(src.substr(0,4),10);
+            var month = parseInt(src.substr(4,2),10) - 1;
+            var day   = parseInt(src.substr(6,2),10);
+            return new Date(year, month, day);
+        }
+
+        return null;
+    }
+
 }
