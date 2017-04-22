@@ -18,6 +18,7 @@
         <span>ファイル名：{{ctrl.imageName}}</span>
 
         <div>
+            <input type="date" data-ng-model="ctrl.tag"><br>
             <button data-ng-click="ctrl.insertOrUpdate()" data-ng-disabled="ctrl.imageName===''" class="btn">登録(ファイル作成)</button>
         <div>
         </div>
@@ -33,6 +34,12 @@
                 <th class="text-center" style="width:30em;">
                     ファイル名
                 </th>
+                <th class="text-center" style="width:5em;">
+                    タグ(日付)
+                </th>
+                <th class="text-center" style="width:8em;">
+                    タグ(日付)<br>入力テキスト実装例
+                </th>
             </tr>
             <tr  data-ng-repeat="result in ctrl.searchResult">
                 <td class="text-center" style="height:100px;">
@@ -41,6 +48,13 @@
                 </td>
                 <td class="text-left">
                     {{result.fileName}}
+                </td>
+                <td class="text-left">
+                    {{ result.tag | date:'yyyy/MM/dd' }}
+                </td>
+                <td class="text-left">
+                    <input type="date"
+                        data-ng-model="result.tag">
                 </td>
             </tr>
         </table>
