@@ -418,7 +418,7 @@ public class UserResource extends Resource {
         try (UserModel model = new UserModel()) {
             // DBからデータ取得
             List<UserEntity> entities = new ArrayList<>();
-            entities = model.getUsers(new UserListEntity(searchUserId));
+            entities = model.getAllUsers(new UserListEntity(searchUserId));
 
             // CSV出力対象設定
             CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName"), entities);
