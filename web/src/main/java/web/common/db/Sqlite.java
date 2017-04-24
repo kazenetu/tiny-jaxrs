@@ -31,6 +31,7 @@ public class Sqlite implements Database {
 
     private Connection con = null;
     private boolean isSetTransaction = false;
+    private int fetchSize = -1;
 
     public Sqlite() {
 
@@ -75,6 +76,14 @@ public class Sqlite implements Database {
                 throw new Exception(e);
             }
         }
+    }
+
+    /*
+     * フェッチサイズを設定
+     * @param rows 行サイズ
+     */
+    public void setFetchSize(int rows){
+        fetchSize = rows;
     }
 
     /**
@@ -181,6 +190,11 @@ public class Sqlite implements Database {
         List<Map<String,Object>> resultList = new ArrayList<>();
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
+
+            // フェッチサイズが設定されていれば設定
+            if(fetchSize > 0){
+                statement.setFetchSize(fetchSize);
+            }
 
             int i = 1;
             for (Object param : params) {

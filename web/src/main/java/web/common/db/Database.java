@@ -9,6 +9,12 @@ import java.util.Map;
 public interface Database {
     public void close() throws Exception;
 
+    /*
+     * フェッチサイズを設定
+     * @param rows 行サイズ
+     */
+    void setFetchSize(int rows);
+
     /**
      * トランザクション設定
      * @throws Exception 例外エラー

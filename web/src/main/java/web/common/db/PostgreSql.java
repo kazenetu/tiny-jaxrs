@@ -26,6 +26,7 @@ public class PostgreSql implements Database {
 
     private Connection con = null;
     private boolean isSetTransaction = false;
+    private int fetchSize = -1;
 
     public PostgreSql(){
 
@@ -65,6 +66,14 @@ public class PostgreSql implements Database {
                 throw new Exception(e);
             }
         }
+    }
+
+    /*
+     * フェッチサイズを設定
+     * @param rows 行サイズ
+     */
+    public void setFetchSize(int rows){
+        fetchSize = rows;
     }
 
     /**
@@ -143,6 +152,11 @@ public class PostgreSql implements Database {
         List<Map<String,Object>> resultList = new ArrayList<>();
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
+
+            // フェッチサイズが設定されていれば設定
+            if(fetchSize > 0){
+                statement.setFetchSize(fetchSize);
+            }
 
             int i = 1;
             for (Object param : params) {
