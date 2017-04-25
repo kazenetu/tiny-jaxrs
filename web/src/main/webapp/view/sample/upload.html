@@ -18,7 +18,8 @@
         <span>ファイル名：{{ctrl.imageName}}</span>
 
         <div>
-            <input type="date" data-ng-model="ctrl.tag"><br>
+            <input type="date" data-ng-model="ctrl.tag"
+                data-text-ex  ><br>
             <button data-ng-click="ctrl.insertOrUpdate()" data-ng-disabled="ctrl.imageName===''" class="btn">登録(ファイル作成)</button>
         <div>
         </div>
@@ -53,7 +54,7 @@
                     {{ result.tag | date:'yyyy/MM/dd' }}
                 </td>
                 <td class="text-left">
-                    <input type="date"
+                    <input type="date" data-text-ex
                         data-ng-model="result.tag">
                 </td>
             </tr>

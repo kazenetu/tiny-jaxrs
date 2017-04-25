@@ -2,7 +2,7 @@
  * inputタグ拡張ディレクティブ
  */
 angular.module('App')
-.directive('textEx', [function(){
+.directive('textEx', ['$compile', function($compile){
     return{
         restrict: 'A',
         scope:{
@@ -11,6 +11,27 @@ angular.module('App')
             ngModel:'='
         },
         link: function postLink(scope, element, attrs, ctrl){
+            if(attrs.type === 'date' && !Modernizr.inputtypes.date ){
+                var ngModel = element.controller('ngModel');
+
+                ngModel.$formatters.length = 0;
+                // $modelValue to $viewValue
+                  ngModel.$formatters.push(function(date){
+                      if(date == null){
+                          return '';
+                      }
+                      return String(date.getFullYear()) + '/' +
+                      ('0'+(date.getMonth()+1)).slice(-2) + '/' +
+                      ('0'+date.getDate()).slice(-2);
+                  });
+
+                  // $viewValue to $modelValue
+                  ngModel.$parsers.length = 0;
+                  ngModel.$parsers.push(function(value){
+                      return new Date(value.replace(/-/g,'/'));
+                  });
+            }
+
             /**
              * 半角文字のみ許可するか否か
              */
