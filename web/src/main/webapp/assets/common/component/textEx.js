@@ -17,7 +17,7 @@ angular.module('App')
                 ngModel.$formatters.length = 0;
                 // $modelValue to $viewValue
                   ngModel.$formatters.push(function(date){
-                      if(date == null){
+                      if(date == null || date === undefined){
                           return '';
                       }
                       return String(date.getFullYear()) + '/' +
@@ -28,6 +28,9 @@ angular.module('App')
                   // $viewValue to $modelValue
                   ngModel.$parsers.length = 0;
                   ngModel.$parsers.push(function(value){
+                      if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
+                          return null;
+                      }
                       return new Date(value.replace(/-/g,'/'));
                   });
             }
