@@ -11,29 +11,6 @@ angular.module('App')
             ngModel:'='
         },
         link: function postLink(scope, element, attrs, ctrl){
-            if(attrs.type === 'date' && !Modernizr.inputtypes.date ){
-                var ngModel = element.controller('ngModel');
-
-                ngModel.$formatters.length = 0;
-                // $modelValue to $viewValue
-                  ngModel.$formatters.push(function(date){
-                      if(date == null || date === undefined){
-                          return '';
-                      }
-                      return String(date.getFullYear()) + '/' +
-                      ('0'+(date.getMonth()+1)).slice(-2) + '/' +
-                      ('0'+date.getDate()).slice(-2);
-                  });
-
-                  // $viewValue to $modelValue
-                  ngModel.$parsers.length = 0;
-                  ngModel.$parsers.push(function(value){
-                      if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
-                          return null;
-                      }
-                      return new Date(value.replace(/-/g,'/'));
-                  });
-            }
 
             /**
              * 半角文字のみ許可するか否か
@@ -50,6 +27,11 @@ angular.module('App')
              */
             var isNumberType = attrs.type === 'number';
 
+            /**
+             * typeが'date'か否か
+             */
+            var isDateType = attrs.type === 'date';
+
             // ime-disabledがclassに設定されていれば、半角入力制限をする
             if(!!attrs.class && attrs.class.indexOf('ime-disabled') >= 0){
                 singleByteMode = true;
@@ -57,6 +39,55 @@ angular.module('App')
 
             // スペーストリミングを無効にする
             attrs.$set('ngTrim', "false");
+
+            // IE11用 日付
+            if(isDateType && !Modernizr.inputtypes.date ){
+                var ngModel = element.controller('ngModel');
+
+                ngModel.$formatters.length = 0;
+                // $modelValue to $viewValue
+                  ngModel.$formatters.push(function(date){
+                  if(date == null || date === undefined){
+                      return '';
+                  }
+                      return String(date.getFullYear()) + '/' +
+                      ('0'+(date.getMonth()+1)).slice(-2) + '/' +
+                      ('0'+date.getDate()).slice(-2);
+                  });
+
+                  // $viewValue to $modelValue
+                  ngModel.$parsers.length = 0;
+                  ngModel.$parsers.push(function(value){
+                      if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
+                          return null;
+                      }
+                      return new Date(value.replace(/-/g,'/'));
+                  });
+
+                  //  id付与
+                  var id = 'date'+scope.$id;
+                  attrs.$set('id', id);
+
+                  // 日付形式のフォーマットを設定
+                  setTimeout(function(){
+                      $('#'+id).FormattingTextbox("____/__/__",{
+                          inputRegExp:/[0-9]/
+                          ,delimiterRegExp:/[\/]/
+                        });
+                  },0);
+
+                  return;
+            }
+
+            //IE11用 数値型
+            if(isNumberType && !Modernizr.inputtypes.number ){
+                element.bind('keydown', function (e) {
+                    if(e.key!=="Backspace" && (e.char!=='' && !/[0-9.]/.test(e.char))){
+                          return false;
+                    }
+                    return true;
+                });
+            }
 
             /**
              * フォーカスロスト時 値変更イベント
@@ -78,19 +109,21 @@ angular.module('App')
              * 値変更
              */
             function textChange(newVal, oldVal){
-                // 半角文字以外を削除
-                if(singleByteMode){
-                    if(isNumberType){
-                        if(newVal === undefined) {
-                            if(oldVal === null){
-                                // 前回の値がnullの場合は0を設定
-                                newVal = 0;
-                            }else{
-                                // 入力値が不正な値である場合、前回の値を設定
-                                newVal = oldVal;
-                            }
+                // type=number
+                if(isNumberType){
+                    if(newVal === null || newVal === undefined) {
+                        if(newVal === undefined && oldVal !== null){
+                            // 入力値が不正な値である場合、前回の値を設定
+                            newVal = oldVal;
+                        }else{
+                            // nullを設定
+                            newVal = null;
                         }
                     }
+                }
+
+                // 半角文字以外を削除
+                if(singleByteMode){
                     if(isTextType) {
                         if(!newVal){
                             return;
