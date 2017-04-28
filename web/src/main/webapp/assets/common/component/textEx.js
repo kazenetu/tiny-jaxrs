@@ -42,6 +42,10 @@ angular.module('App')
 
             // IE11用 日付
             if(isDateType && !Modernizr.inputtypes.date ){
+                //  id付与
+                var id = 'date'+scope.$id;
+                attrs.$set('id', id);
+
                 var ngModel = element.controller('ngModel');
 
                 ngModel.$formatters.length = 0;
@@ -50,9 +54,14 @@ angular.module('App')
                   if(date == null || date === undefined){
                       return '';
                   }
-                      return String(date.getFullYear()) + '/' +
-                      ('0'+(date.getMonth()+1)).slice(-2) + '/' +
-                      ('0'+date.getDate()).slice(-2);
+                      var dateString =
+                          String(date.getFullYear()) + '/' +
+                          ('0'+(date.getMonth()+1)).slice(-2) + '/' +
+                          ('0'+date.getDate()).slice(-2);
+
+                      $('#'+id).trigger('datachange',[dateString]);
+
+                      return dateString;
                   });
 
                   // $viewValue to $modelValue
@@ -64,16 +73,12 @@ angular.module('App')
                       return new Date(value.replace(/-/g,'/'));
                   });
 
-                  //  id付与
-                  var id = 'date'+scope.$id;
-                  attrs.$set('id', id);
-
-                  // 日付形式のフォーマットを設定
                   setTimeout(function(){
+                      // 日付形式のフォーマットを設定
                       $('#'+id).FormattingTextbox("____/__/__",{
                           inputRegExp:/[0-9]/
                           ,delimiterRegExp:/[\/]/
-                        });
+                      });
                   },0);
 
                   return;
