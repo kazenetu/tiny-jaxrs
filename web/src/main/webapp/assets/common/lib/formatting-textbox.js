@@ -154,6 +154,12 @@ p.init = function(){
   $(instance.targetId).on("keyup",function(e){
     e.preventDefault();
   });
+
+  // データ変更用カスタムイベント
+  $(instance.targetId).on("datachange",function(e, data){
+    instance.dataArray = data.split('');
+    instance.displayText();
+  });
 };
 this.FormattingTextbox = new FormattingTextbox(this.selector,format,option);
 this.FormattingTextbox.init();
