@@ -40,6 +40,12 @@ angular.module('App')
             // スペーストリミングを無効にする
             attrs.$set('ngTrim', "false");
 
+            // date有効ブラウザ用
+            if(isDateType && Modernizr.inputtypes.date) {
+                // 最大日付を設定
+                attrs.$set('max', "2100-12-31");
+            }
+
             // IE11用 日付
             if(isDateType && !Modernizr.inputtypes.date ){
                 //  id付与
