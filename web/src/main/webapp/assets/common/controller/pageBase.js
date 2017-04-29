@@ -176,7 +176,7 @@ front.common.controller.PageBase = function PageBase(){
         }
         var srcArray = src.toString().split('.');
         var srcIntPart = '0';
-        var srcDecimalPart = '0';
+        var srcDecimalPart = '';
         if(/^[0-9]+[.][0-9]+$/.test(src)) {
             srcIntPart = srcArray[0];
             srcDecimalPart = srcArray[1];
@@ -205,9 +205,14 @@ front.common.controller.PageBase = function PageBase(){
         }
 
         // 小数部
-        if(decimalPartCount > 0){
-            regString += '[0-9]{0,' + decimalPartCount + '}';
-            if(!(new RegExp('^'+ regString + '$').test(srcDecimalPart))){
+        if(srcDecimalPart.length > 0){
+            if(decimalPartCount > 0){
+                regString = '[0-9]{0,' + decimalPartCount + '}';
+                if(!(new RegExp('^'+ regString + '$').test(srcDecimalPart))){
+                    return false;
+                }
+            }
+            else {
                 return false;
             }
         }
