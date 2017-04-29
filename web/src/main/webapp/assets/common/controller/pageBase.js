@@ -174,23 +174,45 @@ front.common.controller.PageBase = function PageBase(){
         if(decimalPartCount === null || decimalPartCount === undefined) {
             decimalPartCount = 0;
         }
+        var srcArray = src.toString().split('.');
+        var srcIntPart = '0';
+        var srcDecimalPart = '0';
+        if(/^[0-9]+[.][0-9]+$/.test(src)) {
+            srcIntPart = srcArray[0];
+            srcDecimalPart = srcArray[1];
+        }
+        else {
+            if(/[.]$/.test(src)) {
+                srcDecimalPart = srcArray[0];
+            }
+            else{
+                srcIntPart = srcArray[0];
+            }
+        }
+        // 整数部はいったん数値に変換してゼロを除去
+        srcIntPart = parseInt(srcIntPart,10).toString();
+
         var regString = '';
-        var count;
+
         // 整数部
-        if(intPartCount>1){
-            regString += '[1-9]?';
+        if(intPartCount > 1){
+            regString = '[1-9]?';
             intPartCount -= 1;
         }
         regString += '[0-9]{1,' + intPartCount + '}';
+        if(!(new RegExp('^'+ regString + '$').test(srcIntPart))) {
+            return false;
+        }
 
         // 小数部
         if(decimalPartCount > 0){
-            regString += '[.]?[0-9]{0,' + decimalPartCount + '}';
-            for(count=decimalPartCount;count>0;count--){
+            regString += '[0-9]{0,' + decimalPartCount + '}';
+            if(!(new RegExp('^'+ regString + '$').test(srcDecimalPart))){
+                return false;
             }
         }
 
-        return new RegExp('^'+ regString + '$').test(src);
+        return true;
     }
 
     /**
