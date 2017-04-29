@@ -70,6 +70,8 @@ front.common.component.HeaderController = function HeaderController($location, u
                 front.common.messages = response;
             });
         }
+
+        $('.modal-backdrop').remove();
     };
 
     /**
