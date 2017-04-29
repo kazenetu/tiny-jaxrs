@@ -51,9 +51,9 @@ angular.module('App')
                 ngModel.$formatters.length = 0;
                 // $modelValue to $viewValue
                   ngModel.$formatters.push(function(date){
-                  if(date == null || date === undefined){
-                      return '';
-                  }
+                      if(date == null || date === undefined){
+                          return '';
+                      }
                       var dateString =
                           String(date.getFullYear()) + '/' +
                           ('0'+(date.getMonth()+1)).slice(-2) + '/' +
@@ -84,13 +84,37 @@ angular.module('App')
                   return;
             }
 
-            //IE11用 数値型
-            if(isNumberType && !Modernizr.inputtypes.number ){
+            //数値型用イベント
+            if(isNumberType) {
+                // キーダウン：特殊キーと数値以外は入力不可
                 element.bind('keydown', function (e) {
-                    if(e.key!=="Backspace" && (e.char!=='' && !/[0-9.]/.test(e.char))){
+                    if(e.key.length <= 1 && !/[0-9.]/.test(e.key)){
                           return false;
                     }
                     return true;
+                });
+                // フォーカスロスト：整数部の不要な0を排除
+                element.bind('blur', function (e) {
+                    if(scope.ngModel === null){
+                        return;
+                    }
+                    var value = $(element).val();
+                    var values = value.split('.');
+
+                    //整数部を数値化→文字列化
+                    value = Number(values[0]).toString();
+                    if(values.length > 1){
+                        // 小数部があればそのまま追加
+                        value += '.' + values[1];
+                    }
+                    $(element).val(value);
+
+
+
+                    /*
+                    var value = Number($(element).val()).toString();
+                    $(element).val(value);
+                    */
                 });
             }
 
