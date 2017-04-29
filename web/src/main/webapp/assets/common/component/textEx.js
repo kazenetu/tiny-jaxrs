@@ -108,13 +108,6 @@ angular.module('App')
                         value += '.' + values[1];
                     }
                     $(element).val(value);
-
-
-
-                    /*
-                    var value = Number($(element).val()).toString();
-                    $(element).val(value);
-                    */
                 });
             }
 
