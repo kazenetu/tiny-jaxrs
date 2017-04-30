@@ -3,6 +3,7 @@ package web.model;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +60,7 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public List<UserEntity> getAllUsers(UserListEntity seachCondition) throws Exception{
-        String sql = "select * from MT_USER";
+        String sql = "SELECT  mt_user.user_id  , mt_user.name  ,test_table.decmal_data  , mt_user.password  , mt_user.date_data  , mt_user.time_data  , mt_user.ts_data FROM  mt_user inner join test_table   on test_table.str_data = mt_user.user_id";
 
         // 検索条件
         String searchUserId = seachCondition.getSearchUserId();
@@ -95,6 +96,64 @@ public class UserModel extends Model{
         }
 
         return entities;
+    }
+
+    /**
+     * ユーザー全レコードCSVを取得する
+     * @return ユーザー全レコードのリスト
+     * @throws Exception
+     */
+    public String getAllUsersCsv(UserListEntity seachCondition,List<String> columnNames) throws Exception{
+        String sql = "select * from MT_USER";
+
+        // 検索条件
+        String searchUserId = seachCondition.getSearchUserId();
+
+        // パラメータの設定
+        ArrayList<Object> params = new ArrayList<>();
+        if(!isNullorEmpty(searchUserId)){
+            sql += " where USER_ID like ? ";
+            params.add("%" + searchUserId + "%");
+        }
+
+        StringBuilder csvData = new StringBuilder();
+        try {
+            // フェッチサイズを100行に設定
+            db.setFetchSize(100);
+
+            List<Map<String,Object>> result = db.query(sql, params);
+            if (!result.isEmpty()) {
+
+                result.forEach(row->{
+                    boolean isFirst = false;
+
+                    for(String columnName : columnNames){
+                        csvData.append(getCsvColumnValue(row,columnName,isFirst));
+                        isFirst = true;
+                    }
+                    csvData.append(String.format("%n"));
+                });
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new Exception(e);
+        }
+
+        return csvData.toString();
+    }
+    private String getCsvColumnValue(Map<String,Object> row,String columnName,boolean isFirst) {
+        Object value = getColumnValue(row,columnName);
+
+        // TODO 変換とダブルクォーテーション
+        if(value != null){
+            if(value.getClass() == Date.class) {
+                DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                value = ((Date)value).toLocalDate().format(f);
+            }
+        }
+
+        // TODO 前カンマ
+        return "";
     }
 
     /**
