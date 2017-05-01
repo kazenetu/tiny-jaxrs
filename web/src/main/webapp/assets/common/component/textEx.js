@@ -80,15 +80,14 @@ angular.module('App')
                           dateString = dateToString(result);
                           $('#'+id).trigger('datachange',[dateString]);
                       }
+                      return result;
                   });
 
-                  setTimeout(function(){
-                      // 日付形式のフォーマットを設定
-                      $('#'+id).FormattingTextbox("____/__/__",{
-                          inputRegExp:/[0-9]/
-                          ,delimiterRegExp:/[\/]/
-                      });
-                  },0);
+                  // 日付形式のフォーマットを設定
+                  $('#'+id).FormattingTextbox("____/__/__",{
+                      inputRegExp:/[0-9]/
+                      ,delimiterRegExp:/[\/]/
+                  });
 
                   /**
                    * Date型を文字列に変換
