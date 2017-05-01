@@ -60,10 +60,7 @@ angular.module('App')
                       if(date == null || date === undefined){
                           return '';
                       }
-                      var dateString =
-                          String(date.getFullYear()) + '/' +
-                          ('0'+(date.getMonth()+1)).slice(-2) + '/' +
-                          ('0'+date.getDate()).slice(-2);
+                      var dateString = dateToString(date);
 
                       $('#'+id).trigger('datachange',[dateString]);
 
@@ -76,7 +73,13 @@ angular.module('App')
                       if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
                           return null;
                       }
-                      return new Date(value.replace(/-/g,'/'));
+                      var result = new Date(value.replace(/-/g,'/'));
+                      var dateString = dateToString(result);
+                      if(value !== dateString){
+                          result = new Date(result.getFullYear(),result.getMonth(),0);
+                          dateString = dateToString(result);
+                          $('#'+id).trigger('datachange',[dateString]);
+                      }
                   });
 
                   setTimeout(function(){
@@ -86,6 +89,18 @@ angular.module('App')
                           ,delimiterRegExp:/[\/]/
                       });
                   },0);
+
+                  /**
+                   * Date型を文字列に変換
+                   */
+                  function dateToString(date) {
+                      if(date == null || date === undefined){
+                          return '';
+                      }
+                      return String(date.getFullYear()) + '/' +
+                              ('0'+(date.getMonth()+1)).slice(-2) + '/' +
+                              ('0'+date.getDate()).slice(-2);
+                  }
 
                   return;
             }
