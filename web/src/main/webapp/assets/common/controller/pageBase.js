@@ -168,7 +168,7 @@ front.common.controller.PageBase = function PageBase(){
      */
     ctrl.isNumber = function(src, intPartCount, decimalPartCount) {
         if(src === null || src === undefined) {
-            return true;
+            return false;
         }
 
         if(decimalPartCount === null || decimalPartCount === undefined) {
