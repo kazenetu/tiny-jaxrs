@@ -2,7 +2,7 @@
  * inputタグ拡張ディレクティブ
  */
 angular.module('App')
-.directive('textEx', ['$compile', function($compile){
+.directive('textEx', [function(){
     return{
         restrict: 'A',
         scope:{
