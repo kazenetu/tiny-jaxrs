@@ -57,7 +57,7 @@ angular.module('App')
                 ngModel.$formatters.length = 0;
                 // $modelValue to $viewValue
                   ngModel.$formatters.push(function(date){
-                      if(date == null || date === undefined){
+                      if(date === null || date === undefined){
                           return '';
                       }
                       var dateString = dateToString(date);
