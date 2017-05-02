@@ -46,76 +46,86 @@ angular.module('App')
                 attrs.$set('max', "2100-12-31");
             }
 
-            // IE11用 日付
-            if(isDateType && !Modernizr.inputtypes.date ){
+            // 日付用
+            if(isDateType){
                 //  id付与
                 var id = 'date'+scope.$id;
                 attrs.$set('id', id);
 
-                var ngModel = element.controller('ngModel');
+                // IE11用
+                if(!Modernizr.inputtypes.date) {
+                    var ngModel = element.controller('ngModel');
 
-                ngModel.$formatters.length = 0;
-                // $modelValue to $viewValue
-                  ngModel.$formatters.push(function(date){
-                      if(date === null || date === undefined){
-                          return '____/__/__';
-                      }
-                      var dateString = dateToString(date);
+                    ngModel.$formatters.length = 0;
+                    // $modelValue to $viewValue
+                      ngModel.$formatters.push(function(date){
+                          if(date === null || date === undefined){
+                              return '____/__/__';
+                          }
+                          var dateString = dateToString(date);
 
-                      $('#'+id).trigger('datachange',[dateString]);
-
-                      return dateString;
-                  });
-
-                  // $viewValue to $modelValue
-                  ngModel.$parsers.length = 0;
-                  ngModel.$parsers.push(function(value){
-                      if(value === '____/__/__'){
-                          return null;
-                      }
-
-                      if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
-                          return undefined;
-                      }
-                      var result = new Date(value.replace(/-/g,'/'));
-                      if(result.toString() === 'Invalid Date'){
-                          return undefined;
-                      }
-
-                      var dateString = dateToString(result);
-                      if(value !== dateString){
-                          result = new Date(result.getFullYear(),result.getMonth(),0);
-                          dateString = dateToString(result);
                           $('#'+id).trigger('datachange',[dateString]);
-                      }
-                      return result;
-                  });
 
-                  // 日付形式のフォーマットを設定
-                  setTimeout(function(){
-                      $('#'+id).FormattingTextbox("____/__/__",{
-                          inputRegExp:/[0-9]/
-                          ,delimiterRegExp:/[\/]/
+                          return dateString;
                       });
-                      var dateString = dateToString(scope.ngModel);
-                      if(dateString !== ''){
-                          $('#'+id).trigger('datachange',[dateString]);
-                      }
-                  },0);
 
-                  /**
-                   * Date型を文字列に変換
-                   */
-                  function dateToString(date) {
-                      if(date == null || date === undefined){
-                          return '';
-                      }
-                      return String(date.getFullYear()) + '/' +
-                              ('0'+(date.getMonth()+1)).slice(-2) + '/' +
-                              ('0'+date.getDate()).slice(-2);
-                  }
+                      // $viewValue to $modelValue
+                      ngModel.$parsers.length = 0;
+                      ngModel.$parsers.push(function(value){
+                          if(value === '____/__/__'){
+                              return null;
+                          }
 
-                  return;
+                          if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
+                              return undefined;
+                          }
+                          var result = new Date(value.replace(/-/g,'/'));
+                          if(result.toString() === 'Invalid Date'){
+                              return undefined;
+                          }
+
+                          var dateString = dateToString(result);
+                          if(value !== dateString){
+                              result = new Date(result.getFullYear(),result.getMonth(),0);
+                              dateString = dateToString(result);
+                              $('#'+id).trigger('datachange',[dateString]);
+                          }
+                          return result;
+                      });
+
+                      // 日付形式のフォーマットを設定
+                      setTimeout(function(){
+                          $('#'+id).FormattingTextbox("____/__/__",{
+                              inputRegExp:/[0-9]/
+                              ,delimiterRegExp:/[\/]/
+                          });
+                          var dateString = dateToString(scope.ngModel);
+                          if(dateString !== ''){
+                              $('#'+id).trigger('datachange',[dateString]);
+                          }
+                      },0);
+
+                      /**
+                       * Date型を文字列に変換
+                       */
+                      function dateToString(date) {
+                          if(date == null || date === undefined){
+                              return '';
+                          }
+                          return String(date.getFullYear()) + '/' +
+                                  ('0'+(date.getMonth()+1)).slice(-2) + '/' +
+                                  ('0'+date.getDate()).slice(-2);
+                      }
+
+                      return;
+                }
+                // type=date有効ブラウザ用ロストフォーカスイベント
+                element.bind('blur', function (e) {
+                    // 入力OKでngModelがエラーの場合はnullを設定
+                    if($('#'+id)[0].checkValidity() && scope.ngModel === undefined) {
+                        scope.ngModel = null;
+                    }
+                });
             }
 
             //数値型用イベント
