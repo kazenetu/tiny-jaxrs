@@ -7,6 +7,7 @@ front.controller.InputcheckController =  function InputcheckController($location
     ctrl.inputAlpha = '';
     ctrl.inputKana = '';
     ctrl.inputNumber = 0;
+    ctrl.inputDate = null;
 
     /**
      * 入力チェック
@@ -42,6 +43,14 @@ front.controller.InputcheckController =  function InputcheckController($location
         if(ctrl.inputKana !== ''){
             if(!ctrl.isKana(ctrl.inputKana)){
                 ctrl.showError('カタカナエラー');
+                return;
+            }
+        }
+
+        // 日付チェック
+        if(ctrl.inputDate !== null) {
+            if(!ctrl.isValidDate(ctrl.inputDate)) {
+                ctrl.showError('日付エラー');
                 return;
             }
         }
