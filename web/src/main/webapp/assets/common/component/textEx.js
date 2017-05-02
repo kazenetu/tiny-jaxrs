@@ -58,7 +58,7 @@ angular.module('App')
                 // $modelValue to $viewValue
                   ngModel.$formatters.push(function(date){
                       if(date === null || date === undefined){
-                          return '';
+                          return '____/__/__';
                       }
                       var dateString = dateToString(date);
 
@@ -70,10 +70,18 @@ angular.module('App')
                   // $viewValue to $modelValue
                   ngModel.$parsers.length = 0;
                   ngModel.$parsers.push(function(value){
-                      if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
+                      if(value === '____/__/__'){
                           return null;
                       }
+
+                      if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
+                          return undefined;
+                      }
                       var result = new Date(value.replace(/-/g,'/'));
+                      if(result.toString() === 'Invalid Date'){
+                          return undefined;
+                      }
+
                       var dateString = dateToString(result);
                       if(value !== dateString){
                           result = new Date(result.getFullYear(),result.getMonth(),0);
@@ -84,10 +92,16 @@ angular.module('App')
                   });
 
                   // 日付形式のフォーマットを設定
-                  $('#'+id).FormattingTextbox("____/__/__",{
-                      inputRegExp:/[0-9]/
-                      ,delimiterRegExp:/[\/]/
-                  });
+                  setTimeout(function(){
+                      $('#'+id).FormattingTextbox("____/__/__",{
+                          inputRegExp:/[0-9]/
+                          ,delimiterRegExp:/[\/]/
+                      });
+                      var dateString = dateToString(scope.ngModel);
+                      if(dateString !== ''){
+                          $('#'+id).trigger('datachange',[dateString]);
+                      }
+                  },0);
 
                   /**
                    * Date型を文字列に変換
