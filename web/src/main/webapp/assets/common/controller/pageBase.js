@@ -221,6 +221,16 @@ front.common.controller.PageBase = function PageBase(){
     }
 
     /**
+     * 日付が有効か否か
+     */
+    ctrl.isValidDate = function(date) {
+        if(date === null || date === undefined) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Dateから文字列(yyyyMMdd)に変換
      */
     ctrl.dateToString = function(src) {
