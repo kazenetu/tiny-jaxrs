@@ -92,7 +92,6 @@ front.controller.UserEditController = function UserEditController($q, $location,
         // 新規作成時のみチェックする
         if(settings.isCreateMode()){
             if(ctrl.userId === ''){
-                ctrl.userIdIcon = ctrl.ICONS.NG;
                 return;
             }
 
