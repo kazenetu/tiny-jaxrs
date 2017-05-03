@@ -25,7 +25,7 @@
                     </div>
                     <div class=col-sm-2>
                     <input type="text" id = "userId" data-ng-disabled="!ctrl.isCreateMode()" class="form-control"
-                        data-ng-blur='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
+                        data-ng-change='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
                     </div>
                     <div class=col-sm-5 data-ng-show="ctrl.isCreateMode()">
                         <span data-ng-show="ctrl.userIdIcon === ctrl.ICONS.OK" class="glyphicon {{ctrl.userIdIcon}} text-success" aria-hidden="true">登録できます</span>
