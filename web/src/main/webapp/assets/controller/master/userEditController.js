@@ -104,7 +104,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
                 if(response.responseData === null){
                     // レコードがなければOKアイコン
                     ctrl.userIdIcon = ctrl.ICONS.OK;
-                    ctrl.checkClearRequired('errorUserId');
+                    ctrl.errorUserId = '';
                 }else{
                     //レコードがあればNGアイコン
                     ctrl.userIdIcon = ctrl.ICONS.NG;
@@ -204,16 +204,6 @@ front.controller.UserEditController = function UserEditController($q, $location,
                 // 取得結果をコントロールに設定
                 settings.setEditControls(response.responseData);
             });
-        }
-    }
-
-    /**
-     * 必須入力エラー後に入力があるか
-     */
-    ctrl.checkClearRequired = function(target){
-        if(this[target] !== ''){
-            this[target] = '';
-            ctrl.hideError();
         }
     }
 
