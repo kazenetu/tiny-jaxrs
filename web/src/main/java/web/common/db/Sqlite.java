@@ -32,41 +32,47 @@ public class Sqlite implements Database {
     private Connection con = null;
     private boolean isSetTransaction = false;
     private int fetchSize = -1;
+    private boolean isCreateConnection = false;
 
-    public Sqlite() {
+    public Sqlite(Connection connection) {
+        if(connection == null) {
+            isCreateConnection = true;
+            // context.xmlからDataSourceを取得
+            try {
+                InitialContext context = new InitialContext();
+                DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/SQLite");
+                con = ds.getConnection();
+                context.close();
+                return;
+            } catch (Exception e1) {
+                logger.debug("外部ファイルからコネクション取得失敗："+e1.getMessage());
+            }
 
-        // context.xmlからDataSourceを取得
-        try {
-            InitialContext context = new InitialContext();
-            DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/SQLite");
-            con = ds.getConnection();
-            context.close();
-            return;
-        } catch (Exception e1) {
-            logger.debug("外部ファイルからコネクション取得失敗："+e1.getMessage());
+            logger.debug("デバッグ用コネクションを取得");
+
+            // 取得できない場合はリソースパスから取得
+            try {
+                //クラスローダーからdbファイルの物理パスを取得する
+                String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
+
+                // データベースに接続する なければ作成される
+                SQLiteDataSource sqliteDs = new SQLiteDataSource();
+                sqliteDs.setUrl("jdbc:sqlite:" + filePath);
+
+                con = sqliteDs.getConnection();
+
+            } catch (Exception e) {
+                logger.debug("デバッグ用コネクション取得失敗："+e.getMessage());
+            }
         }
-
-        logger.debug("デバッグ用コネクションを取得");
-
-        // 取得できない場合はリソースパスから取得
-        try {
-            //クラスローダーからdbファイルの物理パスを取得する
-            String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
-
-            // データベースに接続する なければ作成される
-            SQLiteDataSource sqliteDs = new SQLiteDataSource();
-            sqliteDs.setUrl("jdbc:sqlite:" + filePath);
-
-            con = sqliteDs.getConnection();
-
-        } catch (Exception e) {
-            logger.debug("デバッグ用コネクション取得失敗："+e.getMessage());
+        else{
+            con = connection;
         }
     }
 
     @Override
     public void close() throws Exception {
-        if (con != null) {
+        if (con != null && isCreateConnection) {
             try {
                 if (isSetTransaction) {
                     con.rollback();
@@ -83,7 +89,18 @@ public class Sqlite implements Database {
      * @param rows 行サイズ
      */
     public void setFetchSize(int rows){
+        if(!isCreateConnection){
+            return;
+        }
         fetchSize = rows;
+    }
+
+    /**
+     * コネクション取得
+     * @return コネクション
+     */
+    public Connection getConnection(){
+        return con;
     }
 
     /**
@@ -91,6 +108,9 @@ public class Sqlite implements Database {
      * @throws Exception 例外エラー
      */
     public void setTransaction() throws Exception {
+        if(!isCreateConnection){
+            return;
+        }
         try {
             con.setAutoCommit(false);
             con.setSavepoint();
@@ -105,6 +125,9 @@ public class Sqlite implements Database {
      * @throws Exception 例外エラー
      */
     public void commit() throws Exception {
+        if(!isCreateConnection){
+            return;
+        }
         try {
             con.commit();
             isSetTransaction = false;
@@ -118,6 +141,9 @@ public class Sqlite implements Database {
      * @throws Exception 例外エラー
      */
     public void rollback() throws Exception {
+        if(!isCreateConnection){
+            return;
+        }
         try {
             con.rollback();
             isSetTransaction = false;

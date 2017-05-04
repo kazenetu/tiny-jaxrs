@@ -27,36 +27,44 @@ public class PostgreSql implements Database {
     private Connection con = null;
     private boolean isSetTransaction = false;
     private int fetchSize = -1;
+    private boolean isCreateConnection = false;
 
-    public PostgreSql(){
+    public PostgreSql(Connection connection){
+        if(connection == null) {
+            isCreateConnection = true;
 
-        // context.xmlからDataSourceを取得
-        try {
-            InitialContext context = new InitialContext();
-            DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/PostgreSql");
-            con = ds.getConnection();
-            con.setAutoCommit(false);
-            context.close();
-            return;
-        } catch (Exception e1) {
-            logger.debug("外部ファイルからコネクション取得失敗："+e1.getMessage());
+            // context.xmlからDataSourceを取得
+            try {
+                InitialContext context = new InitialContext();
+                DataSource ds = (DataSource)context.lookup("java:comp/env/jdbc/PostgreSql");
+                con = ds.getConnection();
+                con.setAutoCommit(false);
+                context.close();
+                return;
+            } catch (Exception e1) {
+                logger.debug("外部ファイルからコネクション取得失敗："+e1.getMessage());
+            }
+
+            logger.debug("デバッグ用コネクションを取得");
+
+            // 取得できない場合はリソースパスから取得
+            try {
+                Class.forName("org.postgresql.Driver");
+                con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testDB","test","test");
+                con.setAutoCommit(false);
+            } catch (Exception e) {
+                logger.debug("デバッグ用コネクション取得失敗："+e.getMessage());
+            }
+        }
+        else{
+            con = connection;
         }
 
-        logger.debug("デバッグ用コネクションを取得");
-
-        // 取得できない場合はリソースパスから取得
-        try {
-            Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/testDB","test","test");
-            con.setAutoCommit(false);
-        } catch (Exception e) {
-            logger.debug("デバッグ用コネクション取得失敗："+e.getMessage());
-        }
     }
 
     @Override
     public void close() throws Exception {
-        if (con != null) {
+        if (con != null && isCreateConnection) {
             try {
                 if (isSetTransaction) {
                     con.rollback();
@@ -73,7 +81,18 @@ public class PostgreSql implements Database {
      * @param rows 行サイズ
      */
     public void setFetchSize(int rows){
+        if(!isCreateConnection){
+            return;
+        }
         fetchSize = rows;
+    }
+
+    /**
+     * コネクション取得
+     * @return コネクション
+     */
+    public Connection getConnection(){
+        return con;
     }
 
     /**
@@ -81,6 +100,9 @@ public class PostgreSql implements Database {
      * @throws Exception 例外エラー
      */
     public void setTransaction() throws Exception {
+        if(!isCreateConnection){
+            return;
+        }
         try {
             con.setSavepoint();
             isSetTransaction = true;
@@ -94,6 +116,9 @@ public class PostgreSql implements Database {
      * @throws Exception 例外エラー
      */
     public void commit() throws Exception {
+        if(!isCreateConnection){
+            return;
+        }
         try {
             con.commit();
             isSetTransaction = false;
@@ -107,6 +132,9 @@ public class PostgreSql implements Database {
      * @throws Exception 例外エラー
      */
     public void rollback() throws Exception {
+        if(!isCreateConnection){
+            return;
+        }
         try {
             con.rollback();
             isSetTransaction = false;
@@ -123,7 +151,7 @@ public class PostgreSql implements Database {
      * @throws Exception 実行時例外エラー
      */
     public int execute(String sql, List<Object> params) throws Exception {
-        if(!isSetTransaction) {
+        if(!isSetTransaction && isCreateConnection) {
             throw new Exception("setTransactionメソッドが実行されていません");
         }
 

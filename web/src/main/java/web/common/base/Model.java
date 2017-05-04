@@ -1,5 +1,6 @@
 package web.common.base;
 
+import java.sql.Connection;
 import java.util.Map;
 
 import web.common.db.Database;
@@ -41,10 +42,24 @@ public abstract class Model implements AutoCloseable {
     private ColumnType columnType;
 
     /**
-     * コンストラクタ
+     * コンストラクタ(コネクション作成)
      */
     public Model() {
+        initialize(null);
+    }
 
+    /**
+     * コンストラクタ(コネクション引き継ぎ)
+     * @param mainModel メインModel
+     */
+    public Model(Model mainModel){
+        initialize(mainModel.db.getConnection());
+    }
+
+    /**
+     * 初期化
+     */
+    public void initialize(Connection connection) {
         // dbの種類を設定
         String dbName = System.getenv("DBNAME");
 
@@ -54,12 +69,12 @@ public abstract class Model implements AutoCloseable {
 
         // dbのインスタンスを作成
         if (DBType.SQLite.toString().equals(dbName)) {
-            db = new Sqlite();
+            db = new Sqlite(connection);
             columnType = ColumnType.UPPER;
             return;
         }
         if (DBType.PostgreSQL.toString().equals(dbName)) {
-            db = new PostgreSql();
+            db = new PostgreSql(connection);
             columnType = ColumnType.LOWER;
             return;
         }

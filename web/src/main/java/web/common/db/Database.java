@@ -1,5 +1,6 @@
 package web.common.db;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,12 @@ public interface Database {
      * @param rows 行サイズ
      */
     void setFetchSize(int rows);
+
+    /**
+     * コネクション取得
+     * @return コネクション
+     */
+    Connection getConnection();
 
     /**
      * トランザクション設定
