@@ -20,6 +20,8 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         templateUrl : 'view/sample/inputcheck.html',
     }).when('/sample/numbercheck', {
         templateUrl : 'view/sample/numbercheck.html',
+    }).when('/sample/multi', {
+        templateUrl : 'view/sample/multi.html',
 
     }).otherwise({
         redirectTo : '/'
