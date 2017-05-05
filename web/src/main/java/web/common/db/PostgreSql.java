@@ -76,7 +76,7 @@ public class PostgreSql implements Database {
         }
     }
 
-    /*
+    /**
      * フェッチサイズを設定
      * @param rows 行サイズ
      */

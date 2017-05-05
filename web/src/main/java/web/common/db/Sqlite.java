@@ -84,7 +84,7 @@ public class Sqlite implements Database {
         }
     }
 
-    /*
+    /**
      * フェッチサイズを設定
      * @param rows 行サイズ
      */
