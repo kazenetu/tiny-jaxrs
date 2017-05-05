@@ -76,7 +76,7 @@ angular.module('App')
                               return null;
                           }
 
-                          if(!/^[0-9]{4}\/[0-9]?[1-9]\/[0-9]?[1-9]$/.test(value)){
+                          if(!/^[0-9]{4}\/[0-9]?[0-9]\/[0-9]?[0-9]$/.test(value)){
                               return undefined;
                           }
                           var result = new Date(value.replace(/-/g,'/'));
