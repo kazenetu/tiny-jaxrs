@@ -82,38 +82,49 @@ p.init = function(){
       //置き換え位置の設定と値の設定
       if(isBS || isDel){
         if(isBS){
-          //カーソルの移動
-          startPos--;
-          if(startPos<0){
-            startPos=0;
-          }
-          if(instance.delimiterRegExp.test(instance.dataArray[startPos])){
+          var count = $(this)[0].selectionStart;
+          var endPos = $(this)[0].selectionEnd;
+          startPos = endPos;
+          if(count === endPos) endPos++;
+          while(count < endPos){
             startPos--;
-          }
+            if(startPos<0){
+              startPos=0;
+            }
 
-          //置き換え
-          instance.dataArray[startPos] = "_";
+            //カーソルの移動
+            if(instance.delimiterRegExp.test(instance.dataArray[startPos])){
+              startPos--;
+              count++;
+            }
+            //置き換え
+            instance.dataArray[startPos] = "_";
+
+            count++;
+          }
         }
         if(isDel){
-          var index = startPos;
-          while(index < instance.format.length-1){
-            if(instance.delimiterRegExp.test(instance.dataArray[index]) === false){
-              if(instance.delimiterRegExp.test(instance.dataArray[index+1])){
-                instance.dataArray[index] = instance.dataArray[index+2];
-              }else{
-                instance.dataArray[index] = instance.dataArray[index+1];
-              }
-            }
-            index++;
+          var count = $(this)[0].selectionStart;
+          var endPos = $(this)[0].selectionEnd;
+          startPos = count;
+          if(count === endPos) endPos++;
+          while(count < endPos){
+              var index = startPos;
+              while(index < instance.format.length-1){
+                  if(!instance.delimiterRegExp.test(instance.dataArray[index])){
+                    if(instance.delimiterRegExp.test(instance.dataArray[index+1])){
+                      instance.dataArray[index] = instance.dataArray[index+2];
+                    }else{
+                      instance.dataArray[index] = instance.dataArray[index+1];
+                    }
+                  }
+                  index++;
+               }
+               instance.dataArray[index] = "_";
+               count++;
           }
-          instance.dataArray[index] = "_";
         }
       }else{
-        //最終桁に入力があれば終了
-        var index = instance.format.length-1;
-        if(instance.dataArray[index] !== "_"){
-          return;
-        }
 
         //字送りを行う
         while(startPos < index){
