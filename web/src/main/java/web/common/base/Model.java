@@ -1,6 +1,12 @@
 package web.common.base;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import web.common.db.Database;
@@ -113,6 +119,44 @@ public abstract class Model implements AutoCloseable {
             key = columnName.toLowerCase();
         }
         return row.get(key);
+    }
+
+    /**
+     * CSV出力用カンマ区切り文字列取得
+     * @param recordSet DBから取得したRecordSet
+     * @param colCount カラム数
+     * @return カンマ区切り文字列取得
+     * @throws SQLException
+     */
+    protected String getCsvColumnValue(ResultSet recordSet,int colCount) throws SQLException {
+        List<String> result = new  ArrayList<>();
+
+        Object value = null;
+        boolean isDoubleQuote = false;
+        for(int colIndex = 1;colIndex <= colCount;colIndex++) {
+            value = recordSet.getObject(colIndex);
+
+            // ダブルクォーテーション囲みあり
+            isDoubleQuote = true;
+            if(value != null){
+                Class<? extends Object> valueClass = value.getClass();
+                if(valueClass == Date.class) {
+                    DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                    value = ((Date)value).toLocalDate().format(f);
+                }
+                if(valueClass == Integer.class || valueClass == java.math.BigDecimal.class) {
+                    isDoubleQuote = false;
+                }
+            }
+            if(isDoubleQuote){
+                result.add(String.format("\"%s\"", value));
+            }
+            else{
+                result.add(String.format("%s", value));
+            }
+        }
+
+        return String.join(",", result);
     }
 
     /**
