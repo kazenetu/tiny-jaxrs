@@ -40,6 +40,12 @@ td
 
                         <input type="submit" class="btn" value="CSV出力">
                     </form>
+                    <form action="api/user/downloadCSV" method="POST" style="float:left;padding-right:1em;">
+                        <input type="hidden" name="userId" value={{ctrl.userId}}>
+                        <input type="hidden" name="userName" value={{ctrl.userName}}>
+
+                        <input type="submit" class="btn" value="CSV出力ストリーム版">
+                    </form>
                     <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
                         <input type="hidden" name="userId" value={{ctrl.userId}}>
                         <input type="hidden" name="userName" value={{ctrl.userName}}>

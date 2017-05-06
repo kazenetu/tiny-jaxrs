@@ -1,9 +1,12 @@
 package web.model;
 
+import java.io.BufferedWriter;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +63,8 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public List<UserEntity> getAllUsers(UserListEntity seachCondition) throws Exception{
-        String sql = "SELECT  mt_user.user_id  , mt_user.name  ,test_table.decmal_data  , mt_user.password  , mt_user.date_data  , mt_user.time_data  , mt_user.ts_data FROM  mt_user inner join test_table   on test_table.str_data = mt_user.user_id";
+//        String sql = "SELECT  mt_user.user_id  , mt_user.name  ,test_table.decmal_data  , mt_user.password  , mt_user.date_data  , mt_user.time_data  , mt_user.ts_data FROM  mt_user inner join test_table   on test_table.str_data = mt_user.user_id";
+        String sql = "select * from MT_USER";
 
         // 検索条件
         String searchUserId = seachCondition.getSearchUserId();
@@ -99,11 +103,11 @@ public class UserModel extends Model{
     }
 
     /**
-     * ユーザー全レコードCSVを取得する
+     * ユーザー全レコードCSVを書き込む
      * @return ユーザー全レコードのリスト
      * @throws Exception
      */
-    public String getAllUsersCsv(UserListEntity seachCondition,List<String> columnNames) throws Exception{
+    public void writeAllUsersCsv(UserListEntity seachCondition,BufferedWriter writer) throws Exception{
         String sql = "select * from MT_USER";
 
         // 検索条件
@@ -116,44 +120,31 @@ public class UserModel extends Model{
             params.add("%" + searchUserId + "%");
         }
 
-        StringBuilder csvData = new StringBuilder();
-        try {
+        try (PreparedStatement statement = db.getConnection().prepareStatement(sql);) {
+
             // フェッチサイズを100行に設定
-            db.setFetchSize(100);
+            statement.setFetchSize(100);
 
-            List<Map<String,Object>> result = db.query(sql, params);
-            if (!result.isEmpty()) {
+            int i = 1;
+            for (Object param : params) {
+                statement.setObject(i, param);
+                i++;
+            }
 
-                result.forEach(row->{
-                    boolean isFirst = false;
+            // SQL発行しResultSetを取得
+            ResultSet result = statement.executeQuery();
+            ResultSetMetaData metaData = result.getMetaData();
+            int colCount = metaData.getColumnCount();
 
-                    for(String columnName : columnNames){
-                        csvData.append(getCsvColumnValue(row,columnName,isFirst));
-                        isFirst = true;
-                    }
-                    csvData.append(String.format("%n"));
-                });
+            //結果を書き込む
+            while(result.next()){
+                writer.write(getCsvColumnValue(result,colCount));
+                writer.newLine();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new Exception(e);
         }
-
-        return csvData.toString();
-    }
-    private String getCsvColumnValue(Map<String,Object> row,String columnName,boolean isFirst) {
-        Object value = getColumnValue(row,columnName);
-
-        // TODO 変換とダブルクォーテーション
-        if(value != null){
-            if(value.getClass() == Date.class) {
-                DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-                value = ((Date)value).toLocalDate().format(f);
-            }
-        }
-
-        // TODO 前カンマ
-        return "";
     }
 
     /**

@@ -1,6 +1,12 @@
 package web.resource;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,9 +20,11 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.glassfish.jersey.process.internal.RequestScoped;
 import org.slf4j.Logger;
@@ -421,7 +429,7 @@ public class UserResource extends Resource {
             entities = model.getAllUsers(new UserListEntity(searchUserId));
 
             // CSV出力対象設定
-            CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName"), entities);
+            CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName","getPassword","getAge","getDate","getTime","getTs"), entities);
 
             // サンプルのファイル名
             String fileName = "テスト_" + userName + ".csv";
@@ -444,23 +452,34 @@ public class UserResource extends Resource {
         //認証チェック（認証エラー時は401例外を出す）
         authCheck(userId);
 
-        try (UserModel model = new UserModel()) {
-            // DBからデータ取得
-            List<UserEntity> entities = new ArrayList<>();
-            entities = model.getAllUsers(new UserListEntity(searchUserId));
+        //ストリーミング処理
+        StreamingOutput stream = new StreamingOutput() {
+            //書き込み
+            @Override
+            public void write(OutputStream out)
+                    throws IOException, WebApplicationException {
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));
 
-            // CSV出力対象設定
-            CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName"), entities);
+                try (UserModel model = new UserModel()) {
+                    model.writeAllUsersCsv(new UserListEntity(searchUserId), writer);
+                    writer.flush();
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                } finally {
+                    writer.close();
+                }
+            }
+        };
 
-            // サンプルのファイル名
-            String fileName = "テスト_" + userName + ".csv";
+        // サンプルのファイル名
+        String fileName = "テスト_" + userName + ".csv";
 
-            // 結果を返す
-            return Response.ok(entity)
+        // 結果を返す
+        try {
+            return Response.ok(stream)
                     .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
                     .build();
-
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
         }
