@@ -32,6 +32,11 @@ angular.module('App')
              */
             var isDateType = attrs.type === 'date';
 
+            /**
+             * typeが'time'か否か
+             */
+            var isTimeType = attrs.type === 'time';
+
             // ime-disabledがclassに設定されていれば、半角入力制限をする
             if(!!attrs.class && attrs.class.indexOf('ime-disabled') >= 0){
                 singleByteMode = true;
@@ -126,6 +131,74 @@ angular.module('App')
                         scope.ngModel = null;
                     }
                 });
+            }
+
+            // IE11用時刻
+            if(isTimeType && !Modernizr.inputtypes.time) {
+                //  id付与
+                var id = 'time'+scope.$id;
+                attrs.$set('id', id);
+
+                var ngModel = element.controller('ngModel');
+
+                ngModel.$formatters.length = 0;
+                // $modelValue to $viewValue
+                  ngModel.$formatters.push(function(time){
+                      if(time === null || time === undefined){
+                          return '__:__';
+                      }
+                      var timeString = timeToString(time);
+
+                      $('#'+id).trigger('datachange',[timeString]);
+
+                      return timeString;
+                  });
+
+                  // $viewValue to $modelValue
+                  ngModel.$parsers.length = 0;
+                  ngModel.$parsers.push(function(value){
+                      if(value === '__:__'){
+                          return null;
+                      }
+
+                      if(!/^[0-9]{2}:[0-9]{2}$/.test(value)){
+                          return undefined;
+                      }
+                      var result = new Date('1970/01/01 ' + value);
+                      if(result.toString() === 'Invalid Date'){
+                          return undefined;
+                      }
+
+                      var timeString = timeToString(result);
+                      $('#'+id).trigger('datachange',[timeString]);
+
+                      return result;
+                  });
+
+                  // 時刻形式のフォーマットを設定
+                  setTimeout(function(){
+                      $('#'+id).FormattingTextbox("__:__",{
+                          inputRegExp:/[0-9]/
+                          ,delimiterRegExp:/[:]/
+                      });
+                      var timeString = timeToString(scope.ngModel);
+                      if(timeString !== ''){
+                          $('#'+id).trigger('datachange',[timeString]);
+                      }
+                  },0);
+
+                  /**
+                   * Date型を文字列に変換
+                   */
+                  function timeToString(time) {
+                      if(time == null || time === undefined){
+                          return '';
+                      }
+                      return ('0'+(time.getHours())).slice(-2) + ':' +
+                              ('0'+time.getMinutes()).slice(-2);
+                  }
+
+                  return;
             }
 
             //数値型用イベント
