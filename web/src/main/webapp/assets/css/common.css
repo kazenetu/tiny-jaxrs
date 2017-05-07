@@ -11,7 +11,8 @@ html,body{
 }
 
 /* IE用日付の場合はクリアアイコンを非表示にする */
-input[type=date]::-ms-clear
+input[type=date]::-ms-clear,
+input[type=time]::-ms-clear
 {
     display:none;
 }
