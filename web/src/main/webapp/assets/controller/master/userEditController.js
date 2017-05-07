@@ -37,6 +37,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
             var localeTimeString = null;
             if(ctrl.time !== null){
                 localeTimeString = ctrl.time.toLocaleTimeString();
+                localeTimeString = ctrl.time.getTime();
             }
 
             return {
