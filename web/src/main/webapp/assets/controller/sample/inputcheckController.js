@@ -58,6 +58,14 @@ front.controller.InputcheckController =  function InputcheckController($location
         ctrl.hideError();
     }
 
+    ctrl.clearValue = function(targetName){
+        ctrl[targetName] = null;
+    }
+
+    ctrl.clearDate = function(id){
+        $('#'+id).val(null);
+    }
+
     ctrl.blur = function(name){
         console.log(name+' blur');
     }
