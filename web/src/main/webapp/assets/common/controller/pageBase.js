@@ -236,7 +236,7 @@ front.common.controller.PageBase = function PageBase(){
     ctrl.dateToString = function(src) {
         var type = Object.prototype.toString.call(src).slice(8, -1).toLowerCase();
         if(type === 'date'){
-            return String(src.getFullYear()) +
+            return ('0'+String(src.getFullYear())).slice(-4) +
                     ('0'+(src.getMonth()+1)).slice(-2) +
                     ('0'+src.getDate()).slice(-2);
         }

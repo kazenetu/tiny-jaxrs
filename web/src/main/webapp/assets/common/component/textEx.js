@@ -117,7 +117,7 @@ angular.module('App')
                           if(date == null || date === undefined){
                               return '';
                           }
-                          return String(date.getFullYear()) + '/' +
+                          return ('0'+String(date.getFullYear())).slice(-4) + '/' +
                                   ('0'+(date.getMonth()+1)).slice(-2) + '/' +
                                   ('0'+date.getDate()).slice(-2);
                       }
