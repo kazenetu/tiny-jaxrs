@@ -24,7 +24,7 @@
                         <label class="control-label" for="userId">ユーザーID</label>
                     </div>
                     <div class=col-sm-2>
-                    <input type="text" id = "userId" data-ng-disabled="!ctrl.isCreateMode()" class="form-control"
+                    <input type="text" id = "userId" data-ng-disabled="!ctrl.isCreateMode()" class="form-control ime-disabled" text-ex
                         data-ng-change='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
                     </div>
                     <div class=col-sm-5 data-ng-show="ctrl.isCreateMode()">
