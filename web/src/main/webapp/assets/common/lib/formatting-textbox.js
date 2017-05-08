@@ -61,7 +61,7 @@ p.init = function(){
   instance.displayText();
 
   $(instance.targetId).on("keydown",function(e){
-    if(e.keyCode === 35 || e.keyCode === 36){
+    if(e.keyCode === 35 || e.keyCode === 36 || e.keyCode === 9){
       return;
     }
     var isBS = (e.keyCode === 8);
