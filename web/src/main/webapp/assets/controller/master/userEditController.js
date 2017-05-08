@@ -91,7 +91,7 @@ front.controller.UserEditController = function UserEditController($q, $location,
 
         // 新規作成時のみチェックする
         if(settings.isCreateMode()){
-            if(ctrl.userId === ''){
+            if(ctrl.userId === '' || !/[\s\w-]/g.test(ctrl.userId)){
                 return;
             }
 
