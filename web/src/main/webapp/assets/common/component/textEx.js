@@ -277,7 +277,7 @@ angular.module('App')
                         var type = Object.prototype.toString.call(newVal).slice(8, -1).toLowerCase();
                         if(type === 'string'){
                             // 半角文字以外を削除
-                            newVal = newVal.replace(/[^\s\w]/g,'').replace(/　/g,'');
+                            newVal = newVal.replace(/[^\s\w-]/g,'').replace(/　/g,'');
                         }
                     }
                 }
