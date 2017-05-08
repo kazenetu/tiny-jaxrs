@@ -7,6 +7,7 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
     ctrl.imageData = "";
     ctrl.uploadPath = "";
     ctrl.tag = null;
+    ctrl.timeData = null;
 
     ctrl.searchResult = null;
 
@@ -124,7 +125,8 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
                 requestData : {
                     fileName : ctrl.imageName,
                     imageData : ctrl.imageData,
-                    tag : ctrl.dateToString(ctrl.tag)
+                    tag : ctrl.dateToString(ctrl.tag),
+                    timeData : ctrl.timeToString(ctrl.timeData)
                 }
             }, function(response) {
                 if (response.result !== 'OK') {
@@ -167,6 +169,8 @@ front.controller.UploadController = function UploadController($scope,$q, $locati
                     var item = response.responseData[resultIndex];
                     // 文字列(yyyyMMdd)からDateに変換
                     item.tag = ctrl.stringToDate(item.tag);
+                    // 文字列(hhmm)からDate(Time)に変換
+                    item.timeData = ctrl.stringToTime(item.timeData);
                     resultIndex++;
                 }
 

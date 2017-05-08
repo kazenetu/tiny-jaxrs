@@ -20,6 +20,8 @@
         <div>
             <input type="date" data-ng-model="ctrl.tag"
                 data-text-ex  ><br>
+            <input type="time" data-ng-model="ctrl.timeData"
+                data-text-ex  ><br>
             <button data-ng-click="ctrl.insertOrUpdate()" data-ng-disabled="ctrl.imageName===''" class="btn">登録(ファイル作成)</button>
         <div>
         </div>
@@ -56,6 +58,9 @@
                 <td class="text-left">
                     <input type="date" data-text-ex
                         data-ng-model="result.tag">
+                    <br>
+                    <input type="time" data-ng-model="result.timeData"
+                        data-text-ex  >
                 </td>
             </tr>
         </table>
