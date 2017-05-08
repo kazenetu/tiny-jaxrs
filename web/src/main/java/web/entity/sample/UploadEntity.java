@@ -4,6 +4,7 @@ public class UploadEntity {
     private String fileName;
     private String imageData;
     private String tag;
+    private String timeData;
     /**
      * @return fileName
      */
@@ -39,6 +40,18 @@ public class UploadEntity {
      */
     public void setTag(String tag) {
         this.tag = tag;
+    }
+    /**
+     * @return timeData
+     */
+    public String getTimeData() {
+        return timeData;
+    }
+    /**
+     * @param timeData セットする timeData
+     */
+    public void setTimeData(String timeData) {
+        this.timeData = timeData;
     }
 
 }

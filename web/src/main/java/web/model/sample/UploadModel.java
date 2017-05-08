@@ -19,12 +19,13 @@ public class UploadModel extends Model {
      * @return 成否
      */
     public boolean insert(UploadEntity uploadEntity){
-        String sql = "INSERT INTO T_FILE(ID, IMAGE_DATA, FILE_NAME, TAG) SELECT COALESCE(MAX(ID)+1, 1) ,?,?,? FROM T_FILE;";
+        String sql = "INSERT INTO T_FILE(ID, IMAGE_DATA, FILE_NAME, TAG, TIME_DATA) SELECT COALESCE(MAX(ID)+1, 1) ,?,?,?,? FROM T_FILE;";
 
         ArrayList<Object> params = new ArrayList<>();
         params.add(uploadEntity.getImageData());
         params.add(uploadEntity.getFileName());
         params.add(uploadEntity.getTag());
+        params.add(uploadEntity.getTimeData());
 
         try {
             db.setTransaction();
@@ -49,7 +50,7 @@ public class UploadModel extends Model {
      * @throws Exception
      */
     public List<UploadEntity> getDataList() throws Exception{
-        String sql = "SELECT IMAGE_DATA, FILE_NAME, TAG FROM T_FILE ORDER BY ID;";
+        String sql = "SELECT IMAGE_DATA, FILE_NAME, TAG, TIME_DATA FROM T_FILE ORDER BY ID;";
 
         List<UploadEntity> entities = new ArrayList<>();
 
@@ -62,6 +63,7 @@ public class UploadModel extends Model {
                     entity.setImageData((String)(getColumnValue(row,"IMAGE_DATA")));
                     entity.setFileName((String)(getColumnValue(row,"FILE_NAME")));
                     entity.setTag((String)(getColumnValue(row,"TAG")));
+                    entity.setTimeData((String)(getColumnValue(row,"TIME_DATA")));
 
                     entities.add(entity);
                 });
