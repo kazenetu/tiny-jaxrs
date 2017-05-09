@@ -51,6 +51,12 @@ angular.module('App')
                 attrs.$set('max', "2100-12-31");
             }
 
+            // time有効ブラウザ用
+            if(isTimeType && Modernizr.inputtypes.time) {
+                // ミリ秒まで入力できるようにする
+                attrs.$set('step', "1");
+            }
+
             // 日付用
             if(isDateType){
                 //  id付与
@@ -145,7 +151,7 @@ angular.module('App')
                 // $modelValue to $viewValue
                   ngModel.$formatters.push(function(time){
                       if(time === null || time === undefined){
-                          return '__:__';
+                          return '__:__:__';
                       }
                       var timeString = timeToString(time);
 
@@ -157,11 +163,11 @@ angular.module('App')
                   // $viewValue to $modelValue
                   ngModel.$parsers.length = 0;
                   ngModel.$parsers.push(function(value){
-                      if(value === '__:__'){
+                      if(value === '__:__:__'){
                           return null;
                       }
 
-                      if(!/^[0-9]{2}:[0-9]{2}$/.test(value)){
+                      if(!/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(value)){
                           return undefined;
                       }
                       var result = new Date('1970/01/01 ' + value);
@@ -177,7 +183,7 @@ angular.module('App')
 
                   // 時刻形式のフォーマットを設定
                   setTimeout(function(){
-                      $('#'+id).FormattingTextbox("__:__",{
+                      $('#'+id).FormattingTextbox("__:__:__",{
                           inputRegExp:/[0-9]/
                           ,delimiterRegExp:/[:]/
                       });
@@ -195,7 +201,8 @@ angular.module('App')
                           return '';
                       }
                       return ('0'+(time.getHours())).slice(-2) + ':' +
-                              ('0'+time.getMinutes()).slice(-2);
+                              ('0'+time.getMinutes()).slice(-2) + ':' +
+                              ('0'+time.getSeconds()).slice(-2);
                   }
 
                   return;

@@ -260,26 +260,27 @@ front.common.controller.PageBase = function PageBase(){
     }
 
     /**
-     * Date(Time)から文字列(hhmm)に変換
+     * Date(Time)から文字列(hhmmss)に変換
      */
     ctrl.timeToString = function(src) {
         var type = Object.prototype.toString.call(src).slice(8, -1).toLowerCase();
         if(type === 'date'){
-            return ('0'+(src.getHours())).slice(-2) + ('0'+src.getMinutes()).slice(-2);
+            return ('0'+(src.getHours())).slice(-2) + ('0'+src.getMinutes()).slice(-2) + ('0'+src.getSeconds()).slice(-2);
         }
 
         return '';
     }
 
     /**
-     * 文字列(hhmm)からDate(Time)に変換
+     * 文字列(hhmmss)からDate(Time)に変換
      */
     ctrl.stringToTime = function(src) {
         var type = Object.prototype.toString.call(src).slice(8, -1).toLowerCase();
         if(type === 'string' && src !== ''){
             var hour  = parseInt(src.substr(0,2),10);
             var minutes = parseInt(src.substr(2,2),10);
-            return new Date(1970,1,1,hour,minutes);
+            var second = parseInt(src.substr(4,2),10);
+            return new Date(1970,1,1,hour,minutes,second);
         }
 
         return null;
