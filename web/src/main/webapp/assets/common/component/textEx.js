@@ -37,6 +37,15 @@ angular.module('App')
              */
             var isTimeType = attrs.type === 'time';
 
+            /**
+             * クリアボタンを表示するか否か
+             */
+            var isShowClearButton = false;
+
+            //  id付与
+            var id = 'scope'+scope.$id;
+            attrs.$set('id', id);
+
             // ime-disabledがclassに設定されていれば、半角入力制限をする
             if(!!attrs.class && attrs.class.indexOf('ime-disabled') >= 0){
                 singleByteMode = true;
@@ -49,20 +58,35 @@ angular.module('App')
             if(isDateType && Modernizr.inputtypes.date) {
                 // 最大日付を設定
                 attrs.$set('max', "2100-12-31");
+
+                // edgeの場合はクリアボタンを追加
+                if(navigator.userAgent.indexOf('Edge') >= 0) {
+                    isShowClearButton = true;
+                }
             }
 
             // time有効ブラウザ用
             if(isTimeType && Modernizr.inputtypes.time) {
                 // ミリ秒まで入力できるようにする
                 attrs.$set('step', "1");
+
+                // edgeの場合はクリアボタンを追加
+                if(navigator.userAgent.indexOf('Edge') >= 0) {
+                    isShowClearButton = true;
+                }
+            }
+
+            // クリアボタンを追加
+            if(isShowClearButton) {
+                // クリアアイコンを追加
+                $('#'+id).after('<a style="margin-left:-1em;cursor:pointer;" id="b_' + id + '">X</a>');
+                $('#b_'+id).on('click',function(){
+                    $('#'+id).val(null);
+                });
             }
 
             // 日付用
             if(isDateType){
-                //  id付与
-                var id = 'date'+scope.$id;
-                attrs.$set('id', id);
-
                 // IE11用
                 if(!Modernizr.inputtypes.date) {
                     var ngModel = element.controller('ngModel');
@@ -141,10 +165,6 @@ angular.module('App')
 
             // IE11用時刻
             if(isTimeType && !Modernizr.inputtypes.time) {
-                //  id付与
-                var id = 'time'+scope.$id;
-                attrs.$set('id', id);
-
                 var ngModel = element.controller('ngModel');
 
                 ngModel.$formatters.length = 0;
