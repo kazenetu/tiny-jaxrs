@@ -1,4 +1,4 @@
-front.controller.NoPagerListController =  function NoPagerListController($location, webApiService, userService,storageService) {
+front.controller.NoPagerListController =  function NoPagerListController($location,$interval, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.SearchBase);
     this.setTitle('ページャーなし検索サンプル');
 
@@ -216,18 +216,49 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
      * 検索ページ取得処理
      */
     ctrl.getPages = function(pageIndex) {
+        ctrl.searchResult = [];
+
         // 対象ページのレコードを取得
         webApiService.post(settings.getPageApiUrl, {
             loginUserId : userService.getId(),
             requestData : getRequestData(pageIndex)
         }, function(response) {
+            var stop = null;
+            var maxCount = response.responseData.length;
+            var index = 0;
+
+            stop = $interval(function(response){
+                if(index >= maxCount){
+                    $interval.cancel(stop);
+                    stop = undefined;
+                    return;
+                }
+                var count = 0;
+                while(count<100 && index < maxCount){
+                    ctrl.searchResult.push(ctrl.searchResultTemp[index]);
+
+                    count++;
+                    index++;
+                }
+
+            },2000);
             // 検索結果のレコードを設定
-            ctrl.searchResult = response.responseData;
+            ctrl.searchResultTemp = response.responseData;
+            var count = 0;
+            while(count<20 && index < maxCount){
+                ctrl.searchResult.push(ctrl.searchResultTemp[index]);
+
+                count++;
+                index++;
+            }
+
 
             // 検索条件Storageの設定
             setConditions(pageIndex)
         });
     }
+
+    ctrl.searchResultTemp = [];
 
     // ダウンロード処理用のID、名前を設定
     ctrl.userId = userService.getId();
