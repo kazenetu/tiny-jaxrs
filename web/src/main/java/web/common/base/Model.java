@@ -65,7 +65,7 @@ public abstract class Model implements AutoCloseable {
     /**
      * 初期化
      */
-    public void initialize(Connection connection) {
+    private void initialize(Connection connection) {
         // dbの種類を設定
         String dbName = System.getenv("DBNAME");
 
