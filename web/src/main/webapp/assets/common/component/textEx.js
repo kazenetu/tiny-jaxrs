@@ -78,8 +78,14 @@ angular.module('App')
 
             // クリアボタンを追加
             if(isShowClearButton) {
+                var style = 'margin-left:-1em;cursor:pointer;';
+                if(attrs.class.indexOf('form-control') >= 0) {
+                    style += 'margin-top:0.5em;position:absolute;';
+                    $('#'+id).css('float','left');
+                }
+
                 // クリアアイコンを追加
-                $('#'+id).after('<a style="margin-left:-1em;cursor:pointer;" id="b_' + id + '">X</a>');
+                $('#'+id).after('<a style="' + style + '" id="b_' + id + '">X</a>');
                 $('#b_'+id).on('click',function(){
                     $('#'+id).val(null);
                 });
