@@ -77,6 +77,7 @@ public class UserModel extends Model{
             sql += " where USER_ID like ? ";
             params.add("%" + searchUserId + "%");
         }
+        sql += " LIMIT 1000 ";
 
         try {
             List<Map<String,Object>> result = db.query(sql, params);
