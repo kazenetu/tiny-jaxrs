@@ -227,7 +227,7 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             var maxCount = response.responseData.length;
             var index = 0;
 
-            stop = $interval(function(response){
+            stop = $interval(function(){
                 if(index >= maxCount){
                     $interval.cancel(stop);
                     stop = undefined;
