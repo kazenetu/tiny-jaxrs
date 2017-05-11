@@ -223,42 +223,65 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             loginUserId : userService.getId(),
             requestData : getRequestData(pageIndex)
         }, function(response) {
-            var stop = null;
-            var maxCount = response.responseData.length;
-            var index = 0;
+            if(ctrl.searchResultInterval !== undefined){
+                $interval.cancel(ctrl.searchResultInterval);
+            }
+            ctrl.searchResultInterval = undefined;
+            ctrl.searchResultMaxCount = response.responseData.length;
+            ctrl.searchResultIndex = 0;
 
-            stop = $interval(function(){
-                if(index >= maxCount){
-                    $interval.cancel(stop);
-                    stop = undefined;
-                    return;
-                }
-                var count = 0;
-                while(count<100 && index < maxCount){
-                    ctrl.searchResult.push(ctrl.searchResultTemp[index]);
-
-                    count++;
-                    index++;
-                }
-
-            },2000);
             // 検索結果のレコードを設定
             ctrl.searchResultTemp = response.responseData;
-            var count = 0;
-            while(count<20 && index < maxCount){
-                ctrl.searchResult.push(ctrl.searchResultTemp[index]);
 
-                count++;
-                index++;
-            }
+            // 表示位置を上に戻す
+            $('#sc_target').scrollTop(0).scrollLeft(0);
 
+            // ファーストビュー
+            ctrl.getLines();
+            ctrl.searchResultInterval = $interval(function(){
+                if(ctrl.isScroll) {
+                    ctrl.getLines();
+                    console.log('lazyLoad...'+ctrl.searchResultIndex);
+                }
+                ctrl.isScroll = false;
+            },2000);
 
             // 検索条件Storageの設定
             setConditions(pageIndex)
         });
     }
-
+    ctrl.searchResultInterval = undefined;
+    ctrl.searchResultIndex = 0;
+    ctrl.searchResultMaxCount = 0;
     ctrl.searchResultTemp = [];
+    ctrl.isScroll = false;
+
+    ctrl.getLines = function(maxCount){
+        if(ctrl.searchResultIndex >= ctrl.searchResultMaxCount){
+            $interval.cancel(ctrl.searchResultInterval);
+            ctrl.searchResultInterval = undefined;
+            console.log('interval cancel');
+            return false;
+        }
+        if(maxCount === undefined || maxCount < 0){
+            maxCount = 50;
+        }
+        var count = 0;
+        while(count<maxCount && ctrl.searchResultIndex < ctrl.searchResultMaxCount){
+            ctrl.searchResult.push(ctrl.searchResultTemp[ctrl.searchResultIndex]);
+
+            count++;
+            ctrl.searchResultIndex++;
+        }
+        return true;
+    }
+
+    $('#sc_target').on('scroll',function(){
+        var scrollPer = $('#sc_target').scrollTop() / $('#sc_target>table').height();
+        if(scrollPer > 0.6){
+            ctrl.isScroll = true;
+        }
+    });
 
     // ダウンロード処理用のID、名前を設定
     ctrl.userId = userService.getId();
