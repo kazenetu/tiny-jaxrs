@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,21 +48,27 @@ public class CsvWriter<E> implements MessageBodyWriter<CsvEntity<E>> {
             MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
             throws IOException, WebApplicationException {
 
+        // カラム指定がない場合は終了
         if (!csvEntity.isExitstColumns()) {
             return;
         }
 
+        // 出力対象のカラムを取得
         List<String> columns = csvEntity.getColumns();
+
         try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(entityStream, Charset.forName("Windows-31J")));
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.RFC4180.withQuoteMode(QuoteMode.NON_NUMERIC));) {
 
+            // getterメソッドを取得
             Class<?> entityClass = csvEntity.getCsvData().get(0).getClass();
-            List<Method> accessors = Stream.of(entityClass.getMethods())
+            Map<String,Method> accessors = Stream.of(entityClass.getMethods())
                     .filter(m -> m.getReturnType() != void.class && m.getDeclaringClass() == entityClass && columns.contains(m.getName()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toMap(Method::getName, m->m));
 
+            // レコードを出力
             for (E entity : csvEntity.getCsvData()) {
-                for (Method accessor : accessors) {
+                for(String column : columns){
+                    Method accessor = accessors.get(column);
                     printer.print(accessor.invoke(entity));
                 }
                 printer.println();
