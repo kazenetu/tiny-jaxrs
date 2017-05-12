@@ -429,7 +429,41 @@ public class UserResource extends Resource {
             entities = model.getAllUsers(new UserListEntity(searchUserId));
 
             // CSV出力対象設定
-            CsvEntity<UserEntity> entity = new CsvEntity<>(Arrays.asList("getId","getName","getPassword","getAge","getDate","getTime","getTs"), entities);
+            CsvEntity<UserEntity> entity = new CsvEntity<>(
+                    Arrays.asList("getId","getName","getPassword","getDate","getTime","getTs"),
+                    entities);
+
+            // サンプルのファイル名
+            String fileName = "テスト_" + userName + ".csv";
+
+            // 結果を返す
+            return Response.ok(entity)
+                    .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
+                    .build();
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Path("downloadHeaderCSV")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response downloadHeaderCSV(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
+        //認証チェック（認証エラー時は401例外を出す）
+        authCheck(userId);
+
+        try (UserModel model = new UserModel()) {
+            // DBからデータ取得
+            List<UserEntity> entities = new ArrayList<>();
+            entities = model.getAllUsers(new UserListEntity(searchUserId));
+
+            // CSV出力対象設定
+            CsvEntity<UserEntity> entity = new CsvEntity<>(
+                    Arrays.asList("getId","getName","getPassword","getDate","getTime","getTs"),
+                    Arrays.asList("ID","名称","パスワード","誕生日","時刻","日時"),
+                    entities);
 
             // サンプルのファイル名
             String fileName = "テスト_" + userName + ".csv";

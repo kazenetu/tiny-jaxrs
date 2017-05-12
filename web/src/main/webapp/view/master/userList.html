@@ -39,18 +39,19 @@ td
                         <input type="hidden" name="userName" value={{ctrl.userName}}>
 
                         <input type="submit" class="btn" value="CSV出力">
+                        <input type="submit" class="btn" value="ヘッダー付CSV出力" formaction="api/user/downloadHeaderCSV">
+                        <input type="submit" class="btn" value="CSV出力ストリーム版" formaction="api/user/downloadCSV">
+                        <input type="submit" class="btn" value="PDF出力" formaction="api/user/downloadPDF">
                     </form>
-                    <form action="api/user/downloadCSV" method="POST" style="float:left;padding-right:1em;">
+                    <form action="" method="POST" style="float:left;padding-right:1em;">
                         <input type="hidden" name="userId" value={{ctrl.userId}}>
                         <input type="hidden" name="userName" value={{ctrl.userName}}>
 
-                        <input type="submit" class="btn" value="CSV出力ストリーム版">
                     </form>
                     <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
                         <input type="hidden" name="userId" value={{ctrl.userId}}>
                         <input type="hidden" name="userName" value={{ctrl.userName}}>
 
-                        <input type="submit" class="btn" value="PDF出力">
 
                     </form>
                     <input type="button" class="btn" data-ng-click="ctrl.search(0)"  value="検索">
