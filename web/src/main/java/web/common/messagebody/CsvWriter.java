@@ -59,6 +59,14 @@ public class CsvWriter<E> implements MessageBodyWriter<CsvEntity<E>> {
         try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(entityStream, Charset.forName("Windows-31J")));
                 CSVPrinter printer = new CSVPrinter(writer, CSVFormat.RFC4180.withQuoteMode(QuoteMode.NON_NUMERIC));) {
 
+            // ヘッダカラム指定がない場合は終了
+            if (csvEntity.isExitstColumnHeaders()) {
+                for(String columnHeader : csvEntity.getColumnHeaders()){
+                    printer.print(columnHeader);
+                }
+                printer.println();
+            }
+
             // getterメソッドを取得
             Class<?> entityClass = csvEntity.getCsvData().get(0).getClass();
             Map<String,Method> accessors = Stream.of(entityClass.getMethods())
