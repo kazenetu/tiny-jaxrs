@@ -223,9 +223,12 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             loginUserId : userService.getId(),
             requestData : getRequestData(pageIndex)
         }, function(response) {
+            //実行途中のインターバルタイマーを終了する
             if(ctrl.searchResultInterval !== undefined){
                 $interval.cancel(ctrl.searchResultInterval);
             }
+
+            // 遅延レンダリング用プロパティを初期化
             ctrl.searchResultInterval = undefined;
             ctrl.searchResultMaxCount = response.responseData.length;
             ctrl.searchResultIndex = 0;
@@ -234,38 +237,47 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             ctrl.searchResultTemp = response.responseData;
 
             // 表示位置を上に戻す
-            $('#sc_target').scrollTop(0).scrollLeft(0);
+            $('#sc_target').scrollTop(0);
 
             // ファーストビュー
-            ctrl.getLines();
+            ctrl.getLines(15);
+
+            // 遅延レンダリングの監視を開始
             ctrl.searchResultInterval = $interval(function(){
                 if(ctrl.isScroll) {
                     ctrl.getLines();
-                    console.log('lazyLoad...'+ctrl.searchResultIndex);
                 }
                 ctrl.isScroll = false;
-            },2000);
+            },500);
 
             // 検索条件Storageの設定
             setConditions(pageIndex)
         });
     }
+
+    // 遅延レンダリング用プロパティ
     ctrl.searchResultInterval = undefined;
     ctrl.searchResultIndex = 0;
     ctrl.searchResultMaxCount = 0;
     ctrl.searchResultTemp = [];
     ctrl.isScroll = false;
 
+    /**
+     * 検索結果一覧の遅延レンダリング
+     */
     ctrl.getLines = function(maxCount){
+        // すべての行をレンダリングし終えたら終了する
         if(ctrl.searchResultIndex >= ctrl.searchResultMaxCount){
             $interval.cancel(ctrl.searchResultInterval);
             ctrl.searchResultInterval = undefined;
-            console.log('interval cancel');
             return false;
         }
+        // 引数が指定されていない場合はデフォルト値を設定
         if(maxCount === undefined || maxCount < 0){
-            maxCount = 50;
+            maxCount = 100;
         }
+
+        // レンダリング
         var count = 0;
         while(count<maxCount && ctrl.searchResultIndex < ctrl.searchResultMaxCount){
             ctrl.searchResult.push(ctrl.searchResultTemp[ctrl.searchResultIndex]);
@@ -276,9 +288,12 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
         return true;
     }
 
+    /**
+     * 検索結果一覧遅延レンダリング用縦スクロールイベント
+     */
     $('#sc_target').on('scroll',function(){
-        var scrollPer = $('#sc_target').scrollTop() / $('#sc_target>table').height();
-        if(scrollPer > 0.6){
+        var scrollPer = this.scrollTop / (this.scrollHeight - this.clientHeight);
+        if(scrollPer > 0.75){
             ctrl.isScroll = true;
         }
     });
