@@ -105,7 +105,8 @@ public class UserModel extends Model{
 
     /**
      * ユーザー全レコードCSVを書き込む
-     * @return ユーザー全レコードのリスト
+     * @param seachCondition 検索条件
+     * @param writer 書き込むバッファ
      * @throws Exception
      */
     public void writeAllUsersCsv(UserListEntity seachCondition,BufferedWriter writer) throws Exception{
