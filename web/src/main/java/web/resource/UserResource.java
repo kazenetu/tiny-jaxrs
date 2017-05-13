@@ -492,15 +492,13 @@ public class UserResource extends Resource {
             @Override
             public void write(OutputStream out)
                     throws IOException, WebApplicationException {
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));
 
-                try (UserModel model = new UserModel()) {
+                try (UserModel model = new UserModel();
+                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
                     model.writeAllUsersCsv(new UserListEntity(searchUserId), writer);
                     writer.flush();
                 } catch (Exception e) {
                     logger.error(e.getMessage());
-                } finally {
-                    writer.close();
                 }
             }
         };
