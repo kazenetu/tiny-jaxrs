@@ -260,6 +260,16 @@ front.common.controller.PageBase = function PageBase(){
     }
 
     /**
+     * 時刻が有効か否か
+     */
+    ctrl.isValidTime = function(time) {
+        if(time === null || time === undefined) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Date(Time)から文字列(hhmmss)に変換
      */
     ctrl.timeToString = function(src) {
