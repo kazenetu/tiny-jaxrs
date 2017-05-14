@@ -150,11 +150,7 @@ public class UserModel extends Model{
             int colCount = metaData.getColumnCount();
 
             // ヘッダーを書き込む
-            List<String> headers = new ArrayList<>();
-            for(int colIndex = 1;colIndex <= colCount;colIndex++) {
-                headers.add(String.format("\"%s\"", metaData.getColumnName(colIndex)));
-            }
-            writer.write(String.join(",", headers));
+            writer.write(getCsvHeaderColumn(metaData));
             writer.newLine();
 
             //結果を書き込む

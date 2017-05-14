@@ -3,6 +3,7 @@ package web.common.base;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -119,6 +120,24 @@ public abstract class Model implements AutoCloseable {
             key = columnName.toLowerCase();
         }
         return row.get(key);
+    }
+
+    /**
+     * CSV出力用カラムヘッダ取得
+     * @param metaData 列情報
+     * @return カラムへヘッダをカンマ区切りにした文字列
+     * @throws SQLException
+     */
+    protected String getCsvHeaderColumn(ResultSetMetaData metaData) throws SQLException {
+        int colCount = metaData.getColumnCount();
+
+        // ヘッダーを書き込む
+        List<String> result = new ArrayList<>();
+        for(int colIndex = 1;colIndex <= colCount;colIndex++) {
+            result.add(String.format("\"%s\"", metaData.getColumnName(colIndex)));
+        }
+
+        return String.join(",", result);
     }
 
     /**
