@@ -110,7 +110,18 @@ public class UserModel extends Model{
      * @throws Exception
      */
     public void writeAllUsersCsv(UserListEntity seachCondition,BufferedWriter writer) throws Exception{
-        String sql = "select * from MT_USER";
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT");
+        sql.append("  user_id \"ID\" ");
+        sql.append("  , name \"名称\" ");
+        sql.append("  , password \"パスワード\" ");
+        sql.append("  , date_data \"誕生日\" ");
+        sql.append("  , time_data \"時刻\" ");
+        sql.append("  , ts_data \"日時\" ");
+        sql.append("FROM ");
+        sql.append("  mt_user ");
+        sql.append("ORDER BY ");
+        sql.append("  user_id ");
 
         // 検索条件
         String searchUserId = seachCondition.getSearchUserId();
@@ -118,11 +129,11 @@ public class UserModel extends Model{
         // パラメータの設定
         ArrayList<Object> params = new ArrayList<>();
         if(!isNullorEmpty(searchUserId)){
-            sql += " where USER_ID like ? ";
+            sql.append(" where USER_ID like ? ");
             params.add("%" + searchUserId + "%");
         }
 
-        try (PreparedStatement statement = db.getConnection().prepareStatement(sql);) {
+        try (PreparedStatement statement = db.getConnection().prepareStatement(sql.toString());) {
 
             // フェッチサイズを100行に設定
             statement.setFetchSize(100);
@@ -137,6 +148,14 @@ public class UserModel extends Model{
             ResultSet result = statement.executeQuery();
             ResultSetMetaData metaData = result.getMetaData();
             int colCount = metaData.getColumnCount();
+
+            // ヘッダーを書き込む
+            List<String> headers = new ArrayList<>();
+            for(int colIndex = 1;colIndex <= colCount;colIndex++) {
+                headers.add(String.format("\"%s\"", metaData.getColumnName(colIndex)));
+            }
+            writer.write(String.join(",", headers));
+            writer.newLine();
 
             //結果を書き込む
             while(result.next()){
