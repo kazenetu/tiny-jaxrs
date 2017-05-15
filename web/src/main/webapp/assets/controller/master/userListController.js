@@ -5,6 +5,7 @@ front.controller.UserListController =  function UserListController($location, we
     var ctrl = this;
     ctrl.totalPage = 0;
     ctrl.searchUserId = '';
+    ctrl.errorSearchUserId = '';
 
     /**
      * ページ設定
@@ -116,12 +117,35 @@ front.controller.UserListController =  function UserListController($location, we
     }
 
     /**
+     * 入力チェック
+     */
+    ctrl.validateInput = function() {
+        // エラークリア
+        ctrl.errorSearchUserId = '';
+
+        // 検索条件のチェック
+        if(ctrl.searchUserId !=='') {
+            if(!ctrl.isNumAlpha(ctrl.searchUserId)){
+                ctrl.showError('E0001',['ユーザーID','半角英数字']);
+                ctrl.errorSearchUserId = 'has-error'
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 検索処理
      * ボタンクリック時はpageIndexは0固定
      */
     ctrl.search = function(pageIndex) {
         // 検索条件クリア
         clearCondition();
+
+        // 入力チェック
+        if(!ctrl.validateInput()){
+            return;
+        }
 
         // 総ページ数の取得
         webApiService.post(settings.totalPageApiUrl, {
@@ -134,6 +158,10 @@ front.controller.UserListController =  function UserListController($location, we
             if(ctrl.totalPage < 0){
                 ctrl.showError(response.errorMessage);
                 ctrl.totalPage = 0;
+            }
+            if(response.result === 'NG'){
+                ctrl.searchResult = null;
+                return;
             }
 
             // 対象ページのレコードを取得

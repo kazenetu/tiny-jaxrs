@@ -25,9 +25,9 @@ td
         <div class="scroll-area">
             <!-- 検索条件 -->
             <form class="form-inline">
-                <div class="form-group">
-                    <label for="searchUserId">ユーザーID</label>
-                    <input type="text" id = "searchUserId" data-text-ex data-ng-model="ctrl.searchUserId">
+                <div class="form-group {{ctrl.errorSearchUserId}}">
+                    <label class="control-label" for="searchUserId">ユーザーID</label>
+                    <input type="text" class="form-control" id="searchUserId" data-text-ex data-ng-model="ctrl.searchUserId" placeholder="半角英数字">
                 </div>
             </form>
 
