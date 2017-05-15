@@ -147,6 +147,9 @@ front.controller.UserListController =  function UserListController($location, we
             return;
         }
 
+        // 検索条件Storageの設定
+        setConditions(pageIndex)
+
         // 総ページ数の取得
         webApiService.post(settings.totalPageApiUrl, {
             loginUserId : userService.getId(),
@@ -161,6 +164,7 @@ front.controller.UserListController =  function UserListController($location, we
             }
             if(response.result === 'NG'){
                 ctrl.searchResult = null;
+                ctrl.totalPage = 0;
                 return;
             }
 
