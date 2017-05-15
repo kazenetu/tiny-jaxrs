@@ -76,6 +76,11 @@ front.common.controller.SearchBase = function SearchBase(){
      * 検索結果カラムコントロールクリックイベント
      */
     ctrl.clickColumn = function(sortKey,sortType){
+        if(ctrl.validateInput !== undefined) {
+            if(!ctrl.validateInput()) {
+                return;
+            }
+        }
         ctrl.sortKey = sortKey;
         ctrl.sortType = sortType;
         ctrl.paging(0, null);
