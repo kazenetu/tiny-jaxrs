@@ -216,7 +216,7 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
      * 検索ページ取得処理
      */
     ctrl.getPages = function(pageIndex) {
-        ctrl.searchResult = [];
+        ctrl.searchResult = null;
 
         // 対象ページのレコードを取得
         webApiService.post(settings.getPageApiUrl, {
@@ -238,6 +238,12 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
 
             // 表示位置を上に戻す
             $('#sc_target').scrollTop(0);
+
+            // ゼロ件の場合は終了
+            if(ctrl.searchResultMaxCount <= 0){
+                return;
+            }
+            ctrl.searchResult = [];
 
             // ファーストビュー
             ctrl.getLines(15);
