@@ -87,7 +87,8 @@ angular.module('App')
                 // クリアアイコンを追加
                 $('#'+id).after('<a style="' + style + '" id="b_' + id + '">X</a>');
                 $('#b_'+id).on('click',function(){
-                    $('#'+id).val(null);
+                    scope.ngModel = null;
+                    scope.$apply();
                 });
             }
 
