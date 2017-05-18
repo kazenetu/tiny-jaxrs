@@ -176,63 +176,63 @@ angular.module('App')
 
                 ngModel.$formatters.length = 0;
                 // $modelValue to $viewValue
-                  ngModel.$formatters.push(function(time){
-                      if(time === null || time === undefined){
-                          return '__:__:__';
-                      }
-                      var timeString = timeToString(time);
+                ngModel.$formatters.push(function(time){
+                    if(time === null || time === undefined){
+                        return '__:__:__';
+                    }
+                    var timeString = timeToString(time);
 
-                      $('#'+id).trigger('datachange',[timeString]);
+                    $('#'+id).trigger('datachange',[timeString]);
 
-                      return timeString;
-                  });
+                    return timeString;
+                });
 
-                  // $viewValue to $modelValue
-                  ngModel.$parsers.length = 0;
-                  ngModel.$parsers.push(function(value){
-                      if(value === '__:__:__'){
-                          return null;
-                      }
+                // $viewValue to $modelValue
+                ngModel.$parsers.length = 0;
+                ngModel.$parsers.push(function(value){
+                    if(value === '__:__:__'){
+                        return null;
+                    }
 
-                      if(!/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(value)){
-                          return undefined;
-                      }
-                      var result = new Date('1970/01/01 ' + value);
-                      if(result.toString() === 'Invalid Date'){
-                          return undefined;
-                      }
+                    if(!/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(value)){
+                        return undefined;
+                    }
+                    var result = new Date('1970/01/01 ' + value);
+                    if(result.toString() === 'Invalid Date'){
+                        return undefined;
+                    }
 
-                      var timeString = timeToString(result);
-                      $('#'+id).trigger('datachange',[timeString]);
+                    var timeString = timeToString(result);
+                    $('#'+id).trigger('datachange',[timeString]);
 
-                      return result;
-                  });
+                    return result;
+                });
 
-                  // 時刻形式のフォーマットを設定
-                  setTimeout(function(){
-                      $('#'+id).FormattingTextbox("__:__:__",{
-                          inputRegExp:/[0-9]/
-                          ,delimiterRegExp:/[:]/
-                      });
-                      var timeString = timeToString(scope.ngModel);
-                      if(timeString !== ''){
-                          $('#'+id).trigger('datachange',[timeString]);
-                      }
-                  },0);
+                // 時刻形式のフォーマットを設定
+                setTimeout(function(){
+                    $('#'+id).FormattingTextbox("__:__:__",{
+                        inputRegExp:/[0-9]/
+                        ,delimiterRegExp:/[:]/
+                    });
+                    var timeString = timeToString(scope.ngModel);
+                    if(timeString !== ''){
+                        $('#'+id).trigger('datachange',[timeString]);
+                    }
+                },0);
 
-                  /**
-                   * Date型を文字列に変換
-                   */
-                  function timeToString(time) {
-                      if(time == null || time === undefined){
-                          return '';
-                      }
-                      return ('0'+(time.getHours())).slice(-2) + ':' +
-                              ('0'+time.getMinutes()).slice(-2) + ':' +
-                              ('0'+time.getSeconds()).slice(-2);
-                  }
+                /**
+                 * Date型を文字列に変換
+                 */
+                function timeToString(time) {
+                    if(time == null || time === undefined){
+                        return '';
+                    }
+                    return ('0'+(time.getHours())).slice(-2) + ':' +
+                            ('0'+time.getMinutes()).slice(-2) + ':' +
+                            ('0'+time.getSeconds()).slice(-2);
+                }
 
-                  return;
+                return;
             }
 
             //数値型用イベント
