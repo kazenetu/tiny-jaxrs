@@ -24,7 +24,7 @@
                         <label class="control-label" for="userId">ユーザーID</label>
                     </div>
                     <div class=col-sm-2>
-                    <input type="text" id = "userId" data-ng-disabled="!ctrl.isCreateMode()" class="form-control ime-disabled" text-ex
+                    <input type="text" maxlength="10" data-ng-disabled="!ctrl.isCreateMode()" class="form-control ime-disabled" text-ex
                         data-ng-change='ctrl.duplicateUserId()' data-ng-model="ctrl.userId">
                     </div>
                     <div class=col-sm-5 data-ng-show="ctrl.isCreateMode()">
@@ -37,8 +37,8 @@
                     <div class=col-sm-2>
                         <label class="control-label" for="userName">ユーザー名</label>
                     </div>
-                    <div class=col-sm-2>
-                    <input type="text" id = "userName" class="form-control" data-ng-model="ctrl.userName">
+                    <div class=col-sm-10>
+                    <input type="text" maxlength="20" style="width:30em;" class="form-control" data-ng-model="ctrl.userName" data-text-ex>
                     </div>
                 </div>
 
@@ -74,7 +74,8 @@
                         <label class="control-label" for="password">パスワード</label>
                     </div>
                     <div class=col-sm-2>
-                    <input type="text" id = "password" class="form-control" data-ng-model="ctrl.password">
+                        <input type="text" id = "password" maxlength="10"
+                            class="form-control ime-disabled" text-ex data-ng-model="ctrl.password">
                     </div>
                 </div>
             </form>
