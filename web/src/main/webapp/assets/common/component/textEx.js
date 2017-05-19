@@ -272,6 +272,34 @@ angular.module('App')
                     scope.ngModel = scope.ngModel.replace(/[\s]+$/g,'')
                 }
             });
+            var maxLength = attrs['maxlength'];
+            element.bind('blur', function () {
+                if(isTextType) {
+                    // 未確定の文字をいれたままフォーカスロスト
+                    if(scope.ngModel === undefined){
+                        if(singleByteMode) {
+                            // 半角のみの場合は入力クリア
+                            scope.ngModel = null;
+                            scope.$apply();
+                        }
+                        else {
+                            if(maxLength !== undefined) {
+                                // 全半角で最大文字数まで確定
+                                var maxLengthValue = parseInt(maxLength, 10);
+                                var inputValue = $('#'+id).val();
+                                scope.ngModel = inputValue.substr(0, maxLengthValue);
+                                scope.$apply();
+                            }
+                        }
+                    }
+                }
+                if(isNumberType){
+                    if(scope.ngModel === null || scope.ngModel === undefined){
+                        scope.ngModel = null;
+                        $('#'+id).val(scope.ngModel);
+                    }
+                }
+            });
 
             // 値変更イベント
             if (attrs.ngModel) {
