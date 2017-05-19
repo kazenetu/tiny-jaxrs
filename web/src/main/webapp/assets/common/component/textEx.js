@@ -38,6 +38,11 @@ angular.module('App')
             var isTimeType = attrs.type === 'time';
 
             /**
+             * 最大文字数
+             */
+            var maxLength = attrs['maxlength'];
+
+            /**
              * クリアボタンを表示するか否か
              */
             var isShowClearButton = false;
@@ -272,7 +277,6 @@ angular.module('App')
                     scope.ngModel = scope.ngModel.replace(/[\s]+$/g,'')
                 }
             });
-            var maxLength = attrs['maxlength'];
             element.bind('blur', function () {
                 if(isTextType) {
                     // 未確定の文字をいれたままフォーカスロスト
@@ -295,6 +299,7 @@ angular.module('App')
                 }
                 if(isNumberType){
                     if(scope.ngModel === null || scope.ngModel === undefined){
+                        // 未確定の文字をいれたままフォーカスロストした場合は入力クリア
                         scope.ngModel = null;
                         $('#'+id).val(scope.ngModel);
                     }
