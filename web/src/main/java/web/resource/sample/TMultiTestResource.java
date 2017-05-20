@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import web.common.base.RequestEntity;
 import web.common.base.Resource;
-import web.common.base.ResposeEntity;
+import web.common.base.ResponseEntity;
 import web.entity.sample.TMultiTestEntity;
 import web.model.sample.TMultiTestModel;
 import web.resource.MessagesConst;
@@ -41,11 +41,11 @@ public class TMultiTestResource extends Resource {
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, TMultiTestEntity.class);
             RequestEntity<TMultiTestEntity> instance = mapper.readValue(json, type);
 
-            ResposeEntity<String> result = null;
+            ResponseEntity<String> result = null;
             if (model.insert(instance.getRequestData())) {
-                result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+                result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.INSERT),"");
+                result = new ResponseEntity<String>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.INSERT),"");
             }
 
             // 結果を返す

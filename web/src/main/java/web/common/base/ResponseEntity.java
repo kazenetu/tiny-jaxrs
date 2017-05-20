@@ -3,7 +3,7 @@ package web.common.base;
 /**
  * レスポンス用エンティティクラスのジェネリクスクラス
  */
-public class ResposeEntity<T> {
+public class ResponseEntity<T> {
 
     /**
      * 結果
@@ -27,12 +27,12 @@ public class ResposeEntity<T> {
      */
     private T responseData;
 
-    public ResposeEntity(Result result,String errorMessage){
+    public ResponseEntity(Result result,String errorMessage){
         this.result = result;
         this.errorMessage = errorMessage;
     }
 
-    public ResposeEntity(Result result,String errorMessage,T responseData){
+    public ResponseEntity(Result result,String errorMessage,T responseData){
         this.result = result;
         this.errorMessage = errorMessage;
         this.responseData = responseData;

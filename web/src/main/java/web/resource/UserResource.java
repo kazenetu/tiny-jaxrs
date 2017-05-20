@@ -38,7 +38,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import web.common.base.CsvEntity;
 import web.common.base.RequestEntity;
 import web.common.base.Resource;
-import web.common.base.ResposeEntity;
+import web.common.base.ResponseEntity;
 import web.common.util.PdfUtil;
 import web.entity.PasswordChangeEntity;
 import web.entity.UserEntity;
@@ -74,7 +74,7 @@ public class UserResource extends Resource {
 
             Optional<UserEntity> entity = model.login(instance.getId(), instance.getPassword());
 
-            ResposeEntity<UserEntity> result = entity.map(data -> {
+            ResponseEntity<UserEntity> result = entity.map(data -> {
                 //SessionIDの破棄と生成を行う
                 refreshSessionId(servletRequest);
 
@@ -82,8 +82,8 @@ public class UserResource extends Resource {
                 session.setAttribute("userId", instance.getId());
 
                 // 結果を返す
-                return new ResposeEntity<UserEntity>(ResposeEntity.Result.OK,"",entity.get());
-            }).orElse(new ResposeEntity<UserEntity>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.LOGIN),null));
+                return new ResponseEntity<UserEntity>(ResponseEntity.Result.OK,"",entity.get());
+            }).orElse(new ResponseEntity<UserEntity>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.LOGIN),null));
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class UserResource extends Resource {
             //セッションの破棄
             session.invalidate();
 
-            ResposeEntity<String> result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+            ResponseEntity<String> result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
 
             // 結果を返す
             return Response.ok(mapper.writeValueAsString(result)).build();
@@ -138,13 +138,13 @@ public class UserResource extends Resource {
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getId());
 
-            ResposeEntity<String> result = null;
+            ResponseEntity<String> result = null;
 
             // パスワード変更SQLを発行
             if (model.passwordChange(instance.getId(), instance.getPassword(), instance.getNewPassword())) {
-                result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+                result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.PASSWORD_CHANGE),"");
+                result = new ResponseEntity<String>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.PASSWORD_CHANGE),"");
             }
 
             // 結果を返す
@@ -176,13 +176,13 @@ public class UserResource extends Resource {
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-            ResposeEntity<String> result = null;
+            ResponseEntity<String> result = null;
 
             // 登録SQLを発行
             if (model.insert(instance.getRequestData())) {
-                result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+                result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.INSERT),"");
+                result = new ResponseEntity<String>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.INSERT),"");
             }
 
             // 結果を返す
@@ -214,13 +214,13 @@ public class UserResource extends Resource {
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-            ResposeEntity<String> result = null;
+            ResponseEntity<String> result = null;
 
             // 更新SQLを発行
             if (model.update(instance.getRequestData())) {
-                result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+                result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.UPDATE),"");
+                result = new ResponseEntity<String>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.UPDATE),"");
             }
 
             // 結果を返す
@@ -252,13 +252,13 @@ public class UserResource extends Resource {
             //認証チェック（認証エラー時は401例外を出す）
             authCheck(instance.getLoginUserId());
 
-            ResposeEntity<String> result = null;
+            ResponseEntity<String> result = null;
 
             // 削除SQLを発行
             if (model.delete(instance.getRequestData())) {
-                result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+                result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.DELETE),"");
+                result = new ResponseEntity<String>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.DELETE),"");
             }
 
             // 結果を返す
@@ -294,12 +294,12 @@ public class UserResource extends Resource {
             int pageCount = model.getUserPageCount(instance.getRequestData());
 
             // 結果を返す
-            ResposeEntity<Integer> result = null;
+            ResponseEntity<Integer> result = null;
             if(pageCount >= 0){
-                result = new ResposeEntity<Integer>(ResposeEntity.Result.OK,"",pageCount);
+                result = new ResponseEntity<Integer>(ResponseEntity.Result.OK,"",pageCount);
 
             }else{
-                result = new ResposeEntity<Integer>(ResposeEntity.Result.NG,getMessage(MessagesConst.WarnCodes.SEARCH_RESULT_ZERO),pageCount);
+                result = new ResponseEntity<Integer>(ResponseEntity.Result.NG,getMessage(MessagesConst.WarnCodes.SEARCH_RESULT_ZERO),pageCount);
             }
 
             return Response.ok(mapper.writeValueAsString(result)).build();
@@ -334,8 +334,8 @@ public class UserResource extends Resource {
             List<UserEntity> entities = model.getUsers(instance.getRequestData());
 
             // 結果を返す
-            ResposeEntity<List<UserEntity>> result = null;
-            result = new ResposeEntity<List<UserEntity>>(ResposeEntity.Result.OK,"",entities);
+            ResponseEntity<List<UserEntity>> result = null;
+            result = new ResponseEntity<List<UserEntity>>(ResponseEntity.Result.OK,"",entities);
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
@@ -369,8 +369,8 @@ public class UserResource extends Resource {
             List<UserEntity> entities = model.getAllUsers(instance.getRequestData());
 
             // 結果を返す
-            ResposeEntity<List<UserEntity>> result = null;
-            result = new ResposeEntity<List<UserEntity>>(ResposeEntity.Result.OK,"",entities);
+            ResponseEntity<List<UserEntity>> result = null;
+            result = new ResponseEntity<List<UserEntity>>(ResponseEntity.Result.OK,"",entities);
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
@@ -405,9 +405,9 @@ public class UserResource extends Resource {
             Optional<UserEntity> entity = model.getUser(instance.getRequestData().getId());
 
             // 結果を返す
-            ResposeEntity<UserEntity> result = entity.map(data -> {
-                return new ResposeEntity<UserEntity>(ResposeEntity.Result.OK,"",entity.get());
-            }).orElse(new ResposeEntity<UserEntity>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.NOT_FOUND),null));
+            ResponseEntity<UserEntity> result = entity.map(data -> {
+                return new ResponseEntity<UserEntity>(ResponseEntity.Result.OK,"",entity.get());
+            }).orElse(new ResponseEntity<UserEntity>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.NOT_FOUND),null));
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {

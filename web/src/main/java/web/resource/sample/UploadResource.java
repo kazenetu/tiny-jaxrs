@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import web.common.base.RequestEntity;
 import web.common.base.Resource;
-import web.common.base.ResposeEntity;
+import web.common.base.ResponseEntity;
 import web.entity.sample.UploadEntity;
 import web.model.sample.UploadModel;
 import web.resource.MessagesConst;
@@ -61,7 +61,7 @@ public class UploadResource extends Resource {
             output.close();
 
 
-            return Response.ok(mapper.writeValueAsString(new ResposeEntity<String>(ResposeEntity.Result.OK,"",filePath+"に作成しました"))).build();
+            return Response.ok(mapper.writeValueAsString(new ResponseEntity<String>(ResponseEntity.Result.OK,"",filePath+"に作成しました"))).build();
         } catch (Exception e) {
             return Response.serverError().build();
         }
@@ -84,11 +84,11 @@ public class UploadResource extends Resource {
             JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UploadEntity.class);
             RequestEntity<UploadEntity> instance = mapper.readValue(json, type);
 
-            ResposeEntity<String> result = null;
+            ResponseEntity<String> result = null;
             if (model.insert(instance.getRequestData())) {
-                result = new ResposeEntity<String>(ResposeEntity.Result.OK,"","");
+                result = new ResponseEntity<String>(ResponseEntity.Result.OK,"","");
             } else {
-                result = new ResposeEntity<String>(ResposeEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.INSERT),"");
+                result = new ResponseEntity<String>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.INSERT),"");
             }
 
             // 結果を返す
@@ -121,8 +121,8 @@ public class UploadResource extends Resource {
             List<UploadEntity> entities = model.getDataList();
 
             // 結果を返す
-            ResposeEntity<List<UploadEntity>> result = null;
-            result = new ResposeEntity<List<UploadEntity>>(ResposeEntity.Result.OK,"",entities);
+            ResponseEntity<List<UploadEntity>> result = null;
+            result = new ResponseEntity<List<UploadEntity>>(ResponseEntity.Result.OK,"",entities);
 
             return Response.ok(mapper.writeValueAsString(result)).build();
         } catch (Exception e) {
