@@ -14,14 +14,25 @@ td
 .fixed-header th
 {
     border-bottom-width: 1px !important;
+    padding-left: 0.0px !important;
+    padding-right: 0.0px !important;
 }
 .fixed-header td
 {
     border-top-width: 0px !important;
+    border-left-width: 0.5px !important;
+    border-right-width: 0.5px !important;
 }
 /* ゼロ件用 */
 .result-zero td{
     padding: 0px !important;
+}
+/* サイズ調整 */
+.main-area{
+     height:90% !important;
+}
+.scroll-area{
+    height:auto !important;
 }
 </style>
 
@@ -30,7 +41,7 @@ td
     <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
 
     <!-- メイン画面 -->
-    <div  class="container main-area" data-ng-cloak style="padding-left:0em;padding-right:0em;">
+    <div  class="container main-area" data-ng-cloak style="padding-left:0em;padding-right:0em;padding-bottom:0em;">
         <!-- ボタン類 -->
         <div class="form-group buttons-row" style="padding-left: 2em;padding-right: 2em;">
             <input type="button" class="btn" data-ng-click="ctrl.back()"  value="戻る">
@@ -75,8 +86,8 @@ td
                 </div>
 
                 <!-- 検索結果 -->
-                <div style="overflow: hidden;height: 80%;">
-                    <div class="scroll-area" style="overflow-x: scroll;max-height: 80%;height: auto;" id="sc_target">
+                <div style="overflow: hidden;height:60%;" id="list_main">
+                    <div class="scroll-area" style="overflow-x: auto;max-height:60%;height: auto;" id="sc_target">
                         <table class="table table-bordered fixed-header" style="width:1500px;max-width: none;">
                             <thead fix-head>
                                 <tr class="success">
@@ -98,26 +109,26 @@ td
                                         <br>
                                         <input type="text" id = "columnName"  data-ng-model="ctrl.columnName" data-ng-change='ctrl.changeFilter()'>
                                     </th>
-                                    <th class="text-center" style="width:10em;">
+                                    <th class="text-center" style="width:20em;">
                                         <listColumn title="パスワード" key="password"
                                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                             exist-record="{{ctrl.searchResult!==null}}"
                                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
 
                                     </th>
-                                    <th class="text-center" style="width:7em;">
+                                    <th class="text-center" style="width:10em;">
                                         <listColumn title="Date" key="date"
                                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                             exist-record="{{ctrl.searchResult!==null}}"
                                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                                     </th>
-                                    <th class="text-center" style="width:7em;">
+                                    <th class="text-center" style="width:10em;">
                                         <listColumn title="Time" key="time"
                                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                             exist-record="{{ctrl.searchResult!==null}}"
                                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
                                     </th>
-                                    <th class="text-center" style="width:7em;">
+                                    <th class="text-center" style="width:15em;">
                                         <listColumn title="TS" key="ts"
                                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                             exist-record="{{ctrl.searchResult!==null}}"

@@ -169,6 +169,9 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
     ctrl.init = function() {
         // 検索条件Storageから検索結果を再実行
         getConditions();
+
+        // 一覧の高さ調整
+        ctrl.setListHeight();
     }
 
     /**
@@ -232,17 +235,25 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             ctrl.searchResultInterval = undefined;
             ctrl.searchResultMaxCount = response.responseData.length;
             ctrl.searchResultIndex = 0;
-
-            // 検索結果のレコードを設定
-            ctrl.searchResultTemp = response.responseData;
+            ctrl.searchResultTemp = [];
 
             // 表示位置を上に戻す
             $('#sc_target').scrollTop(0);
+
+            // 一覧の高さ調整
+            ctrl.setListHeight();
+
+            // 検索条件Storageの設定
+            setConditions(pageIndex)
 
             // ゼロ件の場合は終了
             if(ctrl.searchResultMaxCount <= 0){
                 return;
             }
+
+            // 検索結果のレコードを設定
+            ctrl.searchResultTemp = response.responseData;
+
             ctrl.searchResult = [];
 
             // ファーストビュー
@@ -255,9 +266,6 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
                 }
                 ctrl.isScroll = false;
             },500);
-
-            // 検索条件Storageの設定
-            setConditions(pageIndex)
         });
     }
 
@@ -302,6 +310,17 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
         if(scrollPer > 0.75){
             ctrl.isScroll = true;
         }
+    });
+    ctrl.setListHeight = function() {
+        setTimeout(function(){
+            var listHeight = $(window).height() - $('#list_main')[0].offsetTop-20;
+            $('#list_main').css('height', listHeight+"px");
+            $('#sc_target').css('max-height', listHeight - $('.clone').height()-10 +"px");
+            $('#sc_target').css('margin-top','-8px');
+        },0);
+    }
+    $(window).on('resize',function(e){
+        ctrl.setListHeight();
     });
 
     // ダウンロード処理用のID、名前を設定
