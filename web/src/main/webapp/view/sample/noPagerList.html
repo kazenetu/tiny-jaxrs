@@ -121,12 +121,18 @@ td
                                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                             exist-record="{{ctrl.searchResult!==null}}"
                                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+
+                                            <input type="date" data-text-ex  class="ime-disabled" id="dummyDate"
+                                                placeholder="日付" data-ng-model="ctrl.columnDate">
                                     </th>
                                     <th class="text-center" style="width:10em;">
                                         <listColumn title="Time" key="time"
                                             active-key="{{ctrl.sortKey}}" sort-type="{{ctrl.sortType}}"
                                             exist-record="{{ctrl.searchResult!==null}}"
                                             on-send-root="ctrl.sendColumn(src)" on-click="ctrl.clickColumn(sortKey,sortType)" />
+
+                                            <input type="time" data-text-ex  class="ime-disabled" id="dummyTime"
+                                                placeholder="時刻" data-ng-model="ctrl.columnTime">
                                     </th>
                                     <th class="text-center" style="width:15em;">
                                         <listColumn title="TS" key="ts"

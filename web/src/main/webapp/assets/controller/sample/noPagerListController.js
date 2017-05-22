@@ -8,6 +8,8 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
 
     ctrl.columnId = '';
     ctrl.columnName = '';
+    ctrl.columnDate = null;
+    ctrl.columnTime = null;
 
     /**
      * ソート情報の取得
