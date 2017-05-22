@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import web.common.base.CsvFormatter;
 import web.common.base.Model;
 import web.entity.UserEntity;
 import web.entity.UserListEntity;
@@ -107,9 +108,10 @@ public class UserModel extends Model{
      * ユーザー全レコードCSVを書き込む
      * @param seachCondition 検索条件
      * @param writer 書き込むバッファ
+     * @param formatter CSV書式設定クラス
      * @throws Exception
      */
-    public void writeAllUsersCsv(UserListEntity seachCondition,BufferedWriter writer) throws Exception{
+    public void writeAllUsersCsv(UserListEntity seachCondition,BufferedWriter writer,CsvFormatter formatter) throws Exception{
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT");
         sql.append("  user_id \"ID\" ");
@@ -150,12 +152,12 @@ public class UserModel extends Model{
             int colCount = metaData.getColumnCount();
 
             // ヘッダーを書き込む
-            writer.write(getCsvHeaderColumn(metaData));
+            writer.write(formatter.getHeader(metaData));
             writer.newLine();
 
             //結果を書き込む
             while(result.next()){
-                writer.write(getCsvColumnValue(result,colCount));
+                writer.write(formatter.getDataRow(result,colCount));
                 writer.newLine();
             }
         } catch (Exception e) {

@@ -39,6 +39,7 @@ import web.common.base.CsvEntity;
 import web.common.base.RequestEntity;
 import web.common.base.Resource;
 import web.common.base.ResponseEntity;
+import web.common.base.StandardCsvFormatter;
 import web.common.util.PdfUtil;
 import web.entity.PasswordChangeEntity;
 import web.entity.UserEntity;
@@ -495,7 +496,7 @@ public class UserResource extends Resource {
 
                 try (UserModel model = new UserModel();
                      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
-                    model.writeAllUsersCsv(new UserListEntity(searchUserId), writer);
+                    model.writeAllUsersCsv(new UserListEntity(searchUserId), writer, new StandardCsvFormatter());
                     writer.flush();
                 } catch (Exception e) {
                     logger.error(e.getMessage());
