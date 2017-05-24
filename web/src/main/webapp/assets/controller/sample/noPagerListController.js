@@ -313,6 +313,10 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             ctrl.isScroll = true;
         }
     });
+
+    /**
+     * 検索結果一覧の高さを調整する
+     */
     ctrl.setListHeight = function() {
         setTimeout(function(){
             var listHeight = $(window).height() - $('#list_main')[0].offsetTop-20;
@@ -321,7 +325,12 @@ front.controller.NoPagerListController =  function NoPagerListController($locati
             $('#sc_target').css('margin-top','-8px');
         },0);
     }
+
+    /**
+     * ブラウザのリサイズイベント
+     */
     $(window).on('resize',function(e){
+        // 検索結果一覧の高さを調整する
         ctrl.setListHeight();
     });
 
