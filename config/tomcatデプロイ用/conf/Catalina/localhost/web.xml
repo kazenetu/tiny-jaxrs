@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<Context>
   <Resource name="jdbc/SQLite" auth="Container" type="javax.sql.DataSource" username="" password="" driverClassName="org.sqlite.JDBC" url="jdbc:sqlite:${catalina.base}/web/WEB-INF/classes/test.db" validationQuery="SELECT 0" />
   <Resource name="jdbc/PostgreSql" auth="Container" type="javax.sql.DataSource" username="test" password="test" driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/testDB" validationQuery="SELECT 0" />
 </Context>
