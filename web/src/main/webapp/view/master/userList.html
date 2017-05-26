@@ -34,13 +34,20 @@ td
             <!-- ボタン類 -->
             <div class="form-group buttons-row">
                 <div class="pull-right">
-                    <form action="api/user/download" method="POST" style="float:left;padding-right:1em;">
+                    <form action="{{ctrl.csvAction}}" method="POST" style="float:left;padding-right:1em;">
                         <input type="hidden" name="userId" value={{ctrl.userId}}>
                         <input type="hidden" name="userName" value={{ctrl.userName}}>
 
+                        <input type="submit" id="csv" style="display: none;">
+
+                        <!--
                         <input type="submit" class="btn" value="CSV出力">
-                        <input type="submit" class="btn" value="ヘッダー付CSV出力" formaction="api/user/downloadHeaderCSV">
-                        <input type="submit" class="btn" value="CSV出力ストリーム版" formaction="api/user/downloadCSV">
+                        <input type="button" class="btn" value="ヘッダー付CSV出力"
+                            data-ng-click="ctrl.checkCsv('api/user/downloadHeaderCSV')">
+                        -->
+                        <input type="button" class="btn" value="CSV出力ストリーム版"
+                            data-ng-click="ctrl.downloadCsv('api/user/downloadCSV')">
+
                         <input type="submit" class="btn" value="PDF出力" formaction="api/user/downloadPDF">
                     </form>
                     <form action="" method="POST" style="float:left;padding-right:1em;">

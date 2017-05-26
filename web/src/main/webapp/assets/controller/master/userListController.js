@@ -1,4 +1,4 @@
-front.controller.UserListController =  function UserListController($location, webApiService, userService,storageService) {
+front.controller.UserListController =  function UserListController($q,$location, webApiService, userService,storageService) {
     front.common.utils.extendController(this, front.common.controller.SearchBase);
     this.setTitle('ユーザー検索');
 
@@ -41,6 +41,46 @@ front.controller.UserListController =  function UserListController($location, we
         };
         storageService.setValue(storageService.keys.updateKeys,values);
         $location.path(settings.editPage);
+    }
+
+    ctrl.csvAction = '';
+    ctrl.downloadCsv = function(webApiUri){
+        // 入力チェック
+        if(!ctrl.validateInput()){
+            return false;
+        }
+
+        var d = $q.defer();
+        d.promise
+        .then(function(){
+            var deferrred = $q.defer();
+
+            // TODO CSVレコード数の取得
+            webApiService.post(settings.totalPageApiUrl, {
+                loginUserId : userService.getId(),
+                requestData : getRequestData(0)
+            }, function(response) {
+                ctrl.hideError();
+                if(response.responseData < 0){
+                    ctrl.showError(response.errorMessage);
+                }
+                if(response.result === 'NG'){
+                    return;
+                }
+
+                deferrred.resolve();
+            });
+
+            return deferrred.promise;
+        })
+        .then(function(){
+            ctrl.csvAction = webApiUri;
+            setTimeout(function(){
+                $('#csv').trigger('click');
+            },0);
+        });
+        // 発火
+        d.resolve();
     }
 
     /**
