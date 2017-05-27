@@ -495,7 +495,7 @@ public class UserResource extends Resource {
                     throws IOException, WebApplicationException {
 
                 try (UserModel model = new UserModel();
-                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
                     model.writeAllUsersCsv(new UserListEntity(searchUserId), writer, new StandardCsvFormatter());
                 } catch (Exception e) {
                     logger.error(e.getMessage());
