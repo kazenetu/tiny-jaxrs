@@ -160,6 +160,7 @@ public class UserModel extends Model{
                 writer.write(formatter.getDataRow(result,colCount));
                 writer.newLine();
             }
+            writer.flush();
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new Exception(e);
