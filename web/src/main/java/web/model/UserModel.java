@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import web.common.base.CsvFormatter;
 import web.common.base.Model;
+import web.common.util.ExcludedExceptionUtil;
 import web.entity.UserEntity;
 import web.entity.UserListEntity;
 
@@ -162,8 +163,10 @@ public class UserModel extends Model{
             }
             writer.flush();
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new Exception(e);
+            if(!ExcludedExceptionUtil.isClientAbortException(e)){
+                logger.error(e.getMessage());
+                throw new Exception(e);
+            }
         }
     }
 

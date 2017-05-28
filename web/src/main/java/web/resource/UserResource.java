@@ -40,6 +40,7 @@ import web.common.base.RequestEntity;
 import web.common.base.Resource;
 import web.common.base.ResponseEntity;
 import web.common.base.StandardCsvFormatter;
+import web.common.util.ExcludedExceptionUtil;
 import web.common.util.PdfUtil;
 import web.entity.PasswordChangeEntity;
 import web.entity.UserEntity;
@@ -498,7 +499,9 @@ public class UserResource extends Resource {
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
                     model.writeAllUsersCsv(new UserListEntity(searchUserId), writer, new StandardCsvFormatter());
                 } catch (Exception e) {
-                    logger.error(e.getMessage());
+                    if(!ExcludedExceptionUtil.isClientAbortException(e)){
+                        logger.error(e.getMessage());
+                    }
                 }
             }
         };
