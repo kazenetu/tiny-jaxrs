@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -514,7 +513,7 @@ public class UserResource extends Resource {
             return Response.ok(stream)
                     .header("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "utf-8"))
                     .build();
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
         }
