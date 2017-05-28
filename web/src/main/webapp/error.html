@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>システムエラーが発生しました</title>
+</head>
+<body>
+    <div>
+        システムエラーが発生しました。
+    </div>
+    <button id="gotoLogin">ログイン画面へ</button>
+<script>
+document.getElementById('gotoLogin').addEventListener('click',function(){
+    var roorURL = sessionStorage.getItem("rootURL");
+    if(roorURL === "" || roorURL === null){
+        roorURL = location.protocol + "//" + location.host + "/web/";
+    }
+    location.href = roorURL;
+});
+</script>
+
+</body>
+</html>
