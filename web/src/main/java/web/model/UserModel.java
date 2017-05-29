@@ -123,8 +123,6 @@ public class UserModel extends Model{
         sql.append("  , ts_data \"日時\" ");
         sql.append("FROM ");
         sql.append("  mt_user ");
-        sql.append("ORDER BY ");
-        sql.append("  user_id ");
 
         // 検索条件
         String searchUserId = seachCondition.getSearchUserId();
@@ -135,6 +133,10 @@ public class UserModel extends Model{
             sql.append(" where USER_ID like ? ");
             params.add("%" + searchUserId + "%");
         }
+
+        //ソート順
+        sql.append("ORDER BY ");
+        sql.append("  user_id ");
 
         try (PreparedStatement statement = db.getConnection().prepareStatement(sql.toString());) {
 
