@@ -43,6 +43,7 @@ front.controller.UserListController =  function UserListController($q,$location,
         $location.path(settings.editPage);
     }
 
+    ctrl.json = '';
     ctrl.csvAction = '';
     ctrl.downloadCsv = function(webApiUri){
         // 入力チェック
@@ -50,16 +51,19 @@ front.controller.UserListController =  function UserListController($q,$location,
             return false;
         }
 
+        var params = {
+            loginUserId : userService.getId(),
+            requestData : getRequestData(0)
+        };
+
         var d = $q.defer();
         d.promise
         .then(function(){
             var deferrred = $q.defer();
 
             // TODO CSVレコード数の取得
-            webApiService.post(settings.totalPageApiUrl, {
-                loginUserId : userService.getId(),
-                requestData : getRequestData(0)
-            }, function(response) {
+            webApiService.post(settings.totalPageApiUrl, params,
+            function(response) {
                 ctrl.hideError();
                 if(response.responseData < 0){
                     ctrl.showError(response.errorMessage);
@@ -75,6 +79,7 @@ front.controller.UserListController =  function UserListController($q,$location,
         })
         .then(function(){
             ctrl.csvAction = webApiUri;
+            ctrl.json = JSON.stringify(params);
             setTimeout(function(){
                 $('#csv').trigger('click');
             },0);

@@ -82,6 +82,9 @@ public class UserResource extends Resource {
                 // セッションにログインIDを設定
                 session.setAttribute("userId", instance.getId());
 
+                // セッションにログイン名を設定
+                session.setAttribute("userName", data.getName());
+
                 // 結果を返す
                 return new ResponseEntity<UserEntity>(ResponseEntity.Result.OK,"",entity.get());
             }).orElse(new ResponseEntity<UserEntity>(ResponseEntity.Result.NG,getMessage(MessagesConst.ErrorCodes.LOGIN),null));
@@ -420,14 +423,20 @@ public class UserResource extends Resource {
     @POST
     @Path("download")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response download(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
-        //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
+    public Response download(@FormParam("json") String json) {
+        ObjectMapper mapper = new ObjectMapper();
 
         try (UserModel model = new UserModel()) {
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
+            RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
             // DBからデータ取得
             List<UserEntity> entities = new ArrayList<>();
-            entities = model.getAllUsers(new UserListEntity(searchUserId));
+            entities = model.getAllUsers(instance.getRequestData());
 
             // CSV出力対象設定
             CsvEntity<UserEntity> entity = new CsvEntity<>(
@@ -435,7 +444,7 @@ public class UserResource extends Resource {
                     entities);
 
             // サンプルのファイル名
-            String fileName = "テスト_" + userName + ".csv";
+            String fileName = "テスト_" + session.getAttribute("userName") + ".csv";
 
             // 結果を返す
             return Response.ok(entity)
@@ -451,14 +460,20 @@ public class UserResource extends Resource {
     @POST
     @Path("downloadHeaderCSV")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response downloadHeaderCSV(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
-        //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
+    public Response downloadHeaderCSV(@FormParam("json") String json) {
+        ObjectMapper mapper = new ObjectMapper();
 
         try (UserModel model = new UserModel()) {
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
+            RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
             // DBからデータ取得
             List<UserEntity> entities = new ArrayList<>();
-            entities = model.getAllUsers(new UserListEntity(searchUserId));
+            entities = model.getAllUsers(instance.getRequestData());
 
             // CSV出力対象設定
             CsvEntity<UserEntity> entity = new CsvEntity<>(
@@ -467,7 +482,7 @@ public class UserResource extends Resource {
                     entities);
 
             // サンプルのファイル名
-            String fileName = "テスト_" + userName + ".csv";
+            String fileName = "テスト_" + session.getAttribute("userName") + ".csv";
 
             // 結果を返す
             return Response.ok(entity)
@@ -483,30 +498,29 @@ public class UserResource extends Resource {
     @POST
     @Path("downloadCSV")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response downloadCSV(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
+    public Response downloadCSV(@FormParam("json") String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        RequestEntity<UserListEntity> instance;
+
+        try {
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
+
+            instance = mapper.readValue(json, type);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            return Response.serverError().build();
+        }
+
         //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
+        authCheck(instance.getLoginUserId());
 
         //ストリーミング処理
-        StreamingOutput stream = new StreamingOutput() {
-            //書き込み
-            @Override
-            public void write(OutputStream out)
-                    throws IOException, WebApplicationException {
-
-                try (UserModel model = new UserModel();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
-                    model.writeAllUsersCsv(new UserListEntity(searchUserId), writer, new StandardCsvFormatter());
-                } catch (Exception e) {
-                    if(!ExcludedExceptionUtil.isClientAbortException(e)){
-                        logger.error(e.getMessage());
-                    }
-                }
-            }
-        };
+        StreamingOutput stream = getDownloadStreamingOutput(instance.getRequestData());
 
         // サンプルのファイル名
-        String fileName = "テスト_" + userName + ".csv";
+        String fileName = "テスト_" + session.getAttribute("userName") + ".csv";
 
         // 結果を返す
         try {
@@ -517,6 +531,30 @@ public class UserResource extends Resource {
             logger.error(e.getMessage());
             return Response.serverError().build();
         }
+    }
+
+    /**
+     * ダウンロード用ストリーム取得
+     * @param entity 画面入力値
+     * @return ダウンロード用ストリーム
+     */
+    private StreamingOutput getDownloadStreamingOutput(UserListEntity entity) {
+        return new StreamingOutput() {
+            //書き込み
+            @Override
+            public void write(OutputStream out)
+                    throws IOException, WebApplicationException {
+
+                try (UserModel model = new UserModel();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
+                    model.writeAllUsersCsv(entity, writer, new StandardCsvFormatter());
+                } catch (Exception e) {
+                    if(!ExcludedExceptionUtil.isClientAbortException(e)){
+                        logger.error(e.getMessage());
+                    }
+                }
+            }
+        };
     }
 
     @POST
