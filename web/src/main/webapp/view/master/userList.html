@@ -39,11 +39,10 @@ td
 
                         <input type="submit" id="csv" style="display: none;">
 
-                        <!--
-                        <input type="submit" class="btn" value="CSV出力">
+                        <input type="button" class="btn" value="CSV出力"
+                            data-ng-click="ctrl.downloadCsv('api/user/download')">
                         <input type="button" class="btn" value="ヘッダー付CSV出力"
-                            data-ng-click="ctrl.checkCsv('api/user/downloadHeaderCSV')">
-                        -->
+                            data-ng-click="ctrl.downloadCsv('api/user/downloadHeaderCSV')">
                         <input type="button" class="btn" value="CSV出力ストリーム版"
                             data-ng-click="ctrl.downloadCsv('api/user/downloadCSV')">
 
