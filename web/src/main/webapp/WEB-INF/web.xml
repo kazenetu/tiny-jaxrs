@@ -29,9 +29,9 @@
 
   <!-- logback用設定サンプル -->
   <env-entry>
-    <env-entry-name>TEST</env-entry-name>
+    <env-entry-name>LOG_DIR</env-entry-name>
     <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>Hello World</env-entry-value>
+    <env-entry-value>none</env-entry-value>
   </env-entry>
 
 

@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE logback>
 <configuration>
-  <insertFromJNDI env-entry-name="java:comp/env/TEST" as="TEST_VALUE" />
-  <property name="test" value="${TEST_VALUE:-none}" />
+  <insertFromJNDI env-entry-name="java:comp/env/LOG_DIR" as="LOG_DIR" />
 
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%date %logger %message ${test} %n</pattern>
-    </encoder>
-  </appender>
-  <root>
-    <appender-ref ref="STDOUT" />
-  </root>
+  <if condition='"none".equals(property("LOG_DIR"))'>
+    <then>
+      <!-- 開発時はコンソール出力 -->
+      <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <pattern>%date %logger %message %-5level %n</pattern>
+        </encoder>
+      </appender>
+      <root>
+        <appender-ref ref="STDOUT" />
+      </root>
+    </then>
+    <else>
+      <!-- APサーバーデプロイ時はファイル出力 -->
+      <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <file>${LOG_DIR}/app.log</file>
 
-<!-- 環境変数「RESOURCE_PATH」に「test.dbが存在するディレクトリのパス」を設定してください。 -->
-<!--
-    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
-      <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
-        <driverClass>org.sqlite.JDBC</driverClass>
-        <url>jdbc:sqlite:${RESOURCE_PATH}/test.db</url>
-        <user></user>
-        <password></password>
-      </connectionSource>
-    </appender>
-    <root>
-      <appender-ref ref="DB" />
-    </root>
- -->
+          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+              <fileNamePattern>${LOG_DIR}/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+              <maxHistory>7</maxHistory>
+          </rollingPolicy>
+          <encoder>
+              <pattern>%date %logger %message %-5level %n</pattern>
+          </encoder>
+      </appender>
+      <root level="INFO">
+        <appender-ref ref="FILE" />
+      </root>
+    </else>
+  </if>
 </configuration>
