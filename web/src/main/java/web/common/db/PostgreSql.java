@@ -156,6 +156,8 @@ public class PostgreSql implements Database {
         }
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
+            // SQLログ出力
+            writeSqlLog(sql, params);
 
             int i = 1;
             for (Object param : params) {
@@ -180,6 +182,8 @@ public class PostgreSql implements Database {
         List<Map<String,Object>> resultList = new ArrayList<>();
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
+            // SQLログ出力
+            writeSqlLog(sql, params);
 
             // フェッチサイズが設定されていれば設定
             if(fetchSize > 0){
@@ -208,5 +212,25 @@ public class PostgreSql implements Database {
             throw new Exception(e);
         }
         return resultList;
+    }
+
+    /**
+     * SQL発行ログを出力
+     * @param sql 実行SQL
+     * @param params パラメータ
+     * @throws Exception
+     */
+    private void writeSqlLog(String sql, List<Object> params) throws Exception {
+        // HACK 都度取得ではなく必要最低限で取得する方法にする
+        InitialContext context = new InitialContext();
+        if(!"true".equals(context.lookup("java:comp/env/OUTPUT_SQL_LOG"))) {
+            return;
+        }
+
+        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[3];
+
+        logger.info("呼び出し元[{}] SQL[{}] params[{}]",
+                stackTraceElement.getClassName() + "#" + stackTraceElement.getMethodName(),
+                sql,params);
     }
 }
