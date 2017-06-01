@@ -33,6 +33,11 @@
     <env-entry-type>java.lang.String</env-entry-type>
     <env-entry-value>none</env-entry-value>
   </env-entry>
+  <env-entry>
+    <env-entry-name>OUTPUT_SQL_LOG</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>false</env-entry-value>
+  </env-entry>
 
   <!-- logback用HTTPリクエストフィルター -->
   <filter>
