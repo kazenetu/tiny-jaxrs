@@ -34,5 +34,16 @@
     <env-entry-value>none</env-entry-value>
   </env-entry>
 
+  <!-- logback用HTTPリクエストフィルター -->
+  <filter>
+    <filter-name>MDCInsertingServletFilter</filter-name>
+    <filter-class>
+      ch.qos.logback.classic.helpers.MDCInsertingServletFilter
+    </filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MDCInsertingServletFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
 </web-app>
