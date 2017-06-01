@@ -2,6 +2,7 @@
 <!DOCTYPE logback>
 <configuration>
   <insertFromJNDI env-entry-name="java:comp/env/LOG_DIR" as="LOG_DIR" />
+  <insertFromJNDI env-entry-name="java:comp/env/OUTPUT_SQL_LOG" as="OUTPUT_SQL_LOG" />
 
   <if condition='"none".equals(property("LOG_DIR"))'>
     <then>
@@ -16,6 +17,29 @@
       </root>
     </then>
     <else>
+
+      <!-- APサーバーデプロイ時でSQL出力ONの場合はSQLログを出力 -->
+      <if condition='"true".equals(property("OUTPUT_SQL_LOG"))'>
+        <then>
+          <!-- SQL確認用ファイル出力 -->
+          <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+              <file>${LOG_DIR}/sql.log</file>
+
+              <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                  <fileNamePattern>${LOG_DIR}/sql.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                  <maxHistory>7</maxHistory>
+              </rollingPolicy>
+              <encoder>
+                <pattern>%date %-15X{req.remoteHost} %c{0} %message %n</pattern>
+              </encoder>
+          </appender>
+
+          <logger name="web.common" level="INFO" additivity="false">
+            <appender-ref ref="SQL_FILE" />
+          </logger>
+        </then>
+      </if>
+
       <!-- APサーバーデプロイ時はファイル出力 -->
       <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
           <file>${LOG_DIR}/app.log</file>
@@ -28,26 +52,10 @@
               <pattern>%date %logger %message %-5level %n</pattern>
           </encoder>
       </appender>
-
-      <!-- SQL確認用ファイル出力 -->
-      <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-          <file>${LOG_DIR}/sql.log</file>
-
-          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-              <fileNamePattern>${LOG_DIR}/sql.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-              <maxHistory>7</maxHistory>
-          </rollingPolicy>
-          <encoder>
-            <pattern>%date %-15X{req.remoteHost} %c{0} %message %n</pattern>
-          </encoder>
-      </appender>
-
-      <logger name="web.common" level="INFO" additivity="false">
-        <appender-ref ref="SQL_FILE" />
-      </logger>
       <root level="INFO">
         <appender-ref ref="FILE" />
       </root>
+
     </else>
   </if>
 </configuration>
