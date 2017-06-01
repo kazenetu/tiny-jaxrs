@@ -33,6 +33,10 @@
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
 
+  <!-- ログ出力場所の指定 -->
+  <Environment name="LOG_DIR" value="./web_logs" override="false" type="java.lang.String" />
+
+  <!-- DB接続設定 -->
   <Resource name="jdbc/SQLite" auth="Container" type="javax.sql.DataSource" username="" password="" driverClassName="org.sqlite.JDBC" url="jdbc:sqlite:${catalina.base}/wtpwebapps/web/WEB-INF/classes/test.db" validationQuery="SELECT 0" />
   <Resource name="jdbc/PostgreSql" auth="Container" type="javax.sql.DataSource" username="test" password="test" driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/testDB" validationQuery="SELECT 0" />
 </Context>
