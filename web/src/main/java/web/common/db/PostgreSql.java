@@ -17,6 +17,8 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import web.common.util.EnvironmentUtil;
+
 /**
  * PostgreSqlアクセスクラス
  *
@@ -221,9 +223,8 @@ public class PostgreSql implements Database {
      * @throws Exception
      */
     private void writeSqlLog(String sql, List<Object> params) throws Exception {
-        // HACK 都度取得ではなく必要最低限で取得する方法にする
-        InitialContext context = new InitialContext();
-        if(!"true".equals(context.lookup("java:comp/env/OUTPUT_SQL_LOG"))) {
+        // ログ出力対象か否か
+        if(!EnvironmentUtil.getInstance().isOutputSqlLog()) {
             return;
         }
 
