@@ -67,7 +67,6 @@ public interface Database {
      * @param logger ログインターフェース
      * @param sql 実行SQL
      * @param params パラメータ
-     * @return
      * @throws Exception
      */
     default void writeSqlLog(Logger logger, String sql, List<Object> params) throws Exception {
