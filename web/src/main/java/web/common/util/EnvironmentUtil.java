@@ -26,9 +26,8 @@ public class EnvironmentUtil {
      * privateなコンストラクタ
      */
     private EnvironmentUtil() {
-        InitialContext context;
         try {
-            context = new InitialContext();
+            InitialContext context = new InitialContext();
 
             if("true".equals(context.lookup("java:comp/env/OUTPUT_SQL_LOG"))) {
                 outputSqlLog = true;
