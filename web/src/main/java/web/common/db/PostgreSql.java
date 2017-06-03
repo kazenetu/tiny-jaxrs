@@ -17,8 +17,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import web.common.util.EnvironmentUtil;
-
 /**
  * PostgreSqlアクセスクラス
  *
@@ -159,7 +157,7 @@ public class PostgreSql implements Database {
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
             // SQLログ出力
-            writeSqlLog(sql, params);
+            writeSqlLog(logger, sql, params);
 
             int i = 1;
             for (Object param : params) {
@@ -185,7 +183,7 @@ public class PostgreSql implements Database {
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
             // SQLログ出力
-            writeSqlLog(sql, params);
+            writeSqlLog(logger, sql, params);
 
             // フェッチサイズが設定されていれば設定
             if(fetchSize > 0){
@@ -214,24 +212,5 @@ public class PostgreSql implements Database {
             throw new Exception(e);
         }
         return resultList;
-    }
-
-    /**
-     * SQL発行ログを出力
-     * @param sql 実行SQL
-     * @param params パラメータ
-     * @throws Exception
-     */
-    private void writeSqlLog(String sql, List<Object> params) throws Exception {
-        // ログ出力対象か否か
-        if(!EnvironmentUtil.getInstance().isOutputSqlLog()) {
-            return;
-        }
-
-        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[3];
-
-        logger.info("呼び出し元[{}] SQL[{}] params[{}]",
-                stackTraceElement.getClassName() + "#" + stackTraceElement.getMethodName(),
-                sql,params);
     }
 }

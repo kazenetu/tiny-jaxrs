@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+
+import web.common.util.EnvironmentUtil;
+
 /**
  * データベースインターフェース
  */
@@ -57,4 +61,25 @@ public interface Database {
      * @throws Exception 実行時例外エラー
      */
     List<Map<String,Object>> query(String sql, List<Object> params) throws Exception;
+
+    /**
+     * SQL発行ログを出力
+     * @param logger ログインターフェース
+     * @param sql 実行SQL
+     * @param params パラメータ
+     * @return
+     * @throws Exception
+     */
+    default void writeSqlLog(Logger logger, String sql, List<Object> params) throws Exception {
+        // ログ出力対象か否か
+        if(!EnvironmentUtil.getInstance().isOutputSqlLog()) {
+            return;
+        }
+
+        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[3];
+
+        logger.info("呼び出し元[{}] SQL[{}] params[{}]",
+                stackTraceElement.getClassName() + "#" + stackTraceElement.getMethodName(),
+                sql,params);
+    }
 }
