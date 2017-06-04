@@ -161,6 +161,8 @@ public class Sqlite implements Database {
      */
     public int execute(String sql, List<Object> params) throws Exception {
         try (PreparedStatement statement = con.prepareStatement(sql);) {
+            // SQLログ出力
+            writeSqlLog(logger, sql, params);
 
             int i = 1;
             for (Object param : params) {
@@ -216,6 +218,8 @@ public class Sqlite implements Database {
         List<Map<String,Object>> resultList = new ArrayList<>();
 
         try (PreparedStatement statement = con.prepareStatement(sql);) {
+            // SQLログ出力
+            writeSqlLog(logger, sql, params);
 
             // フェッチサイズが設定されていれば設定
             if(fetchSize > 0){
