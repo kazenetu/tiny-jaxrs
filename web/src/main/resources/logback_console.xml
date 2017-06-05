@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<included>
+  <!-- 開発時はコンソール出力 -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%date %-15X{req.remoteHost} %c{0} %message %n</pattern>
+    </encoder>
+  </appender>
+  <root>
+    <appender-ref ref="STDOUT" />
+  </root>
+</included>

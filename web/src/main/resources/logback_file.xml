@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<included>
+  <!-- APサーバーデプロイ時はファイル出力 -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_DIR}/app.log</file>
+
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+          <fileNamePattern>${LOG_DIR}/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+          <maxHistory>7</maxHistory>
+      </rollingPolicy>
+      <encoder>
+          <pattern>%date %logger %message %-5level %n</pattern>
+      </encoder>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="FILE" />
+  </root>
+</included>

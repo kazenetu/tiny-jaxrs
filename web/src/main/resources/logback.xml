@@ -6,56 +6,18 @@
 
   <if condition='"none".equals(property("LOG_DIR"))'>
     <then>
-      <!-- 開発時はコンソール出力 -->
-      <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-          <pattern>%date %-15X{req.remoteHost} %c{0} %message %n</pattern>
-        </encoder>
-      </appender>
-      <root>
-        <appender-ref ref="STDOUT" />
-      </root>
+        <include resource="logback_console.xml" />
     </then>
     <else>
 
       <!-- APサーバーデプロイ時でSQL出力ONの場合はSQLログを出力 -->
       <if condition='"true".equals(property("OUTPUT_SQL_LOG"))'>
         <then>
-          <!-- SQL確認用ファイル出力 -->
-          <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-              <file>${LOG_DIR}/sql.log</file>
-
-              <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                  <fileNamePattern>${LOG_DIR}/sql.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-                  <maxHistory>7</maxHistory>
-              </rollingPolicy>
-              <encoder>
-                <pattern>%date %-15X{req.remoteHost} %c{0} %message %n</pattern>
-              </encoder>
-          </appender>
-
-          <logger name="web.common" level="INFO" additivity="false">
-            <appender-ref ref="SQL_FILE" />
-          </logger>
+          <include resource="logback_sql.xml" />
         </then>
       </if>
 
-      <!-- APサーバーデプロイ時はファイル出力 -->
-      <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-          <file>${LOG_DIR}/app.log</file>
-
-          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-              <fileNamePattern>${LOG_DIR}/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-              <maxHistory>7</maxHistory>
-          </rollingPolicy>
-          <encoder>
-              <pattern>%date %logger %message %-5level %n</pattern>
-          </encoder>
-      </appender>
-      <root level="INFO">
-        <appender-ref ref="FILE" />
-      </root>
-
+      <include resource="logback_file.xml" />
     </else>
   </if>
 </configuration>
