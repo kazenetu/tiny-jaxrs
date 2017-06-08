@@ -315,13 +315,6 @@ angular.module('App')
              * 値変更
              */
             function textChange(newVal, oldVal){
-                // type=date
-                if(isDateType){
-                    if(newVal === undefined && !!oldVal){
-                        newVal = new Date(oldVal.getFullYear(),oldVal.getMonth()+1,0);
-                    }
-                }
-
                 // type=number
                 if(isNumberType){
                     if(newVal === null || newVal === undefined) {
