@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -545,8 +545,13 @@ public class UserResource extends Resource {
             public void write(OutputStream out)
                     throws IOException, WebApplicationException {
 
+                // BOM書き込み
+                out.write( 0xef );
+                out.write( 0xbb );
+                out.write( 0xbf );
+
                 try (UserModel model = new UserModel();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, Charset.forName("Windows-31J")));) {
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));) {
                     model.writeAllUsersCsv(entity, writer, new StandardCsvFormatter());
                 } catch (Exception e) {
                     if(!ExcludedExceptionUtil.isClientAbortException(e)){
