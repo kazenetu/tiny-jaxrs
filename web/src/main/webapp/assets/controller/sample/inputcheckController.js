@@ -11,6 +11,19 @@ front.controller.InputcheckController =  function InputcheckController($location
     ctrl.inputTime = null;
 
     /**
+     * 入力リセット
+     */
+    ctrl.reset = function() {
+        ctrl.inputTest = '';
+        ctrl.inputAlpha = '';
+        ctrl.inputKana = '';
+        ctrl.inputNumber = 0;
+        ctrl.inputDate = null;
+        ctrl.inputTime = null;
+        ctrl.inputSingle = '';
+    }
+
+    /**
      * 入力チェック
      */
     ctrl.inputCheck = function() {
