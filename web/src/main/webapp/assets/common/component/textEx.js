@@ -106,10 +106,10 @@ angular.module('App')
                     ngModel.$formatters.length = 0;
                     // $modelValue to $viewValue
                       ngModel.$formatters.push(function(date){
-                          if(date === null || date === undefined){
-                              return '____/__/__';
+                          var dateString = '____/__/__';
+                          if(date !== null && date !== undefined && date !== ''){
+                              dateString = dateToString(date);
                           }
-                          var dateString = dateToString(date);
 
                           $('#'+id).trigger('datachange',[dateString]);
 
@@ -182,10 +182,10 @@ angular.module('App')
                 ngModel.$formatters.length = 0;
                 // $modelValue to $viewValue
                 ngModel.$formatters.push(function(time){
-                    if(time === null || time === undefined){
-                        return '__:__:__';
+                    timeString = '__:__:__';
+                    if(time !== null && time !== undefined && time !== ''){
+                        timeString = timeToString(time);
                     }
-                    var timeString = timeToString(time);
 
                     $('#'+id).trigger('datachange',[timeString]);
 
