@@ -119,25 +119,36 @@ angular.module('App')
                       // $viewValue to $modelValue
                       ngModel.$parsers.length = 0;
                       ngModel.$parsers.push(function(value){
-                          if(value === '____/__/__'){
-                              return null;
+                          // null または undefined、日付文字列を取得する
+                          var dateString = convertDateString(value);
+                          if(dateString === null || dateString === undefined) {
+                              return dateString;
                           }
 
-                          if(!/^[0-9]{4}\/[0-9]?[0-9]\/[0-9]?[0-9]$/.test(value)){
-                              return undefined;
-                          }
-                          var result = new Date(value.replace(/-/g,'/'));
-                          if(result.toString() === 'Invalid Date'){
-                              return undefined;
+                          return new Date(dateString.replace(/-/g,'/'));
+                      });
+
+                      /**
+                       * 月末日の設定
+                       */
+                      element.bind('blur',function(e) {
+                          var value = element.val();
+                          console.log(value)
+
+                          // null または undefined、日付文字列を取得する
+                          var dateString = convertDateString(value);
+                          if(dateString === null || dateString === undefined) {
+                              return dateString;
                           }
 
-                          var dateString = dateToString(result);
+                          // 入力値と日付文字列が異なると月末日を設定する
                           if(value !== dateString){
+                              var result = new Date(value.replace(/-/g,'/'));
                               result = new Date(result.getFullYear(),result.getMonth(),0);
                               dateString = dateToString(result);
                               $('#'+id).trigger('datachange',[dateString]);
                           }
-                          return result;
+                          element.$viewValue = dateString;
                       });
 
                       // 日付形式のフォーマットを設定
@@ -151,6 +162,31 @@ angular.module('App')
                               $('#'+id).trigger('datachange',[dateString]);
                           }
                       },0);
+
+                      /**
+                       * 入力項目を日付文字列に変換する
+                       *
+                       */
+                      function convertDateString(value){
+                          // 未入力の場合はnull
+                          if(value === '____/__/__'){
+                              return null;
+                          }
+
+                          // 日付の書式でなければundefined
+                          if(!/^[0-9]{4}\/[0-9]?[0-9]\/[0-9]?[0-9]$/.test(value)){
+                              return undefined;
+                          }
+
+                          // Deteに変換できなければundefined
+                          var result = new Date(value.replace(/-/g,'/'));
+                          if(result.toString() === 'Invalid Date'){
+                              return undefined;
+                          }
+
+                          // 日付文字列を返す
+                          return dateToString(result);
+                      }
 
                       /**
                        * Date型を文字列に変換
