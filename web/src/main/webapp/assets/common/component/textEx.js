@@ -105,102 +105,101 @@ angular.module('App')
 
                     ngModel.$formatters.length = 0;
                     // $modelValue to $viewValue
-                      ngModel.$formatters.push(function(date){
-                          var dateString = '____/__/__';
-                          if(date !== null && date !== undefined && date !== ''){
-                              dateString = dateToString(date);
-                          }
+                    ngModel.$formatters.push(function(date){
+                    var dateString = '____/__/__';
+                        if(date !== null && date !== undefined && date !== ''){
+                            dateString = dateToString(date);
+                        }
 
-                          $('#'+id).trigger('datachange',[dateString]);
+                        $('#'+id).trigger('datachange',[dateString]);
 
-                          return dateString;
-                      });
+                        return dateString;
+                    });
 
-                      // $viewValue to $modelValue
-                      ngModel.$parsers.length = 0;
-                      ngModel.$parsers.push(function(value){
-                          // null または undefined、日付文字列を取得する
-                          var dateString = convertDateString(value);
-                          if(dateString === null || dateString === undefined) {
-                              return dateString;
-                          }
+                    // $viewValue to $modelValue
+                    ngModel.$parsers.length = 0;
+                    ngModel.$parsers.push(function(value){
+                        // null または undefined、日付文字列を取得する
+                        var dateString = convertDateString(value);
+                        if(dateString === null || dateString === undefined) {
+                            return dateString;
+                        }
 
-                          return new Date(dateString.replace(/-/g,'/'));
-                      });
+                        return new Date(dateString.replace(/-/g,'/'));
+                    });
 
-                      /**
-                       * 月末日の設定
-                       */
-                      element.bind('blur',function(e) {
-                          var value = element.val();
-                          console.log(value)
+                    /**
+                     * 月末日の設定
+                     */
+                    element.bind('blur',function(e) {
+                        var value = element.val();
 
-                          // null または undefined、日付文字列を取得する
-                          var dateString = convertDateString(value);
-                          if(dateString === null || dateString === undefined) {
-                              return dateString;
-                          }
+                        // null または undefined、日付文字列を取得する
+                        var dateString = convertDateString(value);
+                        if(dateString === null || dateString === undefined) {
+                            return dateString;
+                        }
 
-                          // 入力値と日付文字列が異なると月末日を設定する
-                          if(value !== dateString){
-                              var result = new Date(value.replace(/-/g,'/'));
-                              result = new Date(result.getFullYear(),result.getMonth(),0);
-                              dateString = dateToString(result);
-                              $('#'+id).trigger('datachange',[dateString]);
-                          }
-                          element.$viewValue = dateString;
-                      });
+                        // 入力値と日付文字列が異なると月末日を設定する
+                        if(value !== dateString) {
+                            var result = new Date(value.replace(/-/g,'/'));
+                            result = new Date(result.getFullYear(),result.getMonth(),0);
+                            dateString = dateToString(result);
+                            $('#'+id).trigger('datachange',[dateString]);
+                        }
+                        element.$viewValue = dateString;
+                    });
 
-                      // 日付形式のフォーマットを設定
-                      setTimeout(function(){
-                          $('#'+id).FormattingTextbox("____/__/__",{
-                              inputRegExp:/[0-9]/
-                              ,delimiterRegExp:/[\/]/
-                          });
-                          var dateString = dateToString(scope.ngModel);
-                          if(dateString !== ''){
-                              $('#'+id).trigger('datachange',[dateString]);
-                          }
-                      },0);
+                    // 日付形式のフォーマットを設定
+                    setTimeout(function(){
+                        $('#'+id).FormattingTextbox("____/__/__",{
+                            inputRegExp:/[0-9]/
+                            ,delimiterRegExp:/[\/]/
+                        });
+                        var dateString = dateToString(scope.ngModel);
+                        if(dateString !== ''){
+                            $('#'+id).trigger('datachange',[dateString]);
+                        }
+                    },0);
 
-                      /**
-                       * 入力項目を日付文字列に変換する
-                       *
-                       */
-                      function convertDateString(value){
-                          // 未入力の場合はnull
-                          if(value === '____/__/__'){
-                              return null;
-                          }
+                    /**
+                     * 入力項目を日付文字列に変換する
+                     *
+                     */
+                    function convertDateString(value){
+                        // 未入力の場合はnull
+                        if(value === '____/__/__'){
+                            return null;
+                        }
 
-                          // 日付の書式でなければundefined
-                          if(!/^[0-9]{4}\/[0-9]?[0-9]\/[0-9]?[0-9]$/.test(value)){
-                              return undefined;
-                          }
+                        // 日付の書式でなければundefined
+                        if(!/^[0-9]{4}\/[0-9]?[0-9]\/[0-9]?[0-9]$/.test(value)){
+                            return undefined;
+                        }
 
-                          // Deteに変換できなければundefined
-                          var result = new Date(value.replace(/-/g,'/'));
-                          if(result.toString() === 'Invalid Date'){
-                              return undefined;
-                          }
+                        // Deteに変換できなければundefined
+                        var result = new Date(value.replace(/-/g,'/'));
+                        if(result.toString() === 'Invalid Date'){
+                            return undefined;
+                        }
 
-                          // 日付文字列を返す
-                          return dateToString(result);
-                      }
+                        // 日付文字列を返す
+                        return dateToString(result);
+                    }
 
-                      /**
-                       * Date型を文字列に変換
-                       */
-                      function dateToString(date) {
-                          if(date == null || date === undefined){
-                              return '';
-                          }
-                          return ('0'+String(date.getFullYear())).slice(-4) + '/' +
-                                  ('0'+(date.getMonth()+1)).slice(-2) + '/' +
-                                  ('0'+date.getDate()).slice(-2);
-                      }
+                    /**
+                     * Date型を文字列に変換
+                     */
+                    function dateToString(date) {
+                        if(date == null || date === undefined){
+                            return '';
+                        }
+                        return ('0'+String(date.getFullYear())).slice(-4) + '/' +
+                                ('0'+(date.getMonth()+1)).slice(-2) + '/' +
+                                ('0'+date.getDate()).slice(-2);
+                    }
 
-                      return;
+                    return;
                 }
                 // type=date有効ブラウザ用ロストフォーカスイベント
                 element.bind('blur', function (e) {
