@@ -33,6 +33,11 @@ angular.module('App')
             var isDateType = attrs.type === 'date';
 
             /**
+             * typeが'month'か否か
+             */
+            var isMonthType = attrs.type === 'month';
+
+            /**
              * typeが'time'か否か
              */
             var isTimeType = attrs.type === 'time';
@@ -63,6 +68,17 @@ angular.module('App')
             if(isDateType && Modernizr.inputtypes.date) {
                 // 最大日付を設定
                 attrs.$set('max', "2100-12-31");
+
+                // edgeの場合はクリアボタンを追加
+                if(navigator.userAgent.indexOf('Edge') >= 0) {
+                    isShowClearButton = true;
+                }
+            }
+
+            // month有効ブラウザ用
+            if(isMonthType && Modernizr.inputtypes.month) {
+                // 最大日付を設定
+                attrs.$set('max', "2100-12");
 
                 // edgeの場合はクリアボタンを追加
                 if(navigator.userAgent.indexOf('Edge') >= 0) {
@@ -208,6 +224,89 @@ angular.module('App')
                         scope.ngModel = null;
                     }
                 });
+            }
+
+            // 年月用
+            if(isMonthType){
+                // IE11用
+                if(!Modernizr.inputtypes.month) {
+                    var ngModel = element.controller('ngModel');
+
+                    ngModel.$formatters.length = 0;
+                    // $modelValue to $viewValue
+                    ngModel.$formatters.push(function(month){
+                    var monthString = '____/__';
+                        if(month !== null && month !== undefined && month !== ''){
+                            monthString = monthToString(month);
+                        }
+
+                        $('#'+id).trigger('datachange',[monthString]);
+
+                        return monthString;
+                    });
+
+                    // $viewValue to $modelValue
+                    ngModel.$parsers.length = 0;
+                    ngModel.$parsers.push(function(value){
+                        // null または undefined、年月文字列を取得する
+                        var monthString = convertMonthString(value);
+                        if(monthString === null || monthString === undefined) {
+                            return monthString;
+                        }
+
+                        return new Date((monthString+'/01').replace(/-/g,'/'));
+                    });
+
+                    // 年月形式のフォーマットを設定
+                    setTimeout(function(){
+                        $('#'+id).FormattingTextbox("____/__",{
+                            inputRegExp:/[0-9]/
+                            ,delimiterRegExp:/[\/]/
+                        });
+                        var monthString = monthToString(scope.ngModel);
+                        if(monthString !== ''){
+                            $('#'+id).trigger('datachange',[monthString]);
+                        }
+                    },0);
+
+                    /**
+                     * 入力項目を年月文字列に変換する
+                     *
+                     */
+                    function convertMonthString(value){
+                        // 未入力の場合はnull
+                        if(value === '____/__'){
+                            return null;
+                        }
+
+                        // 年月の書式でなければundefined
+                        if(!/^[0-9]{4}\/[0-9]?[0-9]$/.test(value)){
+                            return undefined;
+                        }
+
+                        // Deteに変換できなければundefined
+                        var result = new Date((value+'/01').replace(/-/g,'/'));
+                        if(result.toString() === 'Invalid Date'){
+                            return undefined;
+                        }
+
+                        // 年月文字列を返す
+                        return monthToString(result);
+                    }
+
+                    /**
+                     * Date型を年月文字列に変換
+                     */
+                    function monthToString(month) {
+                        if(month == null || month === undefined){
+                            return '';
+                        }
+                        return ('0'+String(month.getFullYear())).slice(-4) + '/' +
+                                ('0'+(month.getMonth()+1)).slice(-2);
+                    }
+
+                    return;
+                }
             }
 
             // IE11用時刻
