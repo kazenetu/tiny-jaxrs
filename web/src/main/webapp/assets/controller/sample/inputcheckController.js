@@ -9,6 +9,7 @@ front.controller.InputcheckController =  function InputcheckController($location
     ctrl.inputNumber = 0;
     ctrl.inputDate = null;
     ctrl.inputTime = null;
+    ctrl.inputMonth =null;
 
     /**
      * 入力リセット
@@ -20,6 +21,7 @@ front.controller.InputcheckController =  function InputcheckController($location
         ctrl.inputNumber = 0;
         ctrl.inputDate = null;
         ctrl.inputTime = null;
+        ctrl.inputMonth =null;
         ctrl.inputSingle = '';
     }
 
@@ -73,6 +75,14 @@ front.controller.InputcheckController =  function InputcheckController($location
         if(ctrl.inputTime !== null) {
             if(!ctrl.isValidTime(ctrl.inputTime)) {
                 ctrl.showError('時刻エラー');
+                return;
+            }
+        }
+
+        // 年月チェック
+        if(ctrl.inputMonth !== null) {
+            if(!ctrl.isValidDate(ctrl.inputMonth)) {
+                ctrl.showError('年月エラー');
                 return;
             }
         }
