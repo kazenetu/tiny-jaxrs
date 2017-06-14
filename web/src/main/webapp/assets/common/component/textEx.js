@@ -257,6 +257,20 @@ angular.module('App')
                         return new Date((monthString+'/01').replace(/-/g,'/'));
                     });
 
+                    /**
+                     * 年月の設定
+                     */
+                    element.bind('blur',function(e) {
+                        var value = element.val();
+
+                        // null または undefined、年月文字列を取得する
+                        var monthString = convertMonthString(value);
+                        if(monthString === null || monthString === undefined) {
+                            return monthString;
+                        }
+                        $('#'+id).trigger('datachange',[monthString]);
+                    });
+
                     // 年月形式のフォーマットを設定
                     setTimeout(function(){
                         $('#'+id).FormattingTextbox("____/__",{
@@ -285,7 +299,12 @@ angular.module('App')
                         }
 
                         // Deteに変換できなければundefined
-                        var result = new Date((value+'/01').replace(/-/g,'/'));
+                        var year = parseInt(value.substr(0,4),10);
+                        var month = parseInt(value.substr(5,2),10);
+                        if(month > 12) {
+                            month = 12;
+                        }
+                        var result = new Date(year,month-1,1);
                         if(result.toString() === 'Invalid Date'){
                             return undefined;
                         }
