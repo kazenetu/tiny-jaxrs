@@ -316,7 +316,7 @@ angular.module('App')
                 ngModel.$formatters.length = 0;
                 // $modelValue to $viewValue
                 ngModel.$formatters.push(function(time){
-                    timeString = '__:__:__';
+                    var timeString = '__:__:__';
                     if(time !== null && time !== undefined && time !== ''){
                         timeString = timeToString(time);
                     }
