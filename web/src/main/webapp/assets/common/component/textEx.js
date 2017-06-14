@@ -235,7 +235,7 @@ angular.module('App')
                     ngModel.$formatters.length = 0;
                     // $modelValue to $viewValue
                     ngModel.$formatters.push(function(month){
-                    var monthString = '____/__';
+                        var monthString = '____/__';
                         if(month !== null && month !== undefined && month !== ''){
                             monthString = monthToString(month);
                         }
