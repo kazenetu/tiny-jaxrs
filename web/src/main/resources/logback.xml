@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE logback>
-<configuration>
+<configuration scan="true" scanPeriod="5 minutes">
   <insertFromJNDI env-entry-name="java:comp/env/LOG_DIR" as="LOG_DIR" />
   <insertFromJNDI env-entry-name="java:comp/env/OUTPUT_SQL_LOG" as="OUTPUT_SQL_LOG" />
 
