@@ -22,7 +22,7 @@
         <h4 class="modal-title">{{$ctrl.dialogTitle}}</h4>
       </div>
       <div class="modal-body">
-        <p>{{$ctrl.dialogMessage}}</p>
+        <p data-ng-bind-html="$ctrl.dialogMessage"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-show="$ctrl.isConfirmMode">キャンセル</button>
