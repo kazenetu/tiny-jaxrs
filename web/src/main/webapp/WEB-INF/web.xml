@@ -19,12 +19,12 @@
 
   <error-page>
     <error-code>401</error-code>
-    <location>/error.html</location>
+    <location>/WEB-INF/error.html</location>
   </error-page>
 
   <error-page>
     <error-code>500</error-code>
-    <location>/error.html</location>
+    <location>/WEB-INF/error.html</location>
   </error-page>
 
   <!-- logback用設定サンプル -->
