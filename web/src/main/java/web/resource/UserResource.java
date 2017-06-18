@@ -565,14 +565,20 @@ public class UserResource extends Resource {
     @POST
     @Path("downloadPDF")
     @Produces("application/pdf")
-    public Response downloadPDF(@FormParam("userId") String userId, @FormParam("userName") String userName, @FormParam("searchUserId") String searchUserId) {
-        //認証チェック（認証エラー時は401例外を出す）
-        authCheck(userId);
+    public Response downloadPDF(@FormParam("json") String json) {
+        ObjectMapper mapper = new ObjectMapper();
 
-        List<UserEntity> entities = new ArrayList<>();
         try (UserModel model = new UserModel(); PdfUtil pdfUtil = new PdfUtil();) {
+            // json文字列をUserDataにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UserListEntity.class);
+            RequestEntity<UserListEntity> instance = mapper.readValue(json, type);
+
+            //認証チェック（認証エラー時は401例外を出す）
+            authCheck(instance.getLoginUserId());
+
             // DBからデータ取得
-            entities = model.getUsers(new UserListEntity(searchUserId));
+            List<UserEntity> entities = new ArrayList<>();
+            entities = model.getUsers(new UserListEntity(instance.getRequestData().getSearchUserId()));
 
             // PDFのデータソースとして設定
             JRDataSource dataSource = new JRBeanCollectionDataSource(entities);
@@ -583,7 +589,7 @@ public class UserResource extends Resource {
             byte[] result = pdfUtil.getPdfBytes("UserList", params, dataSource);
 
             // サンプルのファイル名
-            String fileName = "テスト_" + userName + ".pdf";
+            String fileName = "テスト_" + session.getAttribute("userName") + ".pdf";
 
             // 結果を返す
             return Response.ok(result)
