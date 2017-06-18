@@ -46,19 +46,8 @@ td
                         <input type="button" class="btn" value="CSV出力ストリーム版"
                             data-ng-click="ctrl.downloadCsv('api/user/downloadCSV')">
 
-                        <input type="submit" class="btn" value="PDF出力"
+                        <input type="button" class="btn" value="PDF出力"
                             data-ng-click="ctrl.downloadCsv('api/user/downloadPDF')">
-                    </form>
-                    <form action="" method="POST" style="float:left;padding-right:1em;">
-                        <input type="hidden" name="userId" value={{ctrl.userId}}>
-                        <input type="hidden" name="userName" value={{ctrl.userName}}>
-
-                    </form>
-                    <form action="api/user/downloadPDF" method="POST" style="float:left;padding-right:1em;">
-                        <input type="hidden" name="userId" value={{ctrl.userId}}>
-                        <input type="hidden" name="userName" value={{ctrl.userName}}>
-
-
                     </form>
                     <input type="button" class="btn" data-ng-click="ctrl.search(0)"  value="検索">
                 </div>
