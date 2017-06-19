@@ -238,11 +238,6 @@ front.controller.UserListController =  function UserListController($q,$location,
             setConditions(pageIndex)
         });
     }
-
-
-    // ダウンロード処理用のID、名前を設定
-    ctrl.userId = userService.getId();
-    ctrl.userName = userService.getName();
 }
 
 angular.module('App').controller('userListController', front.controller.UserListController);
