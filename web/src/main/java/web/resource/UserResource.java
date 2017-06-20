@@ -307,6 +307,8 @@ public class UserResource extends Resource {
             }
 
             return Response.ok(mapper.writeValueAsString(result)).build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -342,6 +344,8 @@ public class UserResource extends Resource {
             result = new ResponseEntity<List<UserEntity>>(ResponseEntity.Result.OK,"",entities);
 
             return Response.ok(mapper.writeValueAsString(result)).build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
@@ -377,6 +381,8 @@ public class UserResource extends Resource {
             result = new ResponseEntity<List<UserEntity>>(ResponseEntity.Result.OK,"",entities);
 
             return Response.ok(mapper.writeValueAsString(result)).build();
+        } catch (WebApplicationException e) {
+            throw e;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Response.serverError().build();
