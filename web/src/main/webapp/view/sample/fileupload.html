@@ -1,0 +1,22 @@
+<style type="text/css">
+.ng-scope
+{
+    height:auto !important;
+}
+</style>
+
+<!-- メイン画面 -->
+<div class="height-100percent" data-ng-init="ctrl.init()" data-ng-controller="fileUploadController as ctrl">
+    <!-- ヘッダー -->
+    <header data-on-send-root="ctrl.sendRootHeader(src)"></header>
+
+    <!-- メイン画面 -->
+    <div  class="container main-area" data-ng-cloak style="height:100%;">
+        <form method="post" action="" enctype="application/x-www-form-urlencoded">
+            <div>
+                <input type="file" name="file">
+            </div>
+            <input type="submit" value="送信">
+        </form>
+    </div>
+</div>

@@ -22,6 +22,8 @@ myApp.config([ '$routeProvider', function($routeProvider) {
         templateUrl : 'view/sample/numbercheck.html',
     }).when('/sample/multi', {
         templateUrl : 'view/sample/multi.html',
+    }).when('/sample/fileupload', {
+        templateUrl : 'view/sample/fileupload.html',
 
     }).otherwise({
         redirectTo : '/'
