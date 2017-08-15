@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import web.common.factory.SessionFactory;
@@ -12,6 +13,7 @@ import web.common.factory.SessionFactory;
 public class ServerApplication extends ResourceConfig {
 
     public ServerApplication() {
+        super(MultiPartFeature.class);
         packages(this.getClass().getPackage().getName());
 
         register(new AbstractBinder() {
