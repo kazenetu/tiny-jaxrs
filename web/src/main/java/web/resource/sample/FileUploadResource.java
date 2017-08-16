@@ -22,16 +22,17 @@ import web.common.base.Resource;
 @Path("fileupload")
 public class FileUploadResource extends Resource {
     /**
-     * ファイルアップロード
-     * @param json リクエスト情報
+     * ファイルからBase64を生成する
+     * @param multiPart ファイル情報
      */
     @POST
-    @Path("upload")
+    @Path("convert/base64")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response test(FormDataMultiPart multiPart) {
         try {
             StringBuilder fileData = new StringBuilder();
+
             List<BodyPart> bodyPartList = multiPart.getBodyParts();
 
             for (BodyPart bodyPart : bodyPartList) {
@@ -46,6 +47,7 @@ public class FileUploadResource extends Resource {
                 }
             }
 
+            // 取得したデータをBase64に変換して返す
             return Response.ok(Base64.encodeAsString(fileData.toString())).build();
         } catch (Exception e) {
             return Response.serverError().build();

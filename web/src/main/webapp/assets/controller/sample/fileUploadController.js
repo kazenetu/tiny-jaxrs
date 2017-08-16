@@ -4,24 +4,24 @@ front.controller.FileUploadController =  function FileUploadController($location
 
     var ctrl = this;
 
-    var fileSelect = function(file) {
-        var f =new FormData();
-        f.append('file',file);
+    var converBase64 = function(file) {
+        var fileData = new FormData();
+        fileData.append('file',file);
+
         //post
-        $http.post('./api/fileupload/upload',f,{
+        $http.post('./api/fileupload/convert/base64',fileData,{
             transformRequest: null,
             headers: {'Content-type':undefined}
-            //headers: {'Content-type':'multipart/form-data;boundary'}
         })
         .then(function(res){
-            console.log(res);
+            console.log(res.data);
         });
     }
 
     ctrl.submit = function(){
         var fileTag = document.getElementById("file");
         if(file.files.length > 0){
-            fileSelect(file.files[0]);
+            converBase64(file.files[0]);
         }
 
         return false;
