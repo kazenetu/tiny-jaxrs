@@ -40,14 +40,16 @@ public class FileUploadResource extends Resource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response test(FormDataMultiPart multiPart) {
         try {
-            StringBuffer fileData = new StringBuffer();
             List<ByteBuffer> bytes = new ArrayList<>();
+            int byteCount = 0;
 
             List<BodyPart> bodyPartList = multiPart.getBodyParts();
 
             for (BodyPart bodyPart : bodyPartList) {
+                // fileだけ処理
                 if(bodyPart.getContentDisposition().getFileName() != null){
 
+                    // ファイルバイナリ取得
                     BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyPart.getEntity();
                     BufferedInputStream bf = new BufferedInputStream(bodyPartEntity.getInputStream());
                     byte[] fbytes = new byte[1024];
@@ -57,32 +59,20 @@ public class FileUploadResource extends Resource {
                         byteBuffer.put(fbytes);
                         bytes.add(byteBuffer);
 
-                        //fileData.append(new String(fbytes));
+                        // バイト数を加算
+                        byteCount += fbytes.length;
                     }
                 }
             }
 
-            String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
-            filePath = filePath.substring(0,filePath.indexOf("test.db")) + "test.zip";
-            FileOutputStream output=new FileOutputStream(filePath);
-            long count = 0;
+            // ファイルバイナリを結合する
+            ByteBuffer targetData = ByteBuffer.allocate(byteCount);
             for(ByteBuffer byteBuffer:bytes){
-                output.write(byteBuffer.array());
-
-                if(count < bytes.size()-1){
-                    fileData.append(Base64.getEncoder().withoutPadding().encodeToString(byteBuffer.array()));
-                }
-                else{
-                    fileData.append(Base64.getEncoder().encodeToString(byteBuffer.array()));
-                }
-                count++;
+                targetData.put(byteBuffer.array());
             }
-            output.flush();
-            output.close();
-
-            String result = new String(fileData.toString());
 
             // 取得したデータをBase64に変換して返す
+            String result = Base64.getEncoder().encodeToString(targetData.array());
             return Response.ok(result).build();
         } catch (Exception e) {
             return Response.serverError().build();
@@ -111,12 +101,12 @@ public class FileUploadResource extends Resource {
             String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
             filePath = filePath.substring(0,filePath.indexOf("test.db")) + entity.getFileName();
 
+            // ファイル作成
             String data = entity.getFileData();
             FileOutputStream output=new FileOutputStream(filePath);
             output.write(Base64.getDecoder().decode(data));
             output.flush();
             output.close();
-
 
             return Response.ok(mapper.writeValueAsString(new ResponseEntity<String>(ResponseEntity.Result.OK,"",filePath+"に作成しました"))).build();
         } catch (Exception e) {
