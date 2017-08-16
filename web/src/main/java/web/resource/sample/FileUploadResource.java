@@ -1,6 +1,10 @@
 package web.resource.sample;
 
 import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -10,13 +14,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.internal.util.Base64;
 import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import web.common.base.RequestEntity;
 import web.common.base.Resource;
+import web.common.base.ResponseEntity;
+import web.entity.sample.UploadFileEntity;
 
 @RequestScoped
 @Path("fileupload")
@@ -31,27 +40,87 @@ public class FileUploadResource extends Resource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response test(FormDataMultiPart multiPart) {
         try {
-            StringBuilder fileData = new StringBuilder();
+            StringBuffer fileData = new StringBuffer();
+            List<ByteBuffer> bytes = new ArrayList<>();
 
             List<BodyPart> bodyPartList = multiPart.getBodyParts();
 
             for (BodyPart bodyPart : bodyPartList) {
                 if(bodyPart.getContentDisposition().getFileName() != null){
+
                     BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyPart.getEntity();
                     BufferedInputStream bf = new BufferedInputStream(bodyPartEntity.getInputStream());
                     byte[] fbytes = new byte[1024];
 
                     while ((bf.read(fbytes)) >= 0) {
-                        fileData.append(fbytes);
+                        ByteBuffer byteBuffer = ByteBuffer.allocate(fbytes.length);
+                        byteBuffer.put(fbytes);
+                        bytes.add(byteBuffer);
+
+                        //fileData.append(new String(fbytes));
                     }
                 }
             }
 
+            String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
+            filePath = filePath.substring(0,filePath.indexOf("test.db")) + "test.zip";
+            FileOutputStream output=new FileOutputStream(filePath);
+            long count = 0;
+            for(ByteBuffer byteBuffer:bytes){
+                output.write(byteBuffer.array());
+
+                if(count < bytes.size()-1){
+                    fileData.append(Base64.getEncoder().withoutPadding().encodeToString(byteBuffer.array()));
+                }
+                else{
+                    fileData.append(Base64.getEncoder().encodeToString(byteBuffer.array()));
+                }
+                count++;
+            }
+            output.flush();
+            output.close();
+
+            String result = new String(fileData.toString());
+
             // 取得したデータをBase64に変換して返す
-            return Response.ok(Base64.encodeAsString(fileData.toString())).build();
+            return Response.ok(result).build();
         } catch (Exception e) {
             return Response.serverError().build();
         }
     }
 
+    /**
+     * アップロード（ファイル作成）
+     * @param json リクエスト情報
+     */
+    @POST
+    @Path("upload")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response upload(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+
+            // json文字列をPasswordChangeにデシリアライズする
+            JavaType type = mapper.getTypeFactory().constructParametricType(RequestEntity.class, UploadFileEntity.class);
+            RequestEntity<UploadFileEntity> instance = mapper.readValue(json, type);
+
+            UploadFileEntity entity = instance.getRequestData();
+
+            String filePath = this.getClass().getClassLoader().getResource("test.db").getPath();
+            filePath = filePath.substring(0,filePath.indexOf("test.db")) + entity.getFileName();
+
+            String data = entity.getFileData();
+            FileOutputStream output=new FileOutputStream(filePath);
+            output.write(Base64.getDecoder().decode(data));
+            output.flush();
+            output.close();
+
+
+            return Response.ok(mapper.writeValueAsString(new ResponseEntity<String>(ResponseEntity.Result.OK,"",filePath+"に作成しました"))).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
 }

@@ -2,7 +2,7 @@ package web.entity.sample;
 
 public class UploadFileEntity {
     private String fileName;
-    private String imageData;
+    private String fileData;
     /**
      * @return fileName
      */
@@ -16,15 +16,15 @@ public class UploadFileEntity {
         this.fileName = fileName;
     }
     /**
-     * @return imageData
+     * @return fileData
      */
-    public String getImageData() {
-        return imageData;
+    public String getFileData() {
+        return fileData;
     }
     /**
-     * @param imageData セットする imageData
+     * @param fileData セットする fileData
      */
-    public void setImageData(String imageData) {
-        this.imageData = imageData;
+    public void setFileData(String fileData) {
+        this.fileData = fileData;
     }
 }
