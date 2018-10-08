@@ -10,7 +10,12 @@ angular.module('App')
             class:'@',
             ngModel:'='
         },
-        link: function postLink(scope, element, attrs, ctrl){
+        link: function postLink(scope, element, attrs, ctrl) {
+
+            // IE以外はなにもせずに終了
+            if (!window.document.documentMode) {
+                return;
+            }
 
             /**
              * 半角文字のみ許可するか否か
