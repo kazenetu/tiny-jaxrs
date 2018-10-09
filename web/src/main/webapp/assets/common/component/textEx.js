@@ -12,11 +12,6 @@ angular.module('App')
         },
         link: function postLink(scope, element, attrs, ctrl) {
 
-            // IE以外はなにもせずに終了
-            if (!window.document.documentMode) {
-                return;
-            }
-
             /**
              * 半角文字のみ許可するか否か
              */
@@ -56,6 +51,16 @@ angular.module('App')
              * クリアボタンを表示するか否か
              */
             var isShowClearButton = false;
+
+            // IE以外はなにもせずに終了
+            if (!window.document.documentMode) {
+                // time有効ブラウザ用
+                if(isTimeType && Modernizr.inputtypes.time) {
+                    // ミリ秒まで入力できるようにする
+                    attrs.$set('step', "1");
+                }
+                return;
+            }
 
             //  id付与
             var id = 'scope'+scope.$id;
